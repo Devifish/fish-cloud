@@ -25,8 +25,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         //日期时间转换格式
         DateTimeFormatterRegistrar dateTimeFormatterRegistrar = new DateTimeFormatterRegistrar();
         dateTimeFormatterRegistrar.setTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN));
-        dateTimeFormatterRegistrar.setDateFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN));
-        dateTimeFormatterRegistrar.setDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN));
+        dateTimeFormatterRegistrar.setDateFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN));
+        dateTimeFormatterRegistrar.setDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN));
         dateTimeFormatterRegistrar.registerFormatters(registry);
 
         //枚举转换格式
