@@ -1,7 +1,7 @@
 package cn.devifish.cloud.gateway;
 
+import cn.devifish.cloud.common.core.BaseApplication;
 import cn.devifish.cloud.common.core.annotation.FishCloudApplication;
-import org.springframework.boot.SpringApplication;
 
 /**
  * GatewayApplication
@@ -11,9 +11,9 @@ import org.springframework.boot.SpringApplication;
  * @date 2020/6/30 15:05
  */
 @FishCloudApplication
-public class GatewayApplication {
+public class GatewayApplication extends BaseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(GatewayApplication.class, args);
+        run(GatewayApplication.class, args);
     }
 }

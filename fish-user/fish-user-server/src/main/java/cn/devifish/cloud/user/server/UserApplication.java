@@ -1,6 +1,6 @@
 package cn.devifish.cloud.user.server;
 
-import org.springframework.boot.SpringApplication;
+import cn.devifish.cloud.common.core.BaseApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
 /**
@@ -11,9 +11,9 @@ import org.springframework.cloud.client.SpringCloudApplication;
  * @date 2020/7/1 11:05
  */
 @SpringCloudApplication
-public class UserApplication {
+public class UserApplication extends BaseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class, args);
+        run(UserApplication.class, args);
     }
 }
