@@ -1,7 +1,10 @@
 package cn.devifish.cloud.common.mysql.config;
 
+import cn.devifish.cloud.common.core.generator.IdGenerator;
+import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +20,18 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 @EnableTransactionManagement
 @MapperScan("cn.devifish.cloud.**.mapper")
 public class MybatisConfiguration {
 
+    private final IdGenerator idGenerator;
+
+    /**
+     * Mybatis 分页插件
+     *
+     * @return PaginationInterceptor
+     */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         log.info("Initializing Mybatis Pagination");
@@ -30,4 +41,16 @@ public class MybatisConfiguration {
         paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
         return paginationInterceptor;
     }
+
+    /**
+     * Mybatis ID生成器
+     * 使用雪花算法实现
+     *
+     * @return IdentifierGenerator
+     */
+    @Bean
+    public IdentifierGenerator identifierGenerator() {
+        return entity -> idGenerator.nextId();
+    }
+
 }
