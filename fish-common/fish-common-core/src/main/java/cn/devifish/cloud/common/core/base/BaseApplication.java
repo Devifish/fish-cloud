@@ -1,5 +1,6 @@
-package cn.devifish.cloud.common.core;
+package cn.devifish.cloud.common.core.base;
 
+import cn.devifish.cloud.common.core.FishCloudBanner;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 

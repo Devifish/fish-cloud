@@ -1,9 +1,9 @@
-package cn.devifish.cloud.common.core.convert;
+package cn.devifish.cloud.common.core.base;
 
 import java.io.Serializable;
 
 /**
- * ConvertibleEnum
+ * BaseEnum
  * 用于实现 Spring ConverterFactory 与 JPA AttributeConverter接口
  * 通过 param 实现到 Enum 的转换
  *
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author Devifish
  * @date 2020/7/2 10:22
  */
-public interface ConvertibleEnum<V extends Serializable> {
+public interface BaseEnum<V extends Serializable> {
 
     V param();
 

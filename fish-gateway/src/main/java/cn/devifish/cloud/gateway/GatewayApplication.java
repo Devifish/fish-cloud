@@ -1,7 +1,7 @@
 package cn.devifish.cloud.gateway;
 
-import cn.devifish.cloud.common.core.BaseApplication;
 import cn.devifish.cloud.common.core.annotation.FishCloudApplication;
+import cn.devifish.cloud.common.core.base.BaseApplication;
 
 /**
  * GatewayApplication

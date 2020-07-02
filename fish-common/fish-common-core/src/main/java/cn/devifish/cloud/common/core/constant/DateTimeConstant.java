@@ -1,19 +1,17 @@
 package cn.devifish.cloud.common.core.constant;
 
 /**
- * CommonConstant
- * 公共常量
+ * DateTimeConstant
+ * 日期时间常量
  *
  * @author Devifish
- * @date 2020/6/30 16:34
+ * @date 2020/7/2 15:26
  */
-public interface CommonConstant {
+public interface DateTimeConstant {
 
-    /**
-     * 框架公共的时间戳格式
-     * 统一时间格式
-     */
     String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     String DATE_PATTERN = "yyyy-MM-dd";
     String TIME_PATTERN = "HH:mm:ss";
+    String TIME_ZONE = "Asia/Shanghai";
+
 }

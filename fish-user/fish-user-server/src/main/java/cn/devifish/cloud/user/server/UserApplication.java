@@ -1,6 +1,6 @@
 package cn.devifish.cloud.user.server;
 
-import cn.devifish.cloud.common.core.BaseApplication;
+import cn.devifish.cloud.common.core.base.BaseApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
 /**

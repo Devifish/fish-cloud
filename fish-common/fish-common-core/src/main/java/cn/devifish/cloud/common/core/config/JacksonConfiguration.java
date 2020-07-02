@@ -1,6 +1,6 @@
 package cn.devifish.cloud.common.core.config;
 
-import cn.devifish.cloud.common.core.constant.CommonConstant;
+import cn.devifish.cloud.common.core.constant.DateTimeConstant;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -40,8 +40,8 @@ public class JacksonConfiguration {
 
         return builder -> {
             builder.locale(Locale.CHINA);
-            builder.timeZone(TimeZone.getTimeZone("Asia/Shanghai"));
-            builder.simpleDateFormat(CommonConstant.DATE_TIME_PATTERN);
+            builder.timeZone(TimeZone.getTimeZone(DateTimeConstant.TIME_ZONE));
+            builder.simpleDateFormat(DateTimeConstant.DATE_TIME_PATTERN);
             builder.modules(initJavaTimeModule());
         };
     }
@@ -53,9 +53,9 @@ public class JacksonConfiguration {
      */
     private JavaTimeModule initJavaTimeModule() {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(CommonConstant.DATE_TIME_PATTERN);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(CommonConstant.DATE_PATTERN);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(CommonConstant.TIME_PATTERN);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN);
 
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));
