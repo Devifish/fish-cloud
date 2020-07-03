@@ -22,6 +22,11 @@
         </dependency>
         <dependency>
             <groupId>cn.devifish.cloud</groupId>
+            <artifactId>fish-common-security</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.devifish.cloud</groupId>
             <artifactId>fish-common-redis</artifactId>
             <version>1.0.0</version>
         </dependency>

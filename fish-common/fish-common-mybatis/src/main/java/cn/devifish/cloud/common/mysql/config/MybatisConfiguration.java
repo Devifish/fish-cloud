@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @RequiredArgsConstructor
 @EnableTransactionManagement
-@MapperScan("cn.devifish.cloud.**.mapper")
+@MapperScan(basePackages = "cn.devifish.cloud.**.mapper", annotationClass = Mapper.class)
 public class MybatisConfiguration {
 
     private final IdGenerator idGenerator;

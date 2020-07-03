@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--suppress SqlNoDataSourceInspection, SqlResolve -->
+<mapper namespace="cn.devifish.cloud.user.server.mapper.ClientDetailMapper">
+
+    <resultMap id="baseResultMap" type="org.springframework.security.oauth2.provider.client.BaseClientDetails">
+        <id column="client_id" property="clientId"/>
+        <result column="client_secret" property="clientSecret"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        `cd`.client_id,
+        `cd`.client_secret,
+        `cd`.scope
+    </sql>
+
+    <select id="findByClientId" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM t_client_detail AS cd
+        <where>
+            cd.client_id = #{clientId}
+        </where>
+    </select>
+</mapper>
