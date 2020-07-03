@@ -13,28 +13,28 @@ public class SnowflakeIdGenerator implements IdGenerator {
     /**
      * 每一部分占用的位数
      */
-    private final static long DATA_CENTER_ID_BITS = 5L; // 数据中心标识在ID中占用的位数
-    private final static long MACHINE_ID_BITS = 5L; // 机器标识在ID中占用的位数
-    private final static long SEQUENCE_BITS = 12L; // 序列号在ID中占用的位数
+    public final static long DATA_CENTER_ID_BITS = 5L; // 数据中心标识在ID中占用的位数
+    public final static long MACHINE_ID_BITS = 5L; // 机器标识在ID中占用的位数
+    public final static long SEQUENCE_BITS = 12L; // 序列号在ID中占用的位数
 
     /**
      * 每一部分的最大值
      */
-    private final static long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS); // 支持的最大数据中心标识ID为31
-    private final static long MAX_MACHINE_ID = ~(-1L << MACHINE_ID_BITS); // 支持的最大机器标识ID为31(这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
-    private final static long MAX_SEQUENCE = ~(-1L << SEQUENCE_BITS); // 支持的最大序列(掩码), 这里为4095 (0b111111111111=0xfff=4095)
+    public final static long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS); // 支持的最大数据中心标识ID为31
+    public final static long MAX_MACHINE_ID = ~(-1L << MACHINE_ID_BITS); // 支持的最大机器标识ID为31(这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
+    public final static long MAX_SEQUENCE = ~(-1L << SEQUENCE_BITS); // 支持的最大序列(掩码), 这里为4095 (0b111111111111=0xfff=4095)
 
     /**
      * 每一部分向左的位移
      */
-    private final static long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS; // 数据中心标识ID向左移17位(12+5)
-    private final static long MACHINE_ID_SHIFT = SEQUENCE_BITS; // 机器标识ID向左移12位
-    private final static long TIMESTAMP_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS + DATA_CENTER_ID_BITS; // 时间戳向左移22位(5+5+12)
+    public final static long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS; // 数据中心标识ID向左移17位(12+5)
+    public final static long MACHINE_ID_SHIFT = SEQUENCE_BITS; // 机器标识ID向左移12位
+    public final static long TIMESTAMP_SHIFT = SEQUENCE_BITS + MACHINE_ID_BITS + DATA_CENTER_ID_BITS; // 时间戳向左移22位(5+5+12)
 
     /**
      * 批量获取的最大数目(10万)
      */
-    private final static int MAX_BATCH_COUNT = 100_000;
+    public final static int MAX_BATCH_COUNT = 100_000;
 
     /**
      * 参数部分

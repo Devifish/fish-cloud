@@ -8,4 +8,19 @@ package cn.devifish.cloud.common.core.exception;
  * @date 2020/7/2 10:15
  */
 public class FishCloudException extends RuntimeException {
+
+    public FishCloudException() {
+    }
+
+    public FishCloudException(String message) {
+        super(message);
+    }
+
+    public FishCloudException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public FishCloudException(Throwable cause) {
+        super(cause);
+    }
 }
