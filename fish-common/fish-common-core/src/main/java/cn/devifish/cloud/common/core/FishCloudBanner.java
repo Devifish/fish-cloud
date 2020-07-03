@@ -40,6 +40,7 @@ public class FishCloudBanner implements Banner {
                 .collect(Collectors.joining());
 
         // 输出到控制台
+        printStream.println();
         printStream.println(banner);
         printStream.println(AnsiOutput.toString(
                 AnsiColor.DEFAULT, padding,
