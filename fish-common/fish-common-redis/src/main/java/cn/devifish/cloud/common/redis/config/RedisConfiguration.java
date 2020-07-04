@@ -1,6 +1,6 @@
-package cn.devifish.cloud.common.cache.config;
+package cn.devifish.cloud.common.redis.config;
 
-import cn.devifish.cloud.common.cache.constant.RedisConstant;
+import cn.devifish.cloud.common.redis.constant.RedisConstant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

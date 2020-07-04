@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.mysql.handler;
+package cn.devifish.cloud.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

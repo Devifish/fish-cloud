@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.cache.base;
+package cn.devifish.cloud.common.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

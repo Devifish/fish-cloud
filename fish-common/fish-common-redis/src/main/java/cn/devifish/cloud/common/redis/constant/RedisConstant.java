@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.cache.constant;
+package cn.devifish.cloud.common.redis.constant;
 
 /**
  * RedisConstant

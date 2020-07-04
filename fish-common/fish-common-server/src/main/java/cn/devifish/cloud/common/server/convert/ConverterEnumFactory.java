@@ -1,6 +1,6 @@
 package cn.devifish.cloud.common.server.convert;
 
-import cn.devifish.cloud.common.core.base.BaseEnum;
+import cn.devifish.cloud.common.core.BaseEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;

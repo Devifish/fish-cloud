@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.core.base;
+package cn.devifish.cloud.common.core;
 
 import java.io.Serializable;
 

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.devifish.cloud.common.mysql.config.MybatisConfiguration
+  cn.devifish.cloud.common.mybatis.config.MybatisConfiguration

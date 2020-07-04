@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.mysql.config;
+package cn.devifish.cloud.common.mybatis.config;
 
 import cn.devifish.cloud.common.core.generator.IdGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;

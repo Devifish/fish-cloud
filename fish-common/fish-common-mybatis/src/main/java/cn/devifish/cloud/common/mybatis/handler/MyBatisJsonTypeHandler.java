@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.mysql.handler;
+package cn.devifish.cloud.common.mybatis.handler;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;

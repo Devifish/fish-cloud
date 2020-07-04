@@ -1,7 +1,7 @@
 package cn.devifish.cloud.user.server.config;
 
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
-import cn.devifish.cloud.user.server.service.ClientDetailService;
+import cn.devifish.cloud.user.server.service.OAuthClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -32,11 +32,11 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     //private final AuthenticationManager authenticationManager;
     private final RedisConnectionFactory redisConnectionFactory;
-    private final ClientDetailService ClientDetailService;
+    private final OAuthClientService OAuthClientService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(ClientDetailService);
+        clients.withClientDetails(OAuthClientService);
     }
 
     /**

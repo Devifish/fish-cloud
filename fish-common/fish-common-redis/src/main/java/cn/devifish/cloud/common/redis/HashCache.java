@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.cache.base;
+package cn.devifish.cloud.common.redis;
 
 /**
  * HashCache
