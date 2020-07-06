@@ -1,6 +1,6 @@
 package cn.devifish.cloud.user.server.mapper;
 
-import cn.devifish.cloud.common.security.OAuthClient;
+import cn.devifish.cloud.user.common.entity.OAuthClient;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

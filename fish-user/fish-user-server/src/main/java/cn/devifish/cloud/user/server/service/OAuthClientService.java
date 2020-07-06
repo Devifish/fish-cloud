@@ -1,6 +1,6 @@
 package cn.devifish.cloud.user.server.service;
 
-import cn.devifish.cloud.common.security.OAuthClient;
+import cn.devifish.cloud.user.common.entity.OAuthClient;
 import cn.devifish.cloud.user.server.mapper.OAuthClientMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
