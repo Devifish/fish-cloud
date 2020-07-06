@@ -7,9 +7,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * WebMvcConfiguration
@@ -35,5 +37,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         //枚举转换格式
         ConverterEnumFactory converterEnumFactory = new ConverterEnumFactory();
         registry.addConverterFactory(converterEnumFactory);
+    }
+
+    @Override
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
+
     }
 }
