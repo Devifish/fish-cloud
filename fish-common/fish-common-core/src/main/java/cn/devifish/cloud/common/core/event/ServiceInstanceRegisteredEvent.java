@@ -23,4 +23,10 @@ public class ServiceInstanceRegisteredEvent extends ApplicationEvent {
     public ServiceInstanceRegisteredEvent(Object source) {
         super(source);
     }
+
+    @Override
+    public Registration getSource() {
+        return (Registration) super.getSource();
+    }
+
 }
