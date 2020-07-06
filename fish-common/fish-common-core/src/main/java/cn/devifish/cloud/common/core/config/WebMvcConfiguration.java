@@ -1,7 +1,9 @@
-package cn.devifish.cloud.common.server.config;
+package cn.devifish.cloud.common.core.config;
 
 import cn.devifish.cloud.common.core.constant.DateTimeConstant;
-import cn.devifish.cloud.common.server.convert.ConverterEnumFactory;
+import cn.devifish.cloud.common.core.convert.ConverterEnumFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
@@ -16,7 +18,8 @@ import java.time.format.DateTimeFormatter;
  * @author Devifish
  * @date 2020/7/2 15:20
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
+@ConditionalOnWebApplication(type = Type.SERVLET)
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override

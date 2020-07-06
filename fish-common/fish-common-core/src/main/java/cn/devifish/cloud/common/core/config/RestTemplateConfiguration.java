@@ -20,7 +20,7 @@ import java.time.Duration;
  * @date 2020/6/30 16:24
  */
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(RestTemplate.class)
 public class RestTemplateConfiguration {
 

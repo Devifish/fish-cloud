@@ -16,7 +16,6 @@
 
     <modules>
         <module>fish-common-core</module>
-        <module>fish-common-server</module>
         <module>fish-common-security</module>
         <module>fish-common-mybatis</module>
         <module>fish-common-redis</module>

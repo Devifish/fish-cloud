@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.server.handler;
+package cn.devifish.cloud.common.core.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
  * @date 2020/7/1 18:01
  */
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class IdGeneratorConfiguration {
 
     private static final long DEFAULT_START_TIMESTAMP = 1577808000000L; // 2020-01-01 00:00:00:000

@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.server.convert;
+package cn.devifish.cloud.common.core.convert;
 
 import cn.devifish.cloud.common.core.BaseEnum;
 import org.apache.commons.lang3.StringUtils;

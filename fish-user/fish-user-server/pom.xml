@@ -17,11 +17,6 @@
     <dependencies>
         <dependency>
             <groupId>cn.devifish.cloud</groupId>
-            <artifactId>fish-common-server</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.devifish.cloud</groupId>
             <artifactId>fish-common-security</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -44,15 +39,6 @@
             <groupId>cn.devifish.cloud</groupId>
             <artifactId>fish-user-common</artifactId>
             <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
     </dependencies>
 

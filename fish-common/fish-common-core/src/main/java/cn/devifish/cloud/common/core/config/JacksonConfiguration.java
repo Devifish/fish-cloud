@@ -30,7 +30,7 @@ import java.util.TimeZone;
  * @date 2020/6/30 16:27
  */
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(JacksonAutoConfiguration.class)
 public class JacksonConfiguration {
 

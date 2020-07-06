@@ -22,7 +22,7 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
  * @date 2020/6/30 15:58
  */
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @RequiredArgsConstructor
 @AutoConfigureAfter(JacksonAutoConfiguration.class)
 public class RedisConfiguration {
