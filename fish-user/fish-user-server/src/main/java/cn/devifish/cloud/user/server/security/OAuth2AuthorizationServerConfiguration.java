@@ -1,7 +1,6 @@
-package cn.devifish.cloud.user.server.config;
+package cn.devifish.cloud.user.server.security;
 
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
-import cn.devifish.cloud.user.server.service.OAuthClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +16,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
- * AuthorizationServerConfiguration
+ * OAuth2AuthorizationServerConfiguration
  * OAuth2 身份认证服务配置
  *
  * @see org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration
@@ -28,15 +27,16 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 @Configuration
 @RequiredArgsConstructor
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     //private final AuthenticationManager authenticationManager;
     private final RedisConnectionFactory redisConnectionFactory;
-    private final OAuthClientService OAuthClientService;
+    private final OAuth2ClientDetailsService oauth2ClientDetailsService;
+    private final OAuth2UserDetailsService oauth2UserDetailsService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(OAuthClientService);
+        clients.withClientDetails(oauth2ClientDetailsService);
     }
 
     /**
@@ -51,7 +51,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 .tokenStore(tokenStore)
-                .tokenServices(tokenService);
+                .tokenServices(tokenService)
+                .userDetailsService(oauth2UserDetailsService);
     }
 
     /**
