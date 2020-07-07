@@ -38,7 +38,6 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
         OAuthClient oauthClient = oauthClientService.findByClientId(clientId);
         if (oauthClient == null) {
-            log.warn("请求 clientId: {} 查询数据为空", clientId);
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }
         return buildClientDetails(oauthClient);
@@ -57,6 +56,8 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                 oauthClient.getGrantTypes(), oauthClient.getAuthorities());
 
         details.setClientSecret(oauthClient.getClientSecret());
+
         return details;
     }
+
 }

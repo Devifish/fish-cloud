@@ -39,4 +39,9 @@ public class RestfulEntity<E> implements Serializable {
     public static <T> RestfulEntity<T> ok(T data) {
         return new RestfulEntity<>(data, ErrorStatus.Ok);
     }
+
+    public static <T> RestfulEntity<T> error(StatusCode statusCode) {
+        return new RestfulEntity<>(statusCode);
+    }
+
 }

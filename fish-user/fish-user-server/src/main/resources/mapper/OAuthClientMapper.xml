@@ -6,13 +6,20 @@
 
     <resultMap id="baseResultMap" type="cn.devifish.cloud.user.common.entity.OAuthClient">
         <id column="client_id" property="clientId"/>
+        <result column="resource_ids" property="resourceIds"/>
         <result column="client_secret" property="clientSecret"/>
+        <result column="scope" property="scope"/>
+        <result column="grant_types" property="grantTypes"/>
+        <result column="authorities" property="authorities"/>
     </resultMap>
 
     <sql id="baseSql">
         `oc`.client_id,
+        `oc`.resource_ids,
         `oc`.client_secret,
-        `oc`.scope
+        `oc`.scope,
+        `oc`.grant_types,
+        `oc`.authorities
     </sql>
 
     <select id="findByClientId" resultMap="baseResultMap">

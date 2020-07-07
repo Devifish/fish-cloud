@@ -21,6 +21,7 @@ public class UserController {
 
     @GetMapping("/test")
     public Boolean test() {
+        int i = 1 / 0;
         return Boolean.FALSE;
     }
 }
