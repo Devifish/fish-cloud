@@ -52,10 +52,10 @@ public class RestfulResponseMethodProcessor extends AbstractMessageConverterMeth
      * 将Spring MVC {@link ResponseBody}方法的返回数据
      * 使用 {@link RestfulEntity} 进行包装
      *
-     * @param returnValue Object
-     * @param returnType MethodParameter
+     * @param returnValue  Object
+     * @param returnType   MethodParameter
      * @param mavContainer ModelAndViewContainer
-     * @param webRequest NativeWebRequest
+     * @param webRequest   NativeWebRequest
      * @throws Exception Exception
      */
     @Override
@@ -64,7 +64,12 @@ public class RestfulResponseMethodProcessor extends AbstractMessageConverterMeth
         ServletServerHttpRequest inputMessage = createInputMessage(webRequest);
         ServletServerHttpResponse outputMessage = createOutputMessage(webRequest);
 
+        // 如果返回参数为 RestfulEntity 则不再包装
+        if (!(returnValue instanceof RestfulEntity)) {
+            returnValue = RestfulEntity.ok(returnValue);
+        }
+
         // Try even with null return value. ResponseBodyAdvice could get involved.
-        writeWithMessageConverters(RestfulEntity.ok(returnValue), returnType, inputMessage, outputMessage);
+        writeWithMessageConverters(returnValue, returnType, inputMessage, outputMessage);
     }
 }

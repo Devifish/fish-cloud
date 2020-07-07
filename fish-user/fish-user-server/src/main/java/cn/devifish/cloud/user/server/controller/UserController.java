@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/test")
-    public String test() {
-        return "test";
+    public Boolean test() {
+        return Boolean.FALSE;
     }
 }
