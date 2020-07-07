@@ -31,7 +31,7 @@ public class ConverterEnumFactory implements ConverterFactory<String, BaseEnum<?
         return key -> {
             final E[] enumConstants = targetType.getEnumConstants();
             for (E enumConstant : enumConstants) {
-                Serializable param = enumConstant.param();
+                Serializable param = enumConstant.getParam();
                 if (StringUtils.equals(key, String.valueOf(param))) {
                     return enumConstant;
                 }

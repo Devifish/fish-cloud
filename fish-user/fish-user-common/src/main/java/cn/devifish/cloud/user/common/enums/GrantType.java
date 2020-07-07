@@ -33,7 +33,7 @@ public enum GrantType implements BaseEnum<String> {
     }
 
     @Override
-    public String param() {
+    public String getParam() {
         return param;
     }
 }

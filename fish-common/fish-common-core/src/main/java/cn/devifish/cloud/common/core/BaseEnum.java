@@ -13,6 +13,6 @@ import java.io.Serializable;
  */
 public interface BaseEnum<V extends Serializable> {
 
-    V param();
+    V getParam();
 
 }
