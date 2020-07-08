@@ -7,6 +7,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
@@ -60,4 +61,18 @@ public class RestfulResponseMethodProcessor extends RequestResponseBodyMethodPro
         }
         super.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
     }
+
+    /**
+     * 替换Spring MVC ResponseBody默认处理方式
+     * 适用于List.replaceAll(this::replaceDefault)使用
+     *
+     * @param handler Handler列表Item
+     * @return HandlerMethodReturnValueHandler
+     */
+    public HandlerMethodReturnValueHandler replaceDefault(HandlerMethodReturnValueHandler handler) {
+        return handler instanceof RequestResponseBodyMethodProcessor
+                ? this
+                : handler;
+    }
+
 }

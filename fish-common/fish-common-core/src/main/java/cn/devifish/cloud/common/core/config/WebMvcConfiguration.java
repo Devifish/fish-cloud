@@ -15,7 +15,6 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -53,16 +52,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     public InitializingBean restfulResponseMethodProcessorBean(RequestMappingHandlerAdapter adapter) {
         return () -> {
             List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
-            returnValueHandlers = new ArrayList<>(Objects.requireNonNull(returnValueHandlers));
-            returnValueHandlers.replaceAll(handlerMethodReturnValueHandler -> {
-                //替换Spring MVC ResponseBody默认处理方式
-                if (handlerMethodReturnValueHandler instanceof RequestResponseBodyMethodProcessor) {
-                    List<HttpMessageConverter<?>> messageConverters = adapter.getMessageConverters();
-                    return new RestfulResponseMethodProcessor(messageConverters);
-                }
-                return handlerMethodReturnValueHandler;
-            });
+            List<HttpMessageConverter<?>> messageConverters = adapter.getMessageConverters();
+            RestfulResponseMethodProcessor processor = new RestfulResponseMethodProcessor(messageConverters);
 
+            //构建新的returnValueHandlers集合
+            returnValueHandlers = new ArrayList<>(Objects.requireNonNull(returnValueHandlers));
+            returnValueHandlers.replaceAll(processor::replaceDefault);
             adapter.setReturnValueHandlers(returnValueHandlers);
         };
     }
