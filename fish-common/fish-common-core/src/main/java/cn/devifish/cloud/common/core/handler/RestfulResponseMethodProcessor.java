@@ -55,8 +55,8 @@ public class RestfulResponseMethodProcessor extends RequestResponseBodyMethodPro
             ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
             throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
 
-        // 如果返回参数为 RestfulEntity 则不再包装
-        if (!(returnValue instanceof RestfulEntity)) {
+        // 不包装 Resource类型及RestfulEntity原型的数据
+        if (!(returnValue instanceof RestfulEntity || isResourceType(returnValue, returnType))) {
             returnValue = RestfulEntity.ok(returnValue);
         }
         super.handleReturnValue(returnValue, returnType, mavContainer, webRequest);
