@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.devifish.cloud.common.security.config.OAuth2ResourceServerConfiguration,\
+  cn.devifish.cloud.common.security.config.OAuth2TokenConfiguration

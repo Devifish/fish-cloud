@@ -1,19 +1,14 @@
 package cn.devifish.cloud.user.server.security;
 
-import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * OAuth2AuthorizationServerConfiguration
@@ -30,9 +25,9 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     //private final AuthenticationManager authenticationManager;
-    private final RedisConnectionFactory redisConnectionFactory;
     private final OAuth2ClientDetailsService oauth2ClientDetailsService;
     private final OAuth2UserDetailsService oauth2UserDetailsService;
+    private final TokenStore tokenStore;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -46,42 +41,9 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        TokenStore tokenStore = tokenStore();
-        DefaultTokenServices tokenService = tokenService(tokenStore);
-
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
-                .tokenStore(tokenStore)
-                .tokenServices(tokenService)
-                .userDetailsService(oauth2UserDetailsService);
-    }
-
-    /**
-     * Redis 数据库缓存鉴权 Token
-     *
-     * @return TokenStore
-     */
-    @Bean
-    public TokenStore tokenStore()  {
-        log.info("Initializing OAuth2 Redis Token Store");
-        RedisTokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
-        tokenStore.setPrefix(SecurityConstant.OAUTH_CACHE_PREFIX);
-        return tokenStore;
-    }
-
-    /**
-     * 注册 TokenServices
-     *
-     * @param tokenStore TokenStore
-     * @return DefaultTokenServices
-     */
-    @Bean
-    public DefaultTokenServices tokenService(TokenStore tokenStore) {
-        log.info("Initializing OAuth2 Redis Token Service");
-        DefaultTokenServices tokenServices = new DefaultTokenServices();
-        tokenServices.setTokenStore(tokenStore);
-        tokenServices.setAccessTokenValiditySeconds((int) SecurityConstant.DEFAULT_ACCESS_TOKEN_VALIDITY);
-        tokenServices.setRefreshTokenValiditySeconds((int) SecurityConstant.DEFAULT_REFRESH_TOKEN_VALIDITY);
-        return tokenServices;
+                .userDetailsService(oauth2UserDetailsService)
+                .tokenStore(tokenStore);
     }
 
 }
