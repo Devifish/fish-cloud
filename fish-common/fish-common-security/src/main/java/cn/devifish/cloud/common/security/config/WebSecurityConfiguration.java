@@ -1,6 +1,6 @@
 package cn.devifish.cloud.common.security.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * WebSecurityConfiguration
@@ -47,21 +46,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Bean
     @Override
+    @ConditionalOnBean(UserDetailsService.class)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    /**
-     * 默认UserDetailsService实现
-     * 防止为 NULL 时 Spring Security随机生成用户数据
-     * 已存在 UserDetailsService 实现时不加载
-     *
-     * @return UserDetailsService
-     */
-    @Bean
-    @ConditionalOnMissingBean(UserDetailsService.class)
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager();
     }
 
     /**
