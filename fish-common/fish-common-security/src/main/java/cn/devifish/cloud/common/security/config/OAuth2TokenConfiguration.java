@@ -17,8 +17,8 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
  * @date 2020/7/9 17:28
  */
 @Slf4j
-@Configuration
 @RequiredArgsConstructor
+@Configuration(proxyBeanMethods = false)
 public class OAuth2TokenConfiguration {
 
     private final RedisConnectionFactory redisConnectionFactory;
