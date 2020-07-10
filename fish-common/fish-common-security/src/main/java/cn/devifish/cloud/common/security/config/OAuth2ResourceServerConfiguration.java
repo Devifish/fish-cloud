@@ -1,7 +1,6 @@
 package cn.devifish.cloud.common.security.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -20,7 +19,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
  */
 @EnableResourceServer
 @RequiredArgsConstructor
-@ConditionalOnMissingBean(AuthorizationServerConfigurer.class)
 @Configuration(proxyBeanMethods = false)
 public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
