@@ -4,7 +4,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,16 +24,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration(proxyBeanMethods = false)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    /**
+     * 排除 Spring 框架默认接口及文件
+     * 防止进入Security拦截器占用CPU资源
+     *
+     * @param web WebSecurity
+     * @throws Exception 异常
+     */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favor.ico");
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/actuator/**", "/error").permitAll()
-                .anyRequest().authenticated();
+        web.ignoring().antMatchers("/favor.ico", "/actuator/**", "/error");
     }
 
     /**
@@ -55,13 +54,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * Spring Security 加密算法
      * 默认使用 BCrypt 算法
      *
-     * @see org.springframework.security.crypto.factory.PasswordEncoderFactories
      * @return PasswordEncoder
+     * @see org.springframework.security.crypto.factory.PasswordEncoderFactories
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        if (passwordEncoder instanceof  DelegatingPasswordEncoder) {
+        if (passwordEncoder instanceof DelegatingPasswordEncoder) {
             BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
             ((DelegatingPasswordEncoder) passwordEncoder).setDefaultPasswordEncoderForMatches(bcryptPasswordEncoder);
         }

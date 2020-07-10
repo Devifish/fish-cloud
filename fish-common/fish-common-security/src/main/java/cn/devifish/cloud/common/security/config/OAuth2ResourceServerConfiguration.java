@@ -2,6 +2,7 @@ package cn.devifish.cloud.common.security.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -23,6 +24,23 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
     private final TokenStore tokenStore;
+
+    /**
+     * 加载放行路径
+     * 不被安全框架拦截
+     *
+     * @param http HttpSecurity
+     * @throws Exception 异常
+     */
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        String[] ignore = {};
+
+        //白名单路径放行, 其他需要鉴权
+        http.authorizeRequests()
+                .antMatchers(ignore).permitAll()
+                .anyRequest().authenticated();
+    }
 
     /**
      * 配置授权、令牌的访问服务
