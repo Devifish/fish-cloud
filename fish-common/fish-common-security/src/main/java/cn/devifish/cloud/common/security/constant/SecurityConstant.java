@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public interface SecurityConstant {
 
     /** OAUTH2 TOKEN 缓存前缀 **/
-    String OAUTH_CACHE_PREFIX = "oauth:";
+    String OAUTH_CACHE_PREFIX = "fish_common_security:";
 
     /** OAUTH2 TOKEN 生存时间 **/
     long DEFAULT_REFRESH_TOKEN_VALIDITY = TimeUnit.DAYS.toSeconds(7);
