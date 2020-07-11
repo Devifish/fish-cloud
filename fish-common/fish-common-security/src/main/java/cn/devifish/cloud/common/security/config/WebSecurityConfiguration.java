@@ -8,10 +8,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * WebSecurityConfiguration
@@ -48,23 +44,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @ConditionalOnBean(UserDetailsService.class)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    /**
-     * Spring Security 加密算法
-     * 默认使用 BCrypt 算法
-     *
-     * @return PasswordEncoder
-     * @see org.springframework.security.crypto.factory.PasswordEncoderFactories
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        if (passwordEncoder instanceof DelegatingPasswordEncoder) {
-            BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
-            ((DelegatingPasswordEncoder) passwordEncoder).setDefaultPasswordEncoderForMatches(bcryptPasswordEncoder);
-        }
-        return passwordEncoder;
     }
 
 }
