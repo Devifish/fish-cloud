@@ -14,10 +14,6 @@
     <packaging>jar</packaging>
     <description>公共mybatis组件</description>
 
-    <properties>
-        <mybatis-plus.version>3.3.2</mybatis-plus.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>cn.devifish.cloud</groupId>
@@ -25,12 +21,19 @@
             <version>1.0.0</version>
         </dependency>
 
+        <!--spring-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <!--mybatis-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
         </dependency>
 
+        <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>

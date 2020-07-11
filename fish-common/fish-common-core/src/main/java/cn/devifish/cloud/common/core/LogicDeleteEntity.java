@@ -1,5 +1,6 @@
 package cn.devifish.cloud.common.core;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +19,7 @@ public abstract class LogicDeleteEntity extends BaseEntity {
     /**
      * 删除标记
      */
+    @TableLogic
     private Boolean deleteFlag;
 
 }
