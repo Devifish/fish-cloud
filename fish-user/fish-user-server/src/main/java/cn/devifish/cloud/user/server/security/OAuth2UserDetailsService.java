@@ -1,5 +1,6 @@
 package cn.devifish.cloud.user.server.security;
 
+import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.user.common.entity.User;
 import cn.devifish.cloud.user.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,13 +48,14 @@ public class OAuth2UserDetailsService implements UserDetailsService {
      * @return UserDetails
      */
     private UserDetails buildUserDetails(User user) {
+        Long id = user.getId();
         String username = user.getUsername();
         String password = user.getPassword();
         Boolean enabled = user.getEnabled();
         Boolean locked = user.getLocked();
-        return new org.springframework.security.core.userdetails.User(
-                username, password, enabled,
-                true, true,
-                !locked, Collections.emptySet());
+
+        return new BasicUser(id, username, password,
+                enabled, true, true, !locked,
+                Collections.emptySet());
     }
 }
