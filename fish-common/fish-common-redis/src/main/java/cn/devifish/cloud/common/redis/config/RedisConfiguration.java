@@ -1,12 +1,17 @@
 package cn.devifish.cloud.common.redis.config;
 
 import cn.devifish.cloud.common.redis.constant.RedisConstant;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
+import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 
@@ -23,6 +28,7 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
 public class RedisConfiguration {
 
     private final RedisConnectionFactory redisConnectionFactory;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
@@ -31,8 +37,16 @@ public class RedisConfiguration {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(RedisSerializer.json());
+        redisTemplate.setValueSerializer(createJsonRedisSerializer());
         return redisTemplate;
+    }
+
+    public RedisSerializer<?> createJsonRedisSerializer() {
+        ObjectMapper objectMapper = this.objectMapper.copy();
+
+        PolymorphicTypeValidator validator = objectMapper.getPolymorphicTypeValidator();
+        objectMapper.activateDefaultTyping(validator, DefaultTyping.NON_FINAL, As.PROPERTY);
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
     }
 
     /**

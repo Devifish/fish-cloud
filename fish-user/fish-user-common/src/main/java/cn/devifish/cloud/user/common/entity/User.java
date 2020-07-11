@@ -1,6 +1,7 @@
 package cn.devifish.cloud.user.common.entity;
 
 import cn.devifish.cloud.common.core.LogicDeleteEntity;
+import cn.devifish.cloud.user.common.enums.SexEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,29 +16,25 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class User extends LogicDeleteEntity {
 
-    /**
-     * 用户名
-     **/
+    /** 用户名 **/
     private String username;
 
-    /**
-     * 密码
-     */
+    /** 密码 **/
     private String password;
 
-    /**
-     * 加密算法
-     */
-    private String crypto;
-
-    /**
-     * 昵称
-     */
+    /** 昵称 **/
     private String nickname;
 
-    /**
-     * 真实姓名
-     */
+    /** 真实姓名 **/
     private String realname;
+
+    /** 性别 **/
+    private SexEnum sex;
+
+    /** 是否启用 **/
+    private Boolean enabled;
+
+    /** 是否锁定 **/
+    private Boolean locked;
 
 }

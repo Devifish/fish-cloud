@@ -36,7 +36,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
      */
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        OAuthClient oauthClient = oauthClientService.findByClientId(clientId);
+        OAuthClient oauthClient = oauthClientService.selectByClientId(clientId);
         if (oauthClient == null) {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }
@@ -56,7 +56,6 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                 oauthClient.getGrantTypes(), oauthClient.getAuthorities());
 
         details.setClientSecret(oauthClient.getClientSecret());
-
         return details;
     }
 

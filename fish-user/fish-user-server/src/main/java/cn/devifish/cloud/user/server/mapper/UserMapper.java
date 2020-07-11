@@ -1,5 +1,7 @@
 package cn.devifish.cloud.user.server.mapper;
 
+import cn.devifish.cloud.user.common.entity.User;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -10,5 +12,14 @@ import org.apache.ibatis.annotations.Mapper;
  * @date 2020/7/6 11:40
  */
 @Mapper
-public interface UserMapper {
+public interface UserMapper extends BaseMapper<User> {
+
+    /**
+     * 根据用户名称查询用户数据
+     *
+     * @param username 用户名
+     * @return User
+     */
+    User selectByUsername(String username);
+
 }

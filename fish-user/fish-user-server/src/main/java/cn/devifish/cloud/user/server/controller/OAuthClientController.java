@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * OAuthClientController
- * OAuth2 客户端
+ * OAuth2 客户端接口
  *
  * @author Devifish
  * @date 2020/7/7 18:26
@@ -28,9 +28,9 @@ public class OAuthClientController {
      * @param clientId 客户端ID
      * @return OAuthClientVo
      */
-    @GetMapping("/find/{clientId}")
-    public OAuthClientVo findByClientId(@PathVariable String clientId) {
-        return oauthClientService.findVoByClientId(clientId);
+    @GetMapping("/select/{clientId}")
+    public OAuthClientVo selectByClientId(@PathVariable String clientId) {
+        return oauthClientService.selectVoByClientId(clientId);
     }
 
 }

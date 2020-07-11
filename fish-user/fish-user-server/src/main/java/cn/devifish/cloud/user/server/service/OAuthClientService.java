@@ -28,8 +28,8 @@ public class OAuthClientService {
      * @param clientId 客户端ID
      * @return OAuthClient
      */
-    public OAuthClient findByClientId(String clientId) {
-        return oauthClientCache.getIfAbsent(clientId, oauthClientMapper::findByClientId);
+    public OAuthClient selectByClientId(String clientId) {
+        return oauthClientCache.getIfAbsent(clientId, oauthClientMapper::selectById);
     }
 
     /**
@@ -38,8 +38,8 @@ public class OAuthClientService {
      * @param clientId 客户端ID
      * @return OAuthClientVo
      */
-    public OAuthClientVo findVoByClientId(String clientId) {
-        OAuthClient oauthClient = findByClientId(clientId);
+    public OAuthClientVo selectVoByClientId(String clientId) {
+        OAuthClient oauthClient = selectByClientId(clientId);
         OAuthClientVo oauthClientVo = new OAuthClientVo();
         BeanUtils.copyProperties(oauthClient, oauthClientVo);
         return oauthClientVo;

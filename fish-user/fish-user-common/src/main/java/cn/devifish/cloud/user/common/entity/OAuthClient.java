@@ -1,5 +1,7 @@
 package cn.devifish.cloud.user.common.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,9 +14,11 @@ import java.io.Serializable;
  * @date 2020/7/6 10:18
  */
 @Data
+@TableName("t_oauth_client")
 public class OAuthClient implements Serializable {
 
     /** 客户端ID **/
+    @TableId
     private String clientId;
 
     /** 资源ID **/
