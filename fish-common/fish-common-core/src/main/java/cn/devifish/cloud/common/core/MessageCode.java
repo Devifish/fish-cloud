@@ -7,7 +7,7 @@ package cn.devifish.cloud.common.core;
  * @author Devifish
  * @date 2020/7/7 14:46
  */
-public enum ErrorStatus implements StatusCode {
+public enum MessageCode implements StatusCode {
 
     /** 常规 **/
     Other(-1, "其他"),
@@ -29,7 +29,7 @@ public enum ErrorStatus implements StatusCode {
     private final int code;
     private final String desc;
 
-    ErrorStatus(int code, String desc) {
+    MessageCode(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }

@@ -33,15 +33,25 @@ public class RestfulEntity<E> implements Serializable {
     }
 
     public static <T> RestfulEntity<T> ok() {
-        return new RestfulEntity<>(ErrorStatus.Ok);
+        return new RestfulEntity<>(MessageCode.Ok);
     }
 
     public static <T> RestfulEntity<T> ok(T data) {
-        return new RestfulEntity<>(data, ErrorStatus.Ok);
+        return new RestfulEntity<>(data, MessageCode.Ok);
     }
 
     public static <T> RestfulEntity<T> error(StatusCode statusCode) {
         return new RestfulEntity<>(statusCode);
+    }
+
+    public static <T> RestfulEntity<T> error(StatusCode statusCode, String message) {
+        return new RestfulEntity<>(null, statusCode.getCode(), message);
+    }
+
+    public static <T> RestfulEntity<T> error(RuntimeException exception) {
+        int code = MessageCode.InternalServerError.getCode();
+        String message = exception.getMessage();
+        return new RestfulEntity<>(null, code, message);
     }
 
 }
