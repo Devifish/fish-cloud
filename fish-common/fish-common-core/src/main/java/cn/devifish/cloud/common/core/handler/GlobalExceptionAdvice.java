@@ -2,13 +2,17 @@ package cn.devifish.cloud.common.core.handler;
 
 import cn.devifish.cloud.common.core.MessageCode;
 import cn.devifish.cloud.common.core.RestfulEntity;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * GlobalExceptionAdvice
@@ -19,7 +23,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionAdvice {
+
+    private final HttpServletRequest request;
 
     /**
      * 全局异常默认处理
@@ -32,6 +39,19 @@ public class GlobalExceptionAdvice {
     public RestfulEntity<Void> exception(Exception exception) {
         log.error(exception.getMessage(), exception);
         return RestfulEntity.error(MessageCode.InternalServerError);
+    }
+
+    /**
+     * 请求类型不支持异常
+     *
+     * @param exception exception
+     * @return error
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RestfulEntity<Void> requestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+        log.warn("URI: {} 不支持 [{}] 请求", request.getRequestURI(), exception.getMethod());
+        return RestfulEntity.error(MessageCode.BadRequest);
     }
 
     /**

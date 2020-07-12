@@ -2,12 +2,14 @@ package cn.devifish.cloud.user.server.security;
 
 import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.user.common.entity.User;
+import cn.devifish.cloud.user.server.service.RoleService;
 import cn.devifish.cloud.user.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Collections;
 
@@ -24,6 +26,7 @@ import java.util.Collections;
 public class OAuth2UserDetailsService implements UserDetailsService {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     /**
      * 适配 Spring Cloud OAuth2 接口
@@ -48,14 +51,11 @@ public class OAuth2UserDetailsService implements UserDetailsService {
      * @return UserDetails
      */
     private UserDetails buildUserDetails(User user) {
-        Long id = user.getId();
-        String username = user.getUsername();
-        String password = user.getPassword();
-        Boolean enabled = user.getEnabled();
-        Boolean locked = user.getLocked();
+        Assert.notNull(user, "user不能为NULL");
+        Long userId = user.getId();
 
-        return new BasicUser(id, username, password,
-                enabled, true, true, !locked,
+        return new BasicUser(user.getId(), user.getUsername(), user.getPassword(),
+                user.getEnabled(), true, true, !user.getLocked(),
                 Collections.emptySet());
     }
 }
