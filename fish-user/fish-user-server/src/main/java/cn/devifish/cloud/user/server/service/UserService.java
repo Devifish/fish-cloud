@@ -70,4 +70,18 @@ public class UserService {
         return userMapper.selectByUsername(username);
     }
 
+    /**
+     * 更具用户ID查询是否存在
+     *
+     * @param id 用户ID
+     * @return boolean
+     */
+    public boolean existById(Long id) {
+        if (id == null) return false;
+
+        //获取用户数据（Cache）
+        User user = selectById(id);
+        return user != null;
+    }
+
 }

@@ -5,6 +5,8 @@ import cn.devifish.cloud.user.common.entity.User;
 import cn.devifish.cloud.user.server.service.RoleService;
 import cn.devifish.cloud.user.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Collections;
+import java.util.List;
 
 /**
  * OAuth2UserDetailsService
@@ -52,10 +55,16 @@ public class OAuth2UserDetailsService implements UserDetailsService {
      */
     private UserDetails buildUserDetails(User user) {
         Assert.notNull(user, "user不能为NULL");
+
+        //获取用户权限
         Long userId = user.getId();
+        String[] authorities = roleService.selectAuthoritiesByUserId(userId);
+        List<GrantedAuthority> authorityList = authorities == null
+                ? Collections.emptyList()
+                : AuthorityUtils.createAuthorityList(authorities);
 
         return new BasicUser(user.getId(), user.getUsername(), user.getPassword(),
-                user.getEnabled(), true, true, !user.getLocked(),
-                Collections.emptySet());
+                user.getEnabled(), true, true,
+                !user.getLocked(), authorityList);
     }
 }

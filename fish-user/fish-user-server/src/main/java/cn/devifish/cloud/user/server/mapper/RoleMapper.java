@@ -4,6 +4,8 @@ import cn.devifish.cloud.user.common.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * RoleMapper
  *
@@ -12,4 +14,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
+
+    /**
+     * 根据用户ID查询角色数据
+     *
+     * @param userId 用户ID
+     * @return List<Role>
+     */
+    List<Role> selectByUserId(Long userId);
+
 }

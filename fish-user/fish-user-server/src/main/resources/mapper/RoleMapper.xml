@@ -5,24 +5,35 @@
 <mapper namespace="cn.devifish.cloud.user.server.mapper.RoleMapper">
 
     <resultMap id="baseResultMap" type="cn.devifish.cloud.user.common.entity.Role">
-        <id column="u_id" property="id"/>
+        <id column="r_id" property="id"/>
         <result column="name" property="name"/>
         <result column="code" property="code"/>
         <result column="remark" property="remark"/>
         <result column="authorities" property="authorities"/>
         <result column="system_flag" property="systemFlag"/>
-        <result column="u_create_time" property="createTime"/>
-        <result column="u_update_time" property="updateTime"/>
+        <result column="r_create_time" property="createTime"/>
+        <result column="r_update_time" property="updateTime"/>
     </resultMap>
 
     <sql id="baseSql">
-        `u`.id AS u_id,
-        `u`.name,
-        `u`.code,
-        `u`.remark,
-        `u`.authorities,
-        `u`.system_flag,
-        `u`.create_time AS u_create_time,
-        `u`.update_time AS u_update_time
+        `r`.id AS r_id,
+        `r`.name,
+        `r`.code,
+        `r`.remark,
+        `r`.authorities,
+        `r`.system_flag,
+        `r`.create_time AS r_create_time,
+        `r`.update_time AS r_update_time
     </sql>
+
+    <select id="selectByUserId" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM t_role AS r
+        LEFT JOIN t_user_role_relation AS urr ON urr.role_id = r.id
+        <where>
+            urr.user_id = #{userId}
+        </where>
+    </select>
+
 </mapper>

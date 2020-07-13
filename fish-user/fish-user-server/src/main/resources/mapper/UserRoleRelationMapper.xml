@@ -8,4 +8,21 @@
         <id column="user_id" property="userId"/>
         <result column="role_id" property="roleId"/>
     </resultMap>
+
+    <select id="selectUserIdByRoleId" resultType="java.lang.Long">
+        SELECT
+        urr.user_id
+        FROM t_user_role_relation AS urr
+        WHERE urr.role_id = #{roleId}
+    </select>
+
+    <delete id="deleteByUserId">
+        DELETE FROM t_user_role_relation AS urr
+        WHERE urr.user_id = #{userId}
+    </delete>
+
+    <delete id="deleteByRoleId">
+        DELETE FROM t_user_role_relation AS urr
+        WHERE urr.role_id = #{roleId}
+    </delete>
 </mapper>
