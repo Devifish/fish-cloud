@@ -38,7 +38,7 @@ public abstract class BaseCache<V, ID extends Serializable> {
     private String cacheKeyPrefix;
 
     @PostConstruct
-    private void init() {
+    protected void init() {
         valueOperations = redisTemplate.opsForValue();
     }
 
