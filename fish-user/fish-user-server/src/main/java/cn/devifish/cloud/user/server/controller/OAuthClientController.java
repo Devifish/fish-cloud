@@ -28,7 +28,7 @@ public class OAuthClientController {
      * @param clientId 客户端ID
      * @return OAuthClientVo
      */
-    @GetMapping("/select/{clientId}")
+    @GetMapping("/select/id/{clientId}")
     public OAuthClientVo selectByClientId(@PathVariable String clientId) {
         return oauthClientService.selectVoByClientId(clientId);
     }

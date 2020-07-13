@@ -1,5 +1,8 @@
 package cn.devifish.cloud.user.server.service;
 
+import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.common.security.BasicUser;
+import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.user.common.entity.User;
 import cn.devifish.cloud.user.common.vo.UserVo;
 import cn.devifish.cloud.user.server.cache.UserCache;
@@ -43,6 +46,18 @@ public class UserService {
         UserVo userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         return userVo;
+    }
+
+    /**
+     * 获取当前用户数据
+     *
+     * @return UserVo
+     */
+    public UserVo currentUserVo() {
+        BasicUser principal = SecurityUtil.getPrincipal();
+        if (principal == null) throw new BizException("获取当前用户失败");
+
+        return selectVoById(principal.getUserId());
     }
 
     /**

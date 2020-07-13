@@ -23,12 +23,22 @@ public class UserController {
     private final UserService userService;
 
     /**
+     * 获取当前用户数据
+     *
+     * @return UserVo
+     */
+    @GetMapping("/current")
+    public UserVo current() {
+        return userService.currentUserVo();
+    }
+
+    /**
      * 根据用户ID查询单个信息
      *
      * @param userId 用户ID
      * @return User
      */
-    @GetMapping("/select/{userId}")
+    @GetMapping("/select/id/{userId}")
     public UserVo selectById(@PathVariable Long userId) {
         return userService.selectVoById(userId);
     }
