@@ -8,7 +8,7 @@
         <id column="u_id" property="id"/>
         <result column="name" property="name"/>
         <result column="code" property="code"/>
-        <result column="description" property="description"/>
+        <result column="remark" property="remark"/>
         <result column="authorities" property="authorities"/>
         <result column="system_flag" property="systemFlag"/>
         <result column="u_create_time" property="createTime"/>
@@ -19,7 +19,7 @@
         `u`.id AS u_id,
         `u`.name,
         `u`.code,
-        `u`.description,
+        `u`.remark,
         `u`.authorities,
         `u`.system_flag,
         `u`.create_time AS u_create_time,
