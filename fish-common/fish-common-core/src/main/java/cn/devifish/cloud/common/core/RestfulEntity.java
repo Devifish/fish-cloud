@@ -1,6 +1,8 @@
 package cn.devifish.cloud.common.core;
 
+import cn.devifish.cloud.common.core.exception.FishCloudException;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 
@@ -48,10 +50,13 @@ public class RestfulEntity<E> implements Serializable {
         return new RestfulEntity<>(null, statusCode.getCode(), message);
     }
 
-    public static <T> RestfulEntity<T> error(RuntimeException exception) {
-        int code = MessageCode.InternalServerError.getCode();
+    public static <T> RestfulEntity<T> error(FishCloudException exception) {
+        StatusCode statusCode = exception.getStatusCode();
         String message = exception.getMessage();
-        return new RestfulEntity<>(null, code, message);
+
+        return StringUtils.isEmpty(message)
+                ? error(statusCode)
+                : error(statusCode, message);
     }
 
 }

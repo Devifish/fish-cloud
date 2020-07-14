@@ -8,8 +8,10 @@ import cn.devifish.cloud.user.common.vo.UserVo;
 import cn.devifish.cloud.user.server.cache.UserCache;
 import cn.devifish.cloud.user.server.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * UserService
@@ -24,6 +26,7 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserCache userCache;
+    private final OAuthTokenService oauthTokenService;
 
     /**
      * 根据用户ID查询单个信息
@@ -82,6 +85,44 @@ public class UserService {
         //获取用户数据（Cache）
         User user = selectById(id);
         return user != null;
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param user 用户参数
+     * @return 是否成功
+     */
+    public Boolean update(User user) {
+        if (user == null) throw new BizException("user 参数不能为NULL");
+
+        //校验用户ID
+        Long userId = user.getId();
+        if (userId == null) throw new BizException("userId 参数不能为NULL");
+
+        //检查用户是否存在
+        User old_user = selectById(userId);
+        if (old_user == null) throw new BizException("该用户不存在");
+
+        //校验用户名是否重复
+        String username = user.getUsername();
+        String old_username = old_user.getUsername();
+        if (StringUtils.isNotEmpty(username) && !username.equals(old_username)) {
+            User temp = selectByUsername(username);
+            if (temp != null) throw new BizException("用户名已存在");
+        }
+
+        //修改密码后注销已登陆的所有用户 (清除Token)
+        String password = user.getPassword();
+        String old_password = old_user.getPassword();
+        if (StringUtils.isNotEmpty(password) && !password.equals(old_password)) {
+            Assert.state(oauthTokenService.logoutAllByUsername(username), "用户修改密码注销Token失败");
+        }
+
+        //更修并移除缓存
+        userCache.delete(userId);
+        userMapper.updateById(user);
+        return Boolean.TRUE;
     }
 
 }

@@ -2,6 +2,7 @@ package cn.devifish.cloud.common.core.handler;
 
 import cn.devifish.cloud.common.core.MessageCode;
 import cn.devifish.cloud.common.core.RestfulEntity;
+import cn.devifish.cloud.common.core.exception.FishCloudException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,15 +46,14 @@ public class GlobalExceptionAdvice {
     }
 
     /**
-     * Assert断言异常信息拦截
+     * 系统框架异常信息拦截
      *
      * @param exception exception
      * @return error
      */
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(FishCloudException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RestfulEntity<?> illegalArgumentException(IllegalArgumentException exception) {
-        log.warn(exception.getMessage());
+    public RestfulEntity<?> illegalArgumentException(FishCloudException exception) {
         return RestfulEntity.error(exception);
     }
 

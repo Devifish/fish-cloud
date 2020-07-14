@@ -1,5 +1,7 @@
 package cn.devifish.cloud.common.core.exception;
 
+import cn.devifish.cloud.common.core.StatusCode;
+
 /**
  * BizException
  * 业务异常
@@ -22,5 +24,13 @@ public class BizException extends FishCloudException {
 
     public BizException(Throwable cause) {
         super(cause);
+    }
+
+    public BizException(StatusCode statusCode, String message) {
+        super(statusCode, message);
+    }
+
+    public BizException(StatusCode statusCode, String message, Throwable cause) {
+        super(statusCode, message, cause);
     }
 }

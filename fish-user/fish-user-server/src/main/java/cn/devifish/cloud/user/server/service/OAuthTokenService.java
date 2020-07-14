@@ -103,4 +103,15 @@ public class OAuthTokenService {
         return Boolean.TRUE;
     }
 
+    /**
+     * 根据用户名注销用户所有存在的Token
+     * 不存在及为空的Token均返回注销失败
+     *
+     * @param username 用户名
+     * @return 是否成功
+     */
+    public Boolean logoutAllByUsername(String username) {
+        return logoutAllByUsername(null, username);
+    }
+
 }
