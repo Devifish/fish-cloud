@@ -4,10 +4,13 @@ import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.user.common.entity.User;
+import cn.devifish.cloud.user.common.enums.SexEnum;
 import cn.devifish.cloud.user.common.vo.UserVo;
 import cn.devifish.cloud.user.server.cache.UserCache;
 import cn.devifish.cloud.user.server.mapper.UserMapper;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,7 @@ import org.springframework.util.Assert;
  * @author Devifish
  * @date 2020/7/6 11:19
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -77,17 +81,63 @@ public class UserService {
     }
 
     /**
-     * 更具用户ID查询是否存在
+     * 根据用户ID查询是否存在
      *
      * @param id 用户ID
      * @return boolean
      */
-    public boolean existById(Long id) {
+    public Boolean existById(Long id) {
         if (id == null) return false;
 
         //获取用户数据（Cache）
         User user = selectById(id);
         return user != null;
+    }
+
+    /**
+     * 根据用户名查询是否存在
+     *
+     * @param username 用户名
+     * @return boolean
+     */
+    public Boolean existByUsername(String username) {
+        if (StringUtils.isEmpty(username)) return false;
+
+        //获取用户数据
+        User user = selectByUsername(username);
+        return user != null;
+    }
+
+    /**
+     * 保存用户信息
+     *
+     * @param user 用户参数
+     * @return 是否成功
+     */
+    public Boolean insert(User user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        if (StringUtils.isEmpty(username)) throw new BizException("用户名不能为空");
+        if (StringUtils.isEmpty(password)) throw new BizException("密码不能为空");
+        if (existByUsername(username)) throw new BizException("用户名已存在");
+
+        //加密密码
+        String encode_password = passwordEncoder.encode(password);
+        user.setPassword(encode_password);
+
+        //设置默认值
+        if (user.getSex() == null) user.setSex(SexEnum.Unset);
+        if (user.getLocked() == null) user.setLocked(Boolean.FALSE);
+        if (user.getEnabled() == null) user.setEnabled(Boolean.TRUE);
+
+        //保存用户数据
+        if (SqlHelper.retBool(userMapper.insert(user))) {
+            log.info("注册用户：{} 成功", username);
+            return Boolean.TRUE;
+        }else {
+            log.info("注册用户：{} 失败", username);
+            throw new BizException("注册用户失败");
+        }
     }
 
     /**
@@ -98,8 +148,8 @@ public class UserService {
      */
     @Transactional
     public Boolean update(User user) {
-        if (user == null || user.getId() == null) throw new BizException("用户基础参数不能为空");
         Long userId = user.getId();
+        if (user.getId() == null) throw new BizException("用户基础参数不能为空");
 
         //检查用户是否存在
         User old_user = selectById(userId);
@@ -109,8 +159,8 @@ public class UserService {
         String username = user.getUsername();
         String old_username = old_user.getUsername();
         if (StringUtils.isNotEmpty(username) && !username.equals(old_username)) {
-            User temp = selectByUsername(username);
-            if (temp != null) throw new BizException("用户名已存在");
+            if (existByUsername(username))
+                throw new BizException("用户名已存在");
         }
 
         //是否修改密码 (注销已登陆的所有用户)
@@ -122,9 +172,13 @@ public class UserService {
         }
 
         //更修并移除缓存
-        userCache.delete(userId);
-        userMapper.updateById(user);
-        return Boolean.TRUE;
+        if (SqlHelper.retBool(userMapper.updateById(user))) {
+            userCache.delete(userId);
+            return Boolean.TRUE;
+        }else {
+            log.warn("修改用户：{} 的用户信息失败", username);
+            throw new BizException("修改用户信息失败");
+        }
     }
 
 }

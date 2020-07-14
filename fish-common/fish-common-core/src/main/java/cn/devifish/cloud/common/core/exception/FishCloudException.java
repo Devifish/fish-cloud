@@ -1,5 +1,6 @@
 package cn.devifish.cloud.common.core.exception;
 
+import cn.devifish.cloud.common.core.MessageCode;
 import cn.devifish.cloud.common.core.StatusCode;
 
 /**
@@ -11,13 +12,15 @@ import cn.devifish.cloud.common.core.StatusCode;
  */
 public class FishCloudException extends RuntimeException {
 
-    private StatusCode statusCode;
+    private final StatusCode statusCode;
 
     public FishCloudException() {
+        this.statusCode = MessageCode.Other;
     }
 
     public FishCloudException(String message) {
         super(message);
+        this.statusCode = MessageCode.Other;
     }
 
     public FishCloudException(StatusCode statusCode, String message) {
@@ -27,6 +30,7 @@ public class FishCloudException extends RuntimeException {
 
     public FishCloudException(String message, Throwable cause) {
         super(message, cause);
+        this.statusCode = MessageCode.Other;
     }
 
     public FishCloudException(StatusCode statusCode, String message, Throwable cause) {
@@ -36,6 +40,7 @@ public class FishCloudException extends RuntimeException {
 
     public FishCloudException(Throwable cause) {
         super(cause);
+        this.statusCode = MessageCode.Other;
     }
 
     public StatusCode getStatusCode() {
