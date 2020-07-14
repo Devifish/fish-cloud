@@ -10,7 +10,9 @@ import cn.devifish.cloud.user.server.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 /**
@@ -27,6 +29,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserCache userCache;
     private final OAuthTokenService oauthTokenService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 根据用户ID查询单个信息
@@ -93,12 +96,10 @@ public class UserService {
      * @param user 用户参数
      * @return 是否成功
      */
+    @Transactional
     public Boolean update(User user) {
-        if (user == null) throw new BizException("user 参数不能为NULL");
-
-        //校验用户ID
+        if (user == null || user.getId() == null) throw new BizException("用户基础参数不能为空");
         Long userId = user.getId();
-        if (userId == null) throw new BizException("userId 参数不能为NULL");
 
         //检查用户是否存在
         User old_user = selectById(userId);
@@ -112,10 +113,11 @@ public class UserService {
             if (temp != null) throw new BizException("用户名已存在");
         }
 
-        //修改密码后注销已登陆的所有用户 (清除Token)
+        //是否修改密码 (注销已登陆的所有用户)
         String password = user.getPassword();
         String old_password = old_user.getPassword();
         if (StringUtils.isNotEmpty(password) && !password.equals(old_password)) {
+            user.setPassword(passwordEncoder.encode(password));
             Assert.state(oauthTokenService.logoutAllByUsername(username), "用户修改密码注销Token失败");
         }
 
