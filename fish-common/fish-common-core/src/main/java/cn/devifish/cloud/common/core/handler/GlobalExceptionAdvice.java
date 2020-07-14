@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,9 +39,22 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RestfulEntity<Void> exception(Exception exception) {
+    public RestfulEntity<?> exception(Exception exception) {
         log.error(exception.getMessage(), exception);
         return RestfulEntity.error(MessageCode.InternalServerError);
+    }
+
+    /**
+     * Assert断言异常信息拦截
+     *
+     * @param exception exception
+     * @return error
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RestfulEntity<?> illegalArgumentException(IllegalArgumentException exception) {
+        log.warn(exception.getMessage());
+        return RestfulEntity.error(exception);
     }
 
     /**
@@ -49,7 +65,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RestfulEntity<Void> requestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
+    public RestfulEntity<?> requestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
         log.warn("URI: {} 不支持 [{}] 请求", request.getRequestURI(), exception.getMethod());
         return RestfulEntity.error(MessageCode.BadRequest);
     }
@@ -62,7 +78,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
-    public RestfulEntity<Void> messageNotReadableException(HttpMessageNotReadableException exception) {
+    public RestfulEntity<?> messageNotReadableException(HttpMessageNotReadableException exception) {
         log.warn(exception.getMessage());
         return RestfulEntity.error(MessageCode.PreconditionFailed, "参数不匹配");
     }
@@ -75,9 +91,32 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
-    public RestfulEntity<Void> missingServletRequestParameterException(MissingServletRequestParameterException exception) {
+    public RestfulEntity<?> missingServletRequestParameterException(MissingServletRequestParameterException exception) {
         log.warn(exception.getMessage());
         return RestfulEntity.error(MessageCode.PreconditionFailed, "缺少必要参数: " + exception.getParameterName());
+    }
+
+    /**
+     * 数据校验异常
+     *
+     * @param exception exception
+     * @return error
+     */
+    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
+    @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
+    public RestfulEntity<?> validExceptionHandler(Exception exception) {
+        BindingResult bindingResult = exception instanceof MethodArgumentNotValidException
+                ? ((MethodArgumentNotValidException) exception).getBindingResult()
+                : ((BindException) exception).getBindingResult();
+
+        return bindingResult.getFieldErrors()
+                .stream()
+                .map(error -> {
+                    String message = error.getField() + ": " + error.getDefaultMessage();
+                    return RestfulEntity.error(MessageCode.PreconditionFailed, message);
+                })
+                .findFirst()
+                .orElse(RestfulEntity.error(MessageCode.PreconditionFailed));
     }
 
 }
