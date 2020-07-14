@@ -1,11 +1,9 @@
 package cn.devifish.cloud.user.server.service;
 
 import cn.devifish.cloud.user.common.entity.OAuthClient;
-import cn.devifish.cloud.user.common.vo.OAuthClientVo;
 import cn.devifish.cloud.user.server.cache.OAuthClientCache;
 import cn.devifish.cloud.user.server.mapper.OAuthClientMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,19 +28,6 @@ public class OAuthClientService {
      */
     public OAuthClient selectByClientId(String clientId) {
         return oauthClientCache.getIfAbsent(clientId, oauthClientMapper::selectById);
-    }
-
-    /**
-     * 根据客户端ID查询单个信息
-     *
-     * @param clientId 客户端ID
-     * @return OAuthClientVo
-     */
-    public OAuthClientVo selectVoByClientId(String clientId) {
-        OAuthClient oauthClient = selectByClientId(clientId);
-        OAuthClientVo oauthClientVo = new OAuthClientVo();
-        BeanUtils.copyProperties(oauthClient, oauthClientVo);
-        return oauthClientVo;
     }
 
 }

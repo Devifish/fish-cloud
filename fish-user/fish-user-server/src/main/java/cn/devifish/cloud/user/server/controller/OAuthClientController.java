@@ -1,8 +1,10 @@
 package cn.devifish.cloud.user.server.controller;
 
+import cn.devifish.cloud.user.common.entity.OAuthClient;
 import cn.devifish.cloud.user.common.vo.OAuthClientVo;
 import cn.devifish.cloud.user.server.service.OAuthClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +32,10 @@ public class OAuthClientController {
      */
     @GetMapping("/select/id/{clientId}")
     public OAuthClientVo selectByClientId(@PathVariable String clientId) {
-        return oauthClientService.selectVoByClientId(clientId);
+        OAuthClient oauthClient = oauthClientService.selectByClientId(clientId);
+        OAuthClientVo oauthClientVo = new OAuthClientVo();
+        BeanUtils.copyProperties(oauthClient, oauthClientVo);
+        return oauthClientVo;
     }
 
 }
