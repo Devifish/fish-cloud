@@ -20,7 +20,7 @@ public interface RedisConstant {
     /** 分布式锁前缀 **/
     String REDIS_LOCK_KEY_PREFIX = "distributed_locks";
 
-    /** 默认缓存超时时间 (30分钟) **/
-    Duration DEFAULT_CACHE_TIMEOUT = Duration.ofMinutes(30);
+    /** 默认缓存超时时间 (1小时) **/
+    Duration DEFAULT_CACHE_TIMEOUT = Duration.ofHours(1);
 
 }
