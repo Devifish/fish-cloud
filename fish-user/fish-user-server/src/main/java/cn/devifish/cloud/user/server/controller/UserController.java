@@ -1,8 +1,10 @@
 package cn.devifish.cloud.user.server.controller;
 
+import cn.devifish.cloud.user.common.entity.User;
 import cn.devifish.cloud.user.common.vo.UserVo;
 import cn.devifish.cloud.user.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +31,10 @@ public class UserController {
      */
     @GetMapping("/current")
     public UserVo current() {
-        return userService.currentUserVo();
+        User user = userService.currentUser();
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
     }
 
     /**
@@ -40,6 +45,12 @@ public class UserController {
      */
     @GetMapping("/select/id/{userId}")
     public UserVo selectById(@PathVariable Long userId) {
-        return userService.selectVoById(userId);
+        User user = userService.selectById(userId);
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
     }
+
+
+
 }

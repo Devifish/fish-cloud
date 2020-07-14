@@ -5,14 +5,12 @@ import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.user.common.entity.User;
 import cn.devifish.cloud.user.common.enums.SexEnum;
-import cn.devifish.cloud.user.common.vo.UserVo;
 import cn.devifish.cloud.user.server.cache.UserCache;
 import cn.devifish.cloud.user.server.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,28 +44,15 @@ public class UserService {
     }
 
     /**
-     * 根据用户ID查询单个信息
-     *
-     * @param id 用户ID
-     * @return User
-     */
-    public UserVo selectVoById(Long id) {
-        User user = selectById(id);
-        UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(user, userVo);
-        return userVo;
-    }
-
-    /**
      * 获取当前用户数据
      *
-     * @return UserVo
+     * @return User
      */
-    public UserVo currentUserVo() {
+    public User currentUser() {
         BasicUser principal = SecurityUtil.getPrincipal();
         if (principal == null) throw new BizException("获取当前用户失败");
 
-        return selectVoById(principal.getUserId());
+        return selectById(principal.getUserId());
     }
 
     /**
@@ -110,10 +95,12 @@ public class UserService {
 
     /**
      * 保存用户信息
+     * 包含各项参数校验及数据转换
      *
      * @param user 用户参数
      * @return 是否成功
      */
+    @Transactional
     public Boolean insert(User user) {
         String username = user.getUsername();
         String password = user.getPassword();
@@ -142,6 +129,7 @@ public class UserService {
 
     /**
      * 更新用户信息
+     * 包含各项参数校验及数据转换
      *
      * @param user 用户参数
      * @return 是否成功
@@ -171,7 +159,7 @@ public class UserService {
             Assert.state(oauthTokenService.logoutAllByUsername(username), "用户修改密码注销Token失败");
         }
 
-        //更修并移除缓存
+        //更新并移除缓存
         if (SqlHelper.retBool(userMapper.updateById(user))) {
             userCache.delete(userId);
             return Boolean.TRUE;
@@ -180,5 +168,7 @@ public class UserService {
             throw new BizException("修改用户信息失败");
         }
     }
+
+
 
 }
