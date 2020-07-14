@@ -14,6 +14,9 @@ public interface SecurityConstant {
     /** OAUTH2 TOKEN 缓存前缀 **/
     String OAUTH_CACHE_PREFIX = "fish_common_security:";
 
+    /** Token 头信息前缀 **/
+    String OAUTH_HEADER_PREFIX = "Bearer";
+
     /** OAUTH2 TOKEN 生存时间 **/
     long DEFAULT_REFRESH_TOKEN_VALIDITY = TimeUnit.DAYS.toSeconds(7);
     long DEFAULT_ACCESS_TOKEN_VALIDITY = TimeUnit.DAYS.toSeconds(1);
