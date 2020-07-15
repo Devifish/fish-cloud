@@ -32,9 +32,8 @@ public abstract class BaseApplication {
      */
     @SneakyThrows
     public static void disableAccessWarnings() {
-        var unsafe = (Unsafe) FieldUtils.getDeclaredField(
-                Unsafe.class, "theUnsafe", true)
-                .get(null);
+        var unsafe = (Unsafe) FieldUtils.readStaticField(
+                Unsafe.class, "theUnsafe", true);
 
         //使用Unsafe修改IllegalAccessLogger为NULL
         var illegalAccessLoggerClass = Class.forName("jdk.internal.module.IllegalAccessLogger");
