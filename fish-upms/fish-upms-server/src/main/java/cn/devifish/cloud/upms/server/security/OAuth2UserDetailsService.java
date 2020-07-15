@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.Collections;
-import java.util.List;
 
 /**
  * OAuth2UserDetailsService
@@ -59,8 +58,8 @@ public class OAuth2UserDetailsService implements UserDetailsService {
         //获取用户权限
         var userId = user.getId();
         var authorities = roleService.selectAuthoritiesByUserId(userId);
-        List<GrantedAuthority> authorityList = authorities == null
-                ? Collections.emptyList()
+        var authorityList = authorities == null
+                ? Collections.<GrantedAuthority>emptyList()
                 : AuthorityUtils.createAuthorityList(authorities);
 
         return new BasicUser(user.getId(), user.getUsername(), user.getPassword(),

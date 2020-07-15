@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -70,7 +69,7 @@ public abstract class HashCache<V, K extends Serializable> extends BaseCache<V, 
     }
 
     public List<V> getAllIfAbsent(Supplier<List<V>> listSupplier) {
-        List<V> value = getAll();
+        var value = getAll();
         if (CollectionUtils.isEmpty(value) && (value = listSupplier.get()) != null) {
             setAll(value);
         }
@@ -85,7 +84,7 @@ public abstract class HashCache<V, K extends Serializable> extends BaseCache<V, 
      */
     @Override
     public void set(K key, V value) {
-        String cacheKey = generatorCacheKey();
+        var cacheKey = generatorCacheKey();
         hashOperations.put(cacheKey, key, value);
         redisTemplate.expire(cacheKey, getTimeout());
     }
@@ -97,10 +96,10 @@ public abstract class HashCache<V, K extends Serializable> extends BaseCache<V, 
      */
     public void setAll(Collection<V> values) {
         if (CollectionUtils.isEmpty(values)) return;
-        Map<K, V> menuMap = values.stream()
+        var cacheKey = generatorCacheKey();
+        var menuMap = values.stream()
                 .collect(Collectors.toMap(keyMapper(), menu -> menu));
 
-        String cacheKey = generatorCacheKey();
         hashOperations.putAll(cacheKey, menuMap);
         redisTemplate.expire(cacheKey, getTimeout());
     }

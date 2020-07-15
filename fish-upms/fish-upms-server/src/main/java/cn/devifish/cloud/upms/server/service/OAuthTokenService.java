@@ -13,7 +13,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,8 +66,8 @@ public class OAuthTokenService {
         if (StringUtils.isEmpty(username)) return Collections.emptySet();
 
         //获取ClientDetails信息
-        List<ClientDetails> clientDetails = StringUtils.isEmpty(clientId)
-                ? Collections.emptyList()
+        var clientDetails = StringUtils.isEmpty(clientId)
+                ? Collections.<ClientDetails>emptyList()
                 : Collections.singletonList(clientDetailsService.loadClientByClientId(clientId));
         if (CollectionUtils.isEmpty(clientDetails)) return Collections.emptySet();
 

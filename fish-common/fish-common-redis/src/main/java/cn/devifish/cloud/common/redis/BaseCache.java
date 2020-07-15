@@ -50,8 +50,8 @@ public abstract class BaseCache<V, ID extends Serializable> {
     @SuppressWarnings("unchecked")
     public String getBaseCacheKey() {
         if (baseCacheKey == null) {
-            ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
-            Class<V> actualType = (Class<V>) genericSuperclass.getActualTypeArguments()[0];
+            var genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+            var actualType = (Class<V>) genericSuperclass.getActualTypeArguments()[0];
             baseCacheKey = StringUtils.lowerCase(actualType.getSimpleName());
         }
         return baseCacheKey;
@@ -69,7 +69,7 @@ public abstract class BaseCache<V, ID extends Serializable> {
                 throw new UtilException("服务名称不符合规范, 生成cacheKeyPrefix失败");
 
             //处理服务名称分隔符
-            String redisKeyPrefix = StringUtils.lowerCase(applicationName);
+            var redisKeyPrefix = StringUtils.lowerCase(applicationName);
             redisKeyPrefix = redisKeyPrefix.replaceAll(CommonConstant.APPLICATION_NAME_SEPARATOR, RedisConstant.KEY_NAME_SEPARATOR);
             this.cacheKeyPrefix = redisKeyPrefix;
         }

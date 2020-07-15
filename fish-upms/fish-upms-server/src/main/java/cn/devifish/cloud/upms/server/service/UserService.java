@@ -1,7 +1,6 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
-import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.enums.SexEnum;
@@ -49,7 +48,7 @@ public class UserService {
      * @return User
      */
     public User currentUser() {
-        BasicUser principal = SecurityUtil.getPrincipal();
+        var principal = SecurityUtil.getPrincipal();
         if (principal == null) throw new BizException("获取当前用户失败");
 
         return selectById(principal.getUserId());
@@ -75,7 +74,7 @@ public class UserService {
         if (id == null) return false;
 
         //获取用户数据（Cache）
-        User user = selectById(id);
+        var user = selectById(id);
         return user != null;
     }
 
@@ -89,7 +88,7 @@ public class UserService {
         if (StringUtils.isEmpty(username)) return false;
 
         //获取用户数据
-        User user = selectByUsername(username);
+        var user = selectByUsername(username);
         return user != null;
     }
 
@@ -102,14 +101,14 @@ public class UserService {
      */
     @Transactional
     public Boolean insert(User user) {
-        String username = user.getUsername();
-        String password = user.getPassword();
+        var username = user.getUsername();
+        var password = user.getPassword();
         if (StringUtils.isEmpty(username)) throw new BizException("用户名不能为空");
         if (StringUtils.isEmpty(password)) throw new BizException("密码不能为空");
         if (existByUsername(username)) throw new BizException("用户名已存在");
 
         //加密密码
-        String encode_password = passwordEncoder.encode(password);
+        var encode_password = passwordEncoder.encode(password);
         user.setPassword(encode_password);
 
         //设置默认值
