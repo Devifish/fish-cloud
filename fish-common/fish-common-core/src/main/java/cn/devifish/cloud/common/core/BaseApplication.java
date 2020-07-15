@@ -36,9 +36,9 @@ public abstract class BaseApplication {
             theUnsafe.setAccessible(true);
             Unsafe unsafe = (Unsafe) theUnsafe.get(null);
 
-            Class<?> cls = Class.forName("jdk.internal.module.IllegalAccessLogger");
-            Field logger = cls.getDeclaredField("logger");
-            unsafe.putObjectVolatile(cls, unsafe.staticFieldOffset(logger), null);
+            Class<?> illegalAccessLoggerClass = Class.forName("jdk.internal.module.IllegalAccessLogger");
+            Field logger = illegalAccessLoggerClass.getDeclaredField("logger");
+            unsafe.putObjectVolatile(illegalAccessLoggerClass, unsafe.staticFieldOffset(logger), null);
         } catch (Exception ignored) { }
     }
 

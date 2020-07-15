@@ -4,7 +4,6 @@ import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.OAuth2RefreshToken;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -43,9 +42,9 @@ public class OAuthTokenService {
             token = StringUtils.removeStartIgnoreCase(token, SecurityConstant.OAUTH_HEADER_PREFIX);
 
         //校验Token是否存在
-        OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
+        var accessToken = tokenStore.readAccessToken(token);
         if (accessToken == null || StringUtils.isEmpty(accessToken.getValue())) return Boolean.FALSE;
-        OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
+        var refreshToken = accessToken.getRefreshToken();
 
         //注销Token
         tokenStore.removeAccessToken(accessToken);
@@ -74,7 +73,7 @@ public class OAuthTokenService {
         //查询该用户全平台Token
         return clientDetails.stream()
                 .map(item -> {
-                    String itemClientId = item.getClientId();
+                    var itemClientId = item.getClientId();
                     return tokenStore.findTokensByClientIdAndUserName(itemClientId, username);
                 })
                 .flatMap(Collection::stream)
