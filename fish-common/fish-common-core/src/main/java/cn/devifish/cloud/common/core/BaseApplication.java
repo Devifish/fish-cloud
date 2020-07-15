@@ -17,13 +17,13 @@ public abstract class BaseApplication {
 
     private static final Banner DEFAULT_BANNER = new FishCloudBanner();
 
+    //默认执行禁用JDK非法反射警告
+    static { disableAccessWarnings(); }
+
     protected static void run(Class<?> primarySource, String... args) {
         var application = new SpringApplication(primarySource);
         application.setBanner(DEFAULT_BANNER);
         application.setBannerMode(Banner.Mode.CONSOLE);
-
-        //在启动SpringBoot前禁用JDK非法反射警告
-        disableAccessWarnings();
         application.run(args);
     }
 
@@ -42,7 +42,8 @@ public abstract class BaseApplication {
             var logger = illegalAccessLoggerClass.getDeclaredField("logger");
             var offset = unsafe.staticFieldOffset(logger);
             unsafe.putObjectVolatile(illegalAccessLoggerClass, offset, null);
-        } catch (Exception ignored) { }
+        } catch (Exception ignored) {
+        }
     }
 
 }
