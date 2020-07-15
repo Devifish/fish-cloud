@@ -32,7 +32,7 @@ public abstract class BaseApplication {
      */
     @SneakyThrows
     public static void disableAccessWarnings() {
-        var unsafe = (Unsafe) FieldUtils.readStaticField(
+        var unsafe = (Unsafe) FieldUtils.readDeclaredStaticField(
                 Unsafe.class, "theUnsafe", true);
 
         //使用Unsafe修改IllegalAccessLogger为NULL
