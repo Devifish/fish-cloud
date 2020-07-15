@@ -136,24 +136,24 @@ public class UserService {
      */
     @Transactional
     public Boolean update(User user) {
-        Long userId = user.getId();
+        var userId = user.getId();
         if (user.getId() == null) throw new BizException("用户基础参数不能为空");
 
         //检查用户是否存在
-        User old_user = selectById(userId);
+        var old_user = selectById(userId);
         if (old_user == null) throw new BizException("该用户不存在");
 
         //校验用户名是否重复
-        String username = user.getUsername();
-        String old_username = old_user.getUsername();
+        var username = user.getUsername();
+        var old_username = old_user.getUsername();
         if (StringUtils.isNotEmpty(username) && !username.equals(old_username)) {
             if (existByUsername(username))
                 throw new BizException("用户名已存在");
         }
 
         //是否修改密码 (注销已登陆的所有用户)
-        String password = user.getPassword();
-        String old_password = old_user.getPassword();
+        var password = user.getPassword();
+        var old_password = old_user.getPassword();
         if (StringUtils.isNotEmpty(password) && !password.equals(old_password)) {
             user.setPassword(passwordEncoder.encode(password));
             Assert.state(oauthTokenService.logoutAllByUsername(username), "用户修改密码注销Token失败");

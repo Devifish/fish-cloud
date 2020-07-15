@@ -5,8 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.converter.ConverterFactory;
 
-import java.io.Serializable;
-
 /**
  * ConverterEnumFactory
  * 实现 Spring MVC 转换枚举类型
@@ -29,9 +27,9 @@ public class ConverterEnumFactory implements ConverterFactory<String, BaseEnum<?
     @SuppressWarnings("NullableProblems")
     public <E extends BaseEnum<?>> Converter<String, E> getConverter(Class<E> targetType) {
         return key -> {
-            final E[] enumConstants = targetType.getEnumConstants();
-            for (E enumConstant : enumConstants) {
-                Serializable param = enumConstant.getParam();
+            var enumConstants = targetType.getEnumConstants();
+            for (var enumConstant : enumConstants) {
+                var param = enumConstant.getParam();
                 if (StringUtils.equals(key, String.valueOf(param))) {
                     return enumConstant;
                 }

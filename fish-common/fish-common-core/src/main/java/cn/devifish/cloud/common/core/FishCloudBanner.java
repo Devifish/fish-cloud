@@ -31,11 +31,10 @@ public class FishCloudBanner implements Banner {
 
     @Override
     public void printBanner(Environment environment, Class<?> sourceClass, PrintStream printStream) {
-        int strap_line_size = BANNER[BANNER.length - 1].length();
-
-        String banner = String.join("\n", BANNER);
-        String version = String.format(SPRING_BOOT, SpringBootVersion.getVersion());
-        String padding = Stream.generate(() -> " ")
+        var strap_line_size = BANNER[BANNER.length - 1].length();
+        var banner = String.join("\n", BANNER);
+        var version = String.format(SPRING_BOOT, SpringBootVersion.getVersion());
+        var padding = Stream.generate(() -> " ")
                 .limit(strap_line_size - version.length())
                 .collect(Collectors.joining());
 

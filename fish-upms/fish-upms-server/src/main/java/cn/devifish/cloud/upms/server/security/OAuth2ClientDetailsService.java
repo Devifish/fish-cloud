@@ -36,7 +36,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
      */
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        OAuthClient oauthClient = oauthClientService.selectByClientId(clientId);
+        var oauthClient = oauthClientService.selectByClientId(clientId);
         if (oauthClient == null) {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }
@@ -51,7 +51,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
      */
     private ClientDetails buildClientDetails(OAuthClient oauthClient) {
         Assert.notNull(oauthClient, "OAuthClient 不能为NULL");
-        BaseClientDetails details = new BaseClientDetails(
+        var details = new BaseClientDetails(
                 oauthClient.getClientId(), oauthClient.getResourceIds(), oauthClient.getScope(),
                 oauthClient.getGrantTypes(), oauthClient.getAuthorities());
 

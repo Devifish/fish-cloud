@@ -1,6 +1,5 @@
 package cn.devifish.cloud.upms.server.controller;
 
-import cn.devifish.cloud.upms.common.entity.OAuthClient;
 import cn.devifish.cloud.upms.common.vo.OAuthClientVo;
 import cn.devifish.cloud.upms.server.service.OAuthClientService;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +31,8 @@ public class OAuthClientController {
      */
     @GetMapping("/select/id/{clientId}")
     public OAuthClientVo selectByClientId(@PathVariable String clientId) {
-        OAuthClient oauthClient = oauthClientService.selectByClientId(clientId);
-        OAuthClientVo oauthClientVo = new OAuthClientVo();
+        var oauthClient = oauthClientService.selectByClientId(clientId);
+        var oauthClientVo = new OAuthClientVo();
         BeanUtils.copyProperties(oauthClient, oauthClientVo);
         return oauthClientVo;
     }

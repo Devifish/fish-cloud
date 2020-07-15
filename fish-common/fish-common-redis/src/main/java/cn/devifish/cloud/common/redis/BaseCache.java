@@ -15,7 +15,6 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.time.Duration;
 import java.util.Objects;
-import java.util.Set;
 import java.util.function.Function;
 
 /**
@@ -99,7 +98,7 @@ public abstract class BaseCache<V, ID extends Serializable> {
      */
     public String generatorCacheKey(String key, Serializable id, CharSequence prefix, CharSequence suffix) {
         Objects.requireNonNull(key);
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
 
         //拼接Key Prefix
         if (StringUtils.isNotEmpty(prefix)) {
@@ -154,7 +153,7 @@ public abstract class BaseCache<V, ID extends Serializable> {
     }
 
     public V getIfAbsent(ID id, Function<ID, ? extends V> mappingFunction) {
-        V value = get(id);
+        var value = get(id);
         if (value == null && mappingFunction != null) {
             value = mappingFunction.apply(id);
             if (value != null) set(id, value);
@@ -176,8 +175,8 @@ public abstract class BaseCache<V, ID extends Serializable> {
      * （包含带ClientID）
      */
     public void deleteAll() {
-        String pattern = generatorCacheKey(getBaseCacheKey(), "*", getCacheKeyPrefix(), "*");
-        Set<String> keys = redisTemplate.keys(pattern);
+        var pattern = generatorCacheKey(getBaseCacheKey(), "*", getCacheKeyPrefix(), "*");
+        var keys = redisTemplate.keys(pattern);
         if (!CollectionUtils.isEmpty(keys)) {
             redisTemplate.delete(keys);
         }

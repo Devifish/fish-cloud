@@ -31,7 +31,7 @@ public class OAuth2TokenConfiguration {
     @Bean
     public TokenStore tokenStore()  {
         log.info("Initializing OAuth2 Redis Token Store");
-        RedisTokenStore tokenStore = new RedisTokenStore(redisConnectionFactory);
+        var tokenStore = new RedisTokenStore(redisConnectionFactory);
         tokenStore.setPrefix(SecurityConstant.OAUTH_CACHE_PREFIX);
         return tokenStore;
     }

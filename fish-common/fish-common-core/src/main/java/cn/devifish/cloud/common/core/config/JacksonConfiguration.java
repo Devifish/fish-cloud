@@ -52,10 +52,10 @@ public class JacksonConfiguration {
      * @return JavaTimeModule
      */
     private JavaTimeModule initJavaTimeModule() {
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN);
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN);
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN);
+        var javaTimeModule = new JavaTimeModule();
+        var dateTimeFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN);
+        var dateFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN);
+        var timeFormatter = DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN);
 
         javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTimeFormatter));
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(dateFormatter));

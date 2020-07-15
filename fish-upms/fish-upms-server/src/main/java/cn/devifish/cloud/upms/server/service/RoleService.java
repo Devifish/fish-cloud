@@ -57,16 +57,14 @@ public class RoleService {
      * @return 授权码
      */
     public String[] selectAuthoritiesByUserId(Long userId) {
-        List<Role> roles = selectByUserId(userId);
+        var roles = selectByUserId(userId);
         if (CollectionUtils.isEmpty(roles)) return null;
 
         //将RoleList转换为AuthoritiesArray
         return roles.stream()
                 .map(role -> {
-                    List<String> authorities = JSON.parseArray(role.getAuthorities(), String.class);
-
-                    //加入角色CODE（用于根据角色判断权限）
-                    String code = role.getCode();
+                    var code = role.getCode();
+                    var authorities = JSON.parseArray(role.getAuthorities(), String.class);
                     authorities.add(code);
                     return authorities;
                 })

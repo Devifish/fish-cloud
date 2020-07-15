@@ -11,14 +11,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -36,14 +33,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @SuppressWarnings("NullableProblems")
     public void addFormatters(FormatterRegistry registry) {
         //日期时间转换格式
-        DateTimeFormatterRegistrar dateTimeFormatterRegistrar = new DateTimeFormatterRegistrar();
-        dateTimeFormatterRegistrar.setTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN));
-        dateTimeFormatterRegistrar.setDateFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN));
-        dateTimeFormatterRegistrar.setDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN));
-        dateTimeFormatterRegistrar.registerFormatters(registry);
+        var registrar = new DateTimeFormatterRegistrar();
+        registrar.setTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN));
+        registrar.setDateFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN));
+        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN));
+        registrar.registerFormatters(registry);
 
         //枚举转换格式
-        ConverterEnumFactory converterEnumFactory = new ConverterEnumFactory();
+        var converterEnumFactory = new ConverterEnumFactory();
         registry.addConverterFactory(converterEnumFactory);
     }
 
@@ -51,9 +48,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @ConditionalOnBean(RequestMappingHandlerAdapter.class)
     public InitializingBean restfulResponseMethodProcessorBean(RequestMappingHandlerAdapter adapter) {
         return () -> {
-            List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
-            List<HttpMessageConverter<?>> messageConverters = adapter.getMessageConverters();
-            RestfulResponseMethodProcessor processor = new RestfulResponseMethodProcessor(messageConverters);
+            var returnValueHandlers = adapter.getReturnValueHandlers();
+            var messageConverters = adapter.getMessageConverters();
+            var processor = new RestfulResponseMethodProcessor(messageConverters);
 
             //构建新的returnValueHandlers集合
             returnValueHandlers = new ArrayList<>(Objects.requireNonNull(returnValueHandlers));

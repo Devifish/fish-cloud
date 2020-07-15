@@ -4,8 +4,8 @@ import cn.devifish.cloud.common.core.BaseApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 
 /**
- * UserApplication
- * 用户服务
+ * UpmsApplication
+ * 用户权限服务
  *
  * @author Devifish
  * @date 2020/7/1 11:05

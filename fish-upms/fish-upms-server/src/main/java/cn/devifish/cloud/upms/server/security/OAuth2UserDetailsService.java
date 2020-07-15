@@ -40,7 +40,7 @@ public class OAuth2UserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.selectByUsername(username);
+        var user = userService.selectByUsername(username);
         if (user == null)
             throw new UsernameNotFoundException("Not found Username: " + username);
 
@@ -57,8 +57,8 @@ public class OAuth2UserDetailsService implements UserDetailsService {
         Assert.notNull(user, "user不能为NULL");
 
         //获取用户权限
-        Long userId = user.getId();
-        String[] authorities = roleService.selectAuthoritiesByUserId(userId);
+        var userId = user.getId();
+        var authorities = roleService.selectAuthoritiesByUserId(userId);
         List<GrantedAuthority> authorityList = authorities == null
                 ? Collections.emptyList()
                 : AuthorityUtils.createAuthorityList(authorities);

@@ -2,7 +2,6 @@ package cn.devifish.cloud.common.security.util;
 
 import cn.devifish.cloud.common.security.BasicUser;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -20,7 +19,7 @@ public class SecurityUtil {
      * @return authentication
      */
     public static Authentication getAuthentication() {
-        SecurityContext context = SecurityContextHolder.getContext();
+        var context = SecurityContextHolder.getContext();
         return context.getAuthentication();
     }
 
@@ -30,9 +29,9 @@ public class SecurityUtil {
      * @return Principal
      */
     public static BasicUser getPrincipal() {
-        Authentication authentication = getAuthentication();
+        var authentication = getAuthentication();
         if (authentication != null) {
-            Object principal = authentication.getPrincipal();
+            var principal = authentication.getPrincipal();
             if (principal instanceof BasicUser) {
                 return (BasicUser) principal;
             }

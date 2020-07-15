@@ -91,12 +91,12 @@ public class OAuthTokenService {
      * @return 是否成功
      */
     public Boolean logoutAllByUsername(String clientId, String username) {
-        Set<OAuth2AccessToken> accessTokens = findAllTokenByUsernameAndClientId(clientId, username);
+        var accessTokens = findAllTokenByUsernameAndClientId(clientId, username);
         if (CollectionUtils.isEmpty(accessTokens)) return Boolean.FALSE;
 
         //遍历注销全部已存在的Token
-        for (OAuth2AccessToken accessToken : accessTokens) {
-            OAuth2RefreshToken refreshToken = accessToken.getRefreshToken();
+        for (var accessToken : accessTokens) {
+            var refreshToken = accessToken.getRefreshToken();
             tokenStore.removeAccessToken(accessToken);
             tokenStore.removeRefreshToken(refreshToken);
         }

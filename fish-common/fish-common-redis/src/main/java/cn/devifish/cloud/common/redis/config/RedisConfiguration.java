@@ -4,7 +4,6 @@ import cn.devifish.cloud.common.redis.constant.RedisConstant;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectMapper.DefaultTyping;
-import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +33,7 @@ public class RedisConfiguration {
     public RedisTemplate<String, Object> redisTemplate() {
         log.info("Initializing Redis Template");
 
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        var redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
         redisTemplate.setValueSerializer(createJsonRedisSerializer());
@@ -42,9 +41,8 @@ public class RedisConfiguration {
     }
 
     public RedisSerializer<?> createJsonRedisSerializer() {
-        ObjectMapper objectMapper = this.objectMapper.copy();
-
-        PolymorphicTypeValidator validator = objectMapper.getPolymorphicTypeValidator();
+        var objectMapper = this.objectMapper.copy();
+        var validator = objectMapper.getPolymorphicTypeValidator();
         objectMapper.activateDefaultTyping(validator, DefaultTyping.NON_FINAL, As.PROPERTY);
         return new GenericJackson2JsonRedisSerializer(objectMapper);
     }

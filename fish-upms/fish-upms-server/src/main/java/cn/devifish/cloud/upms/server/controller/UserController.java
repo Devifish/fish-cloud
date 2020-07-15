@@ -1,6 +1,5 @@
 package cn.devifish.cloud.upms.server.controller;
 
-import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.vo.UserVo;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +30,8 @@ public class UserController {
      */
     @GetMapping("/current")
     public UserVo current() {
-        User user = userService.currentUser();
-        UserVo userVo = new UserVo();
+        var user = userService.currentUser();
+        var userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         return userVo;
     }
@@ -45,8 +44,8 @@ public class UserController {
      */
     @GetMapping("/select/id/{userId}")
     public UserVo selectById(@PathVariable Long userId) {
-        User user = userService.selectById(userId);
-        UserVo userVo = new UserVo();
+        var user = userService.selectById(userId);
+        var userVo = new UserVo();
         BeanUtils.copyProperties(user, userVo);
         return userVo;
     }

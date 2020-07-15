@@ -36,7 +36,7 @@ public class IdGeneratorConfiguration {
      */
     @PostConstruct
     private void init() {
-        String localMacAddress = NetworkUtil.getLocalMacAddress();
+        var localMacAddress = NetworkUtil.getLocalMacAddress();
         this.dataCenterId = Math.abs(applicationName.hashCode() % SnowflakeIdGenerator.MAX_DATA_CENTER_ID);
         this.machineId = Math.abs(localMacAddress.hashCode() % SnowflakeIdGenerator.MAX_MACHINE_ID);
     }
