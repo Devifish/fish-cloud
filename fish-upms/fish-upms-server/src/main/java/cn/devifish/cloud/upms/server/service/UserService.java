@@ -103,6 +103,8 @@ public class UserService {
     public Boolean insert(User user) {
         var username = user.getUsername();
         var password = user.getPassword();
+
+        //参数校验
         if (StringUtils.isEmpty(username)) throw new BizException("用户名不能为空");
         if (StringUtils.isEmpty(password)) throw new BizException("密码不能为空");
         if (existByUsername(username)) throw new BizException("用户名已存在");
