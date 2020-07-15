@@ -1,6 +1,6 @@
 package cn.devifish.cloud.common.core;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,6 @@ import sun.misc.Unsafe;
  * @author Devifish
  * @date 2020/7/2 11:18
  */
-@Slf4j
 public abstract class BaseApplication {
 
     private static final Banner DEFAULT_BANNER = new FishCloudBanner();
@@ -31,19 +30,17 @@ public abstract class BaseApplication {
      * 禁用JDK非法反射警告
      * (适用于 JDK11及以上版本)
      */
+    @SneakyThrows
     public static void disableAccessWarnings() {
-        try {
-            var unsafe = (Unsafe) FieldUtils.getDeclaredField(
-                    Unsafe.class, "theUnsafe", true)
-                    .get(null);
+        var unsafe = (Unsafe) FieldUtils.getDeclaredField(
+                Unsafe.class, "theUnsafe", true)
+                .get(null);
 
-            //使用Unsafe修改IllegalAccessLogger为NULL
-            var illegalAccessLoggerClass = Class.forName("jdk.internal.module.IllegalAccessLogger");
-            var logger = illegalAccessLoggerClass.getDeclaredField("logger");
-            var offset = unsafe.staticFieldOffset(logger);
-            unsafe.putObjectVolatile(illegalAccessLoggerClass, offset, null);
-        } catch (Exception ignored) {
-        }
+        //使用Unsafe修改IllegalAccessLogger为NULL
+        var illegalAccessLoggerClass = Class.forName("jdk.internal.module.IllegalAccessLogger");
+        var logger = illegalAccessLoggerClass.getDeclaredField("logger");
+        var offset = unsafe.staticFieldOffset(logger);
+        unsafe.putObjectVolatile(illegalAccessLoggerClass, offset, null);
     }
 
 }
