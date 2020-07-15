@@ -20,7 +20,7 @@
     <modules>
         <module>fish-common</module>
         <module>fish-gateway</module>
-        <module>fish-user</module>
+        <module>fish-upms</module>
         <module>fish-file</module>
         <module>fish-search</module>
         <module>fish-message</module>

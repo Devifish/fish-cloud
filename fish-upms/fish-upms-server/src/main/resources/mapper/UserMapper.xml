@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--suppress SqlNoDataSourceInspection, SqlResolve -->
+<mapper namespace="cn.devifish.cloud.upms.server.mapper.UserMapper">
+
+    <resultMap id="baseResultMap" type="cn.devifish.cloud.upms.common.entity.User">
+        <id column="u_id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="nickname" property="nickname"/>
+        <result column="realname" property="realname"/>
+        <result column="sex" property="sex"/>
+        <result column="enabled" property="enabled"/>
+        <result column="locked" property="locked"/>
+        <result column="u_create_time" property="createTime"/>
+        <result column="u_update_time" property="updateTime"/>
+        <result column="u_delete_flag" property="deleteFlag"/>
+    </resultMap>
+
+    <sql id="baseSql">
+        `u`.id AS u_id,
+        `u`.username,
+        `u`.password,
+        `u`.nickname,
+        `u`.realname,
+        `u`.sex,
+        `u`.enabled,
+        `u`.locked,
+        `u`.create_time AS u_create_time,
+        `u`.update_time AS u_update_time,
+        `u`.delete_flag AS u_delete_flag
+    </sql>
+
+    <select id="selectByUsername" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM t_user AS u
+        <where>
+            u.delete_flag = 0 AND u.username = #{username}
+        </where>
+    </select>
+</mapper>
