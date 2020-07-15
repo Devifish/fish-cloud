@@ -1,0 +1,44 @@
+# Fish Cloud
+[![star](https://img.shields.io/github/stars/Devifish/fish-cloud.svg?logo=github)](https://github.com/Devifish/fish-cloud)
+[![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+
+> 基于 Spring Cloud Hoxton & Alibaba 微服务框架开发<br/>
+> 使用现代化的函数式编码, 如Lambda、 Java Stream Api<br/>
+> 提供对 Docker 容器环境运行的支持, 可使用 Docker Compose、 Kubernetes 编排（TODO）
+
+## 依赖环境
+依赖 | 版本
+---|---
+Java Language | 11
+Spring Boot | 2.3.1.RELEASE
+Spring Cloud | Hoxton.SR6
+Spring Cloud Alibaba | 2.2.1.RELEASE
+Mybatis Plus | 3.3.2
+
+- 其余依赖包版本基本源自 ```Spring Boot``` ```Spring Cloud``` ```Spring Cloud Alibaba``` 提供的DependencyManagement
+- 基于 ```JDK 11``` 进行开发, 将无法使用其以下版本运行
+  
+## 模块说明
+```
+└── fish-common --------------------------------- 公共组件工具包
+     ├── fish-common-core ----------------------- 公共核心组件
+     ├── fish-common-dubbo ---------------------- 公共RPC组件(Dubbo) [TODO]
+     ├── fish-common-rabbitmq ------------------- 公共消息队列组件(RabbitMQ) [TODO]
+     ├── fish-common-redis ---------------------- 公共缓存组件(Redis)
+     ├── fish-common-security ------------------- 公共安全组件(Spring OAuth2)
+     ├── fish-common-sentinel ------------------- 公共流量控制组件(Sentinel) [TODO]
+     └── fish-common-swagger -------------------- 公共接口文档组件(Swagger) [TODO]
+└── fish-file ----------------------------------- 文件服务聚合包 [TODO]
+     ├── fish-file-common ----------------------- 文件服务公共组件 [TODO]
+     └── fish-file-server ----------------------- 文件服务 [TODO]
+├── fish-gateway -------------------------------- Gateway 路由网关 [TODO]
+└── fish-message -------------------------------- 消息服务聚合包 [TODO]
+     ├── fish-message-common -------------------- 消息服务公共组件 [TODO]
+     └── fish-message-server -------------------- 消息服务 [TODO]
+└── fish-search --------------------------------- 搜索服务聚合包 [TODO]
+     ├── fish-search-common --------------------- 搜索服务公共组件 [TODO]
+     └── fish-search-server --------------------- 搜索服务 [TODO]
+└── fish-upms ----------------------------------- 用户权限服务聚合包
+     ├── fish-upms-common ----------------------- 用户权限服务公共组件
+     └── fish-upms-server ----------------------- 用户权限服务
+```
