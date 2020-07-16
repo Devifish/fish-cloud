@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>cn.devifish.cloud</groupId>
-            <artifactId>fish-user-common</artifactId>
+            <artifactId>fish-search-common</artifactId>
             <version>1.0.0</version>
         </dependency>
 

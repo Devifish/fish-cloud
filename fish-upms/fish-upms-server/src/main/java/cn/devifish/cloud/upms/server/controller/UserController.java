@@ -1,5 +1,6 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.common.vo.UserVo;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,7 @@ public class UserController {
      * @param username 用户名
      * @return boolean
      */
+    @OpenApi
     @GetMapping("/exist/username/{username}")
     public Boolean existByUsername(@PathVariable String username) {
         return userService.existByUsername(username);
