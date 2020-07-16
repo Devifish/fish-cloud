@@ -46,6 +46,8 @@ public class OpenApiUrlProperties implements InitializingBean {
     /**
      * 扫描添加 {@link OpenApi}注解 RequestMapping接口
      * 获取接口URL加入请求白名单
+     *
+     * @return OpenAPI白名单
      */
     public Set<String> scannerOpenApiRequestMappingUrlPatterns() {
         var handlerMethods = handlerMapping.getHandlerMethods();

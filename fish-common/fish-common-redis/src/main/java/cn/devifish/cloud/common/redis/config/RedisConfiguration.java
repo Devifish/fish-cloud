@@ -33,10 +33,13 @@ public class RedisConfiguration {
     public RedisTemplate<String, Object> redisTemplate() {
         log.info("Initializing Redis Template");
 
+        var jsonRedisSerializer = createJsonRedisSerializer();
         var redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(createJsonRedisSerializer());
+        redisTemplate.setValueSerializer(jsonRedisSerializer);
+        redisTemplate.setHashKeySerializer(jsonRedisSerializer);
+        redisTemplate.setHashValueSerializer(jsonRedisSerializer);
         return redisTemplate;
     }
 
