@@ -21,13 +21,4 @@
         `oc`.grant_types,
         `oc`.authorities
     </sql>
-
-    <select id="findByClientId" resultMap="baseResultMap">
-        SELECT
-        <include refid="baseSql"/>
-        FROM t_oauth_client AS oc
-        <where>
-            oc.client_id = #{clientId}
-        </where>
-    </select>
 </mapper>

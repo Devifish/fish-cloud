@@ -50,6 +50,15 @@ public class UserController {
         return userVo;
     }
 
-
+    /**
+     * 根据用户名查询是否存在
+     *
+     * @param username 用户名
+     * @return boolean
+     */
+    @GetMapping("/exist/username/{username}")
+    public Boolean existByUsername(@PathVariable String username) {
+        return userService.existByUsername(username);
+    }
 
 }

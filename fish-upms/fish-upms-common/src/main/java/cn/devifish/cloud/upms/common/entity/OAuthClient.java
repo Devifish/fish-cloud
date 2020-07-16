@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @date 2020/7/6 10:18
  */
 @Data
-@TableName("t_oauth_client")
+@TableName("upms_oauth_client")
 public class OAuthClient implements Serializable {
 
     /** 客户端ID **/

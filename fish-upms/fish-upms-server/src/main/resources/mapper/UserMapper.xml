@@ -35,9 +35,19 @@
     <select id="selectByUsername" resultMap="baseResultMap">
         SELECT
         <include refid="baseSql"/>
-        FROM t_user AS u
+        FROM upms_user AS u
         <where>
             u.delete_flag = 0 AND u.username = #{username}
         </where>
     </select>
+
+    <select id="countByUsername" resultType="java.lang.Integer">
+        SELECT
+            count(0)
+        FROM upms_user AS u
+        <where>
+            u.username = #{username}
+        </where>
+    </select>
+
 </mapper>

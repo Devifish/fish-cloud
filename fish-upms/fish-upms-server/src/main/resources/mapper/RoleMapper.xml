@@ -29,8 +29,8 @@
     <select id="selectByUserId" resultMap="baseResultMap">
         SELECT
         <include refid="baseSql"/>
-        FROM t_role AS r
-        LEFT JOIN t_user_role_relation AS urr ON urr.role_id = r.id
+        FROM upms_role AS r
+        LEFT JOIN upms_user_role_relation AS urr ON urr.role_id = r.id
         <where>
             urr.user_id = #{userId}
         </where>

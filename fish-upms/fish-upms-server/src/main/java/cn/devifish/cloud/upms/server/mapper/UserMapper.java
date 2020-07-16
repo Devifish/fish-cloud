@@ -22,4 +22,13 @@ public interface UserMapper extends BaseMapper<User> {
      */
     User selectByUsername(String username);
 
+    /**
+     * 根据用户名称统计用户数据
+     * 包含已逻辑删除数据
+     *
+     * @param username 用户名
+     * @return 统计
+     */
+    Integer countByUsername(String username);
+
 }

@@ -87,9 +87,9 @@ public class UserService {
     public Boolean existByUsername(String username) {
         if (StringUtils.isEmpty(username)) return false;
 
-        //获取用户数据
-        var user = selectByUsername(username);
-        return user != null;
+        //获取用户统计数据
+        var count = SqlHelper.retCount(userMapper.countByUsername(username));
+        return count > 0;
     }
 
     /**
