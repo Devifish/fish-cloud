@@ -10,7 +10,11 @@
         <result column="password" property="password"/>
         <result column="nickname" property="nickname"/>
         <result column="realname" property="realname"/>
+        <result column="avatar" property="avatar"/>
+        <result column="email" property="email"/>
+        <result column="mobile" property="mobile"/>
         <result column="sex" property="sex"/>
+        <result column="birthday" property="birthday"/>
         <result column="enabled" property="enabled"/>
         <result column="locked" property="locked"/>
         <result column="u_create_time" property="createTime"/>
@@ -24,7 +28,11 @@
         `u`.password,
         `u`.nickname,
         `u`.realname,
+        `u`.avatar,
+        `u`.email,
+        `u`.mobile,
         `u`.sex,
+        `u`.birthday,
         `u`.enabled,
         `u`.locked,
         `u`.create_time AS u_create_time,
