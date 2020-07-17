@@ -1,11 +1,12 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
+import cn.devifish.cloud.upms.common.entity.OAuthClient;
+import cn.devifish.cloud.upms.server.cache.OAuthClientCache;
+import cn.devifish.cloud.upms.server.mapper.OAuthClientMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.ClientDetails;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -16,18 +17,29 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * OAuthTokenService
- * OAuth2 Token服务
+ * OAuthClientService
+ * OAuth2 客户端服务
  *
  * @author Devifish
- * @date 2020/7/14 10:11
+ * @date 2020/7/3 17:36
  */
 @Service
 @RequiredArgsConstructor
-public class OAuthTokenService {
+public class OAuthService {
 
-    private final ClientDetailsService clientDetailsService;
+    private final OAuthClientMapper oauthClientMapper;
+    private final OAuthClientCache oauthClientCache;
     private final TokenStore tokenStore;
+
+    /**
+     * 根据客户端ID查询单个信息
+     *
+     * @param clientId 客户端ID
+     * @return OAuthClient
+     */
+    public OAuthClient selectByClientId(String clientId) {
+        return oauthClientCache.getIfAbsent(clientId, oauthClientMapper::selectById);
+    }
 
     /**
      * 根据用户Token注销用户
@@ -66,8 +78,8 @@ public class OAuthTokenService {
 
         //获取ClientDetails信息
         var clientDetails = StringUtils.isEmpty(clientId)
-                ? Collections.<ClientDetails>emptyList()
-                : Collections.singletonList(clientDetailsService.loadClientByClientId(clientId));
+                ? Collections.<OAuthClient>emptyList()
+                : Collections.singletonList(selectByClientId(clientId));
         if (CollectionUtils.isEmpty(clientDetails)) return Collections.emptySet();
 
         //查询该用户全平台Token

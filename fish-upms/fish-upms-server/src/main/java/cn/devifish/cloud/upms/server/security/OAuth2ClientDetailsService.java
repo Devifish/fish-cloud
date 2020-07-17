@@ -1,7 +1,7 @@
 package cn.devifish.cloud.upms.server.security;
 
 import cn.devifish.cloud.upms.common.entity.OAuthClient;
-import cn.devifish.cloud.upms.server.service.OAuthClientService;
+import cn.devifish.cloud.upms.server.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
 @RequiredArgsConstructor
 public class OAuth2ClientDetailsService implements ClientDetailsService {
 
-    private final OAuthClientService oauthClientService;
+    private final OAuthService oauthService;
 
     /**
      * 适配 Spring Cloud OAuth2 接口
@@ -36,7 +36,7 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
      */
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
-        var oauthClient = oauthClientService.selectByClientId(clientId);
+        var oauthClient = oauthService.selectByClientId(clientId);
         if (oauthClient == null) {
             throw new NoSuchClientException("No client with requested id: " + clientId);
         }

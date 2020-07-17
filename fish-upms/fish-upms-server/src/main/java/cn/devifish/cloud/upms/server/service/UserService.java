@@ -29,7 +29,7 @@ public class UserService {
 
     private final UserMapper userMapper;
     private final UserCache userCache;
-    private final OAuthTokenService oauthTokenService;
+    private final OAuthService oauthService;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -157,7 +157,7 @@ public class UserService {
         var old_password = old_user.getPassword();
         if (StringUtils.isNotEmpty(password) && !password.equals(old_password)) {
             user.setPassword(passwordEncoder.encode(password));
-            Assert.state(oauthTokenService.logoutAllByUsername(username), "用户修改密码注销Token失败");
+            Assert.state(oauthService.logoutAllByUsername(username), "用户修改密码注销Token失败");
         }
 
         //更新并移除缓存
