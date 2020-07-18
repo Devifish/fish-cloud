@@ -3,9 +3,9 @@
 [![license](https://img.shields.io/github/license/Devifish/fish-cloud)](https://github.com/Devifish/fish-cloud)
 
 > 基于 Spring Cloud Hoxton & Alibaba 微服务框架开发<br/>
-> 基于 Java 11 源码级别、Java 最新长期支持版开发<br/>
-> 使用 Lambda、 Java Stream Api 现代化的函数式编码<br/>
-> 提供对 Docker 容器环境运行的支持, 可使用 Docker Compose、 Kubernetes 编排（TODO）
+> 紧跟 Java 长期支持版 代码库使用 Java 11 源码级别<br/>
+> 使用 Lambda、Java Stream Api 现代化的函数式编码<br/>
+> 提供对 Docker 容器环境运行的支持,可使用 Docker Compose、Kubernetes 编排（TODO）
 
 ## 依赖环境
 依赖 | 版本
