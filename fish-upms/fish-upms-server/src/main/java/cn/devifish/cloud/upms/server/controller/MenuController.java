@@ -3,10 +3,10 @@ package cn.devifish.cloud.upms.server.controller;
 import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.server.service.MenuService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * MenuController
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Devifish
  * @date 2020/7/16 10:58
  */
-@Controller
+@RestController
 @RequestMapping("/menu")
 @RequiredArgsConstructor
 public class MenuController {

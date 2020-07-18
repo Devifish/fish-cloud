@@ -1,9 +1,10 @@
 # Fish Cloud
 [![star](https://img.shields.io/github/stars/Devifish/fish-cloud.svg?logo=github)](https://github.com/Devifish/fish-cloud)
-[![license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![license](https://img.shields.io/github/license/Devifish/fish-cloud)](https://github.com/Devifish/fish-cloud)
 
 > 基于 Spring Cloud Hoxton & Alibaba 微服务框架开发<br/>
-> 使用现代化的函数式编码, 如Lambda、 Java Stream Api<br/>
+> 基于 Java 11 源码级别、Java 最新长期支持版开发<br/>
+> 使用 Lambda、 Java Stream Api 现代化的函数式编码<br/>
 > 提供对 Docker 容器环境运行的支持, 可使用 Docker Compose、 Kubernetes 编排（TODO）
 
 ## 依赖环境
@@ -15,8 +16,9 @@ Spring Cloud | Hoxton.SR6
 Spring Cloud Alibaba | 2.2.1.RELEASE
 Mybatis Plus | 3.3.2
 
+- 要求 JDK 11+, 代码库基于 Java 11开发无法使用其以下版本运行
 - 其余依赖包版本基本源自 ```Spring Boot``` ```Spring Cloud``` ```Spring Cloud Alibaba``` 提供的DependencyManagement
-- 基于 ```JDK 11``` 进行开发, 将无法使用其以下版本运行
+- 中间件依赖环境建议使用提供的 ```docker-compose``` 构建
   
 ## 模块说明
 ```

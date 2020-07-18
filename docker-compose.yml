@@ -1,0 +1,45 @@
+version: "3"
+services:
+  nacos:
+    image: nacos/nacos-server:1.3.1
+    container_name: nacos
+    environment:
+      - MODE=standalone
+      - NACOS_APPLICATION_PORT=8848
+      - JVM_XMS=512m
+      - JVM_XMX=512m
+      - JVM_XMN=256m
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mariadb
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=123456
+    ports:
+      - 8848:8848
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+    
+  redis:
+    image: redis:6.0.5
+    container_name: redis
+    command: redis-server --requirepass 123456
+    ports:
+      - "6379:6379"
+    volumes:
+    - ${REDIS_DATA_DIR}:/data
+    
+  mariadb:
+    image: linuxserver/mariadb
+    container_name: mariadb
+    environment:
+      - PUID=65534
+      - PGID=100
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - ${MARIADB_DATA_DIR}:/config
+    restart: unless-stopped

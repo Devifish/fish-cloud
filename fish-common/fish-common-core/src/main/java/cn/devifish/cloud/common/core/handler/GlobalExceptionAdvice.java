@@ -5,6 +5,7 @@ import cn.devifish.cloud.common.core.RestfulEntity;
 import cn.devifish.cloud.common.core.exception.FishCloudException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
+@ConditionalOnClass(HttpServletRequest.class)
 public class GlobalExceptionAdvice {
 
     private final HttpServletRequest request;
