@@ -1,6 +1,7 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.server.cache.RoleCache;
 import cn.devifish.cloud.upms.server.mapper.RoleMapper;
@@ -71,9 +72,14 @@ public class RoleService {
         // 将RoleList转换为AuthoritiesArray
         return roles.stream()
                 .map(role -> {
+                    var authoritiesJson = role.getAuthorities();
+                    var authorities = JSON.parseArray(authoritiesJson, String.class);
+
+                    // 将标准角色权限添加到权限列表
                     var code = role.getCode();
-                    var authorities = JSON.parseArray(role.getAuthorities(), String.class);
-                    authorities.add(code);
+                    if (StringUtils.startsWith(code, SecurityConstant.DEFAULT_ROLE_PREFIX)) {
+                        authorities.add(code);
+                    }
                     return authorities;
                 })
                 .flatMap(Collection::stream)

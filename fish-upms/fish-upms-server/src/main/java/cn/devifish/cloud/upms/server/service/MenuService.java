@@ -1,12 +1,14 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.upms.common.entity.Menu;
+import cn.devifish.cloud.upms.server.cache.MenuCache;
 import cn.devifish.cloud.upms.server.mapper.MenuMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,6 +23,16 @@ import java.util.Set;
 public class MenuService {
 
     private final MenuMapper menuMapper;
+    private final MenuCache menuCache;
+
+    /**
+     * 获取全部菜单数据
+     *
+     * @return List<Menu>
+     */
+    public List<Menu> selectAll() {
+        return menuCache.getAllIfAbsent(menuMapper::selectAll);
+    }
 
     /**
      * 根据菜单ID查询菜单数据

@@ -17,6 +17,9 @@ public interface SecurityConstant {
     /** Token 头信息前缀 **/
     String OAUTH_HEADER_PREFIX = "Bearer";
 
+    /** 默认角色前缀 **/
+    String DEFAULT_ROLE_PREFIX = "ROLE_";
+
     /** OAUTH2 TOKEN 生存时间 **/
     long DEFAULT_REFRESH_TOKEN_VALIDITY = TimeUnit.DAYS.toSeconds(7);
     long DEFAULT_ACCESS_TOKEN_VALIDITY = TimeUnit.DAYS.toSeconds(1);

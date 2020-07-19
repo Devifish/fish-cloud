@@ -30,6 +30,12 @@
         `m`.update_time AS m_update_time
     </sql>
 
+    <select id="selectAll" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM upms_menu AS m
+    </select>
+
     <select id="selectAllPermission" resultType="java.lang.String">
         SELECT
             m.permission

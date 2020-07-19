@@ -4,6 +4,7 @@ import cn.devifish.cloud.upms.common.entity.Menu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,6 +16,13 @@ import java.util.Set;
  */
 @Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
+
+    /**
+     * 获取全部菜单数据
+     *
+     * @return List<Menu>
+     */
+    List<Menu> selectAll();
 
     /**
      * 获取全部菜单的权限代码
