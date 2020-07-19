@@ -23,4 +23,12 @@ public interface RoleMapper extends BaseMapper<Role> {
      */
     List<Role> selectByUserId(Long userId);
 
+    /**
+     * 根据角色Code统计角色数据
+     *
+     * @param code 角色Code
+     * @return Integer
+     */
+    Integer countByCode(String code);
+
 }

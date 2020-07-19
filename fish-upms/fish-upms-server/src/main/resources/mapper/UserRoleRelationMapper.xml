@@ -16,6 +16,13 @@
         WHERE urr.role_id = #{roleId}
     </select>
 
+    <select id="selectRoleIdByUserId" resultType="java.lang.Long">
+        SELECT
+        urr.role_id
+        FROM upms_user_role_relation AS urr
+        WHERE urr.user_id = #{userId}
+    </select>
+
     <delete id="deleteByUserId">
         DELETE FROM upms_user_role_relation AS urr
         WHERE urr.user_id = #{userId}

@@ -1,15 +1,13 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.server.service.RoleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * RoleController
@@ -44,7 +42,31 @@ public class RoleController {
      */
     @GetMapping("/select/userId/{userId}")
     public List<Role> selectByUserId(@PathVariable Long userId) {
-        return Collections.emptyList();
+        return roleService.selectByUserId(userId);
+    }
+
+    /**
+     * 根据角色Code查询是否存在
+     *
+     * @param code 角色Code
+     * @return boolean
+     */
+    @OpenApi
+    @GetMapping("/exist/code/{code}")
+    public Boolean existByCode(@PathVariable String code) {
+        return roleService.existByCode(code);
+    }
+
+    /**
+     * 根据角色ID更新角色权限
+     *
+     * @param roleId 角色ID
+     * @param authorities 权限集合
+     * @return 是否成功
+     */
+    @PutMapping("/update/authorities/id/{roleId}")
+    public Boolean updateAuthoritiesByRoleId(@PathVariable Long roleId, @RequestBody Set<String> authorities) {
+        return roleService.updateAuthoritiesByRoleId(roleId, authorities);
     }
 
 }

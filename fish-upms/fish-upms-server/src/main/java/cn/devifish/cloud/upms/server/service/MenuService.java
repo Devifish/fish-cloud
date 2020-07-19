@@ -4,6 +4,10 @@ import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.server.mapper.MenuMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * MenuService
@@ -26,6 +30,19 @@ public class MenuService {
      */
     public Menu selectById(Long menuId) {
         return menuMapper.selectById(menuId);
+    }
+
+    /**
+     * 获取全部菜单的权限代码
+     * 用于校验角色权限是否正确
+     *
+     * @return 权限代码集合
+     */
+    public Set<String> selectAllPermission() {
+        var allPermission = menuMapper.selectAllPermission();
+        return CollectionUtils.isEmpty(allPermission)
+                ? Collections.emptySet()
+                : allPermission;
     }
 
 }

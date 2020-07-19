@@ -36,4 +36,13 @@
         </where>
     </select>
 
+    <select id="countByCode" resultType="java.lang.Integer">
+        SELECT
+            count(0)
+        FROM upms_role AS r
+        <where>
+            r.code = #{code}
+        </where>
+    </select>
+
 </mapper>

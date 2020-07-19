@@ -23,6 +23,14 @@ public interface UserRoleRelationMapper {
     List<Long> selectUserIdByRoleId(Long roleId);
 
     /**
+     * 根据用户ID查询关联的全部角色ID
+     *
+     * @param userId 用户ID
+     * @return 角色ID
+     */
+    List<Long> selectRoleIdByUserId(Long userId);
+
+    /**
      * 根具用户ID删除用户角色关系
      *
      * @param userId 用户ID

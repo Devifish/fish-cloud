@@ -73,7 +73,7 @@ public class UserService {
     public Boolean existById(Long id) {
         if (id == null) return false;
 
-        //获取用户数据（Cache）
+        // 获取用户数据（Cache）
         var user = selectById(id);
         return user != null;
     }
@@ -87,7 +87,7 @@ public class UserService {
     public Boolean existByUsername(String username) {
         if (StringUtils.isEmpty(username)) return false;
 
-        //获取用户统计数据
+        // 获取用户统计数据
         var count = SqlHelper.retCount(userMapper.countByUsername(username));
         return count > 0;
     }
@@ -104,21 +104,21 @@ public class UserService {
         var username = user.getUsername();
         var password = user.getPassword();
 
-        //参数校验
+        // 参数校验
         if (StringUtils.isEmpty(username)) throw new BizException("用户名不能为空");
         if (StringUtils.isEmpty(password)) throw new BizException("密码不能为空");
         if (existByUsername(username)) throw new BizException("用户名已存在");
 
-        //加密密码
+        // 加密密码
         var encode_password = passwordEncoder.encode(password);
         user.setPassword(encode_password);
 
-        //设置默认值
+        // 设置默认值
         if (user.getSex() == null) user.setSex(SexEnum.Unset);
         if (user.getLocked() == null) user.setLocked(Boolean.FALSE);
         if (user.getEnabled() == null) user.setEnabled(Boolean.TRUE);
 
-        //保存用户数据
+        // 保存用户数据
         if (SqlHelper.retBool(userMapper.insert(user))) {
             log.info("注册用户：{} 成功", username);
             return Boolean.TRUE;
@@ -138,13 +138,13 @@ public class UserService {
     @Transactional
     public Boolean update(User user) {
         var userId = user.getId();
-        if (user.getId() == null) throw new BizException("用户基础参数不能为空");
+        if (userId == null) throw new BizException("用户基础参数不能为空");
 
-        //检查用户是否存在
+        // 检查用户是否存在
         var old_user = selectById(userId);
         if (old_user == null) throw new BizException("该用户不存在");
 
-        //校验用户名是否重复
+        // 校验用户名是否重复
         var username = user.getUsername();
         var old_username = old_user.getUsername();
         if (StringUtils.isNotEmpty(username) && !username.equals(old_username)) {
@@ -152,7 +152,7 @@ public class UserService {
                 throw new BizException("用户名已存在");
         }
 
-        //是否修改密码 (注销已登陆的所有用户)
+        // 是否修改密码 (注销已登陆的所有用户)
         var password = user.getPassword();
         var old_password = old_user.getPassword();
         if (StringUtils.isNotEmpty(password) && !password.equals(old_password)) {
@@ -160,13 +160,13 @@ public class UserService {
             Assert.state(oauthService.logoutAllByUsername(username), "用户修改密码注销Token失败");
         }
 
-        //更新并移除缓存
+        // 更新并移除缓存
         if (SqlHelper.retBool(userMapper.updateById(user))) {
             userCache.delete(userId);
             return Boolean.TRUE;
         }else {
             log.warn("修改用户：{} 的用户信息失败", username);
-            throw new BizException("修改用户信息失败");
+            throw new BizException("修改失败");
         }
     }
 
