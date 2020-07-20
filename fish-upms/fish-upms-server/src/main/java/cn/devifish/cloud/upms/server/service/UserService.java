@@ -117,6 +117,7 @@ public class UserService {
         user.setPassword(encode_password);
 
         // 设置默认值
+        user.setId(null);
         if (user.getSex() == null) user.setSex(SexEnum.Unset);
         if (user.getLocked() == null) user.setLocked(Boolean.FALSE);
         if (user.getEnabled() == null) user.setEnabled(Boolean.TRUE);

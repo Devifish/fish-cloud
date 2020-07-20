@@ -130,7 +130,38 @@ public class RoleService {
     }
 
     /**
+     * 保存角色数据
+     * 包含各项参数校验及数据转换
+     *
+     * @param role 角色
+     * @return 是否成功
+     */
+    @Transactional
+    public Boolean insert(Role role) {
+        var name = role.getName();
+        var code = role.getCode();
+
+        // 参数校验
+        if (StringUtils.isEmpty(name)) throw new BizException("角色名不能为空");
+        if (existByCode(code)) throw new BizException("角色编码已存在");
+
+        // 设置默认值
+        role.setId(null);
+        if (role.getSystemFlag() == null) role.setSystemFlag(Boolean.FALSE);
+        if (role.getAuthorities() == null) role.setAuthorities("[]");
+
+        // 保存角色数据
+        if (SqlHelper.retBool(roleMapper.insert(role))) {
+            return Boolean.TRUE;
+        }else {
+            log.info("保存角色数据：{} 失败", role);
+            throw new BizException("保存角色失败");
+        }
+    }
+
+    /**
      * 更新角色数据
+     * 包含各项参数校验及数据转换
      *
      * @param role 角色
      * @return 是否成功
