@@ -112,4 +112,25 @@ public abstract class HashCache<V, K extends Serializable> extends BaseCache<V, 
         super.delete(null);
     }
 
+    /**
+     * 删除指定 key 数据
+     * 该方法已弃用
+     *
+     * @param key Hash key
+     */
+    @Deprecated
+    @Override
+    public void delete(K key) {
+        super.delete(null);
+    }
+
+    /**
+     * 删除全部数据
+     * 该方法已弃用
+     */
+    @Deprecated
+    @Override
+    public void deleteAll() {
+        super.delete(null);
+    }
 }
