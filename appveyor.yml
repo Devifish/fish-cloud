@@ -1,0 +1,16 @@
+version: 1.0.build-{build}
+image: Ubuntu2004
+
+# 设置环境变量
+environment:
+  JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+
+# 缓存 Maven
+cache:
+  - /home/appveyor/.m2/
+
+build_script:
+  - sh: mvn install -DskipTests=true -B -V -DminimumPriority=1
+
+test_script:
+  - sh: mvn test

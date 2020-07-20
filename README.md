@@ -1,4 +1,5 @@
 # Fish Cloud
+[![Build status](https://ci.appveyor.com/api/projects/status/ujext80auuoh351g?svg=true)](https://ci.appveyor.com/project/Devifish/fish-cloud)
 [![star](https://img.shields.io/github/stars/Devifish/fish-cloud.svg?logo=github)](https://github.com/Devifish/fish-cloud)
 [![license](https://img.shields.io/github/license/Devifish/fish-cloud)](https://github.com/Devifish/fish-cloud)
 
