@@ -5,6 +5,7 @@ import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.server.cache.RoleCache;
 import cn.devifish.cloud.upms.server.mapper.RoleMapper;
+import cn.devifish.cloud.upms.server.mapper.UserRoleRelationMapper;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import java.util.Set;
 public class RoleService {
 
     private final RoleMapper roleMapper;
+    private final UserRoleRelationMapper userRoleRelationMapper;
     private final RoleCache roleCache;
     private final UserService userService;
     private final MenuService menuService;
@@ -43,6 +45,9 @@ public class RoleService {
      * @return 角色
      */
     public Role selectById(Long roleId) {
+        if (roleId == null)
+            throw new BizException("角色ID不能为空");
+
         return roleCache.getIfAbsent(roleId, roleMapper::selectById);
     }
 
@@ -111,10 +116,10 @@ public class RoleService {
     public Boolean updateAuthoritiesByRoleId(Long roleId, Set<String> authorities) {
         var role = selectById(roleId);
         if (role == null) throw new BizException("该角色不存在");
-        if (!CollectionUtils.isEmpty(authorities)) {
-            Set<String> allPermission = menuService.selectAllPermission();
 
-            // 仅保留数据库菜单所设置的授权码
+        // 仅保留数据库菜单所设置的授权码
+        if (!CollectionUtils.isEmpty(authorities)) {
+            var allPermission = menuService.selectAllPermission();
             authorities.retainAll(allPermission);
         }
 
@@ -133,7 +138,6 @@ public class RoleService {
     @Transactional
     public Boolean update(Role role) {
         var roleId = role.getId();
-        if (roleId == null) throw new BizException("角色ID不能为空");
 
         // 检查是否存在
         var old_role = selectById(roleId);
@@ -154,6 +158,32 @@ public class RoleService {
         }else {
             log.warn("修改角色ID：{} 的角色数据失败", roleId);
             throw new BizException("修改失败");
+        }
+    }
+
+    /**
+     * 删除角色
+     * 必须与用户进行解绑
+     *
+     * @param roleId 角色ID
+     * @return 是否成功
+     */
+    @Transactional
+    public Boolean delete(Long roleId) {
+        var role = selectById(roleId);
+        if (role == null) throw new BizException("该角色不存在");
+
+        // 校验角色是否存在绑定
+        var userIds = userRoleRelationMapper.selectUserIdByRoleId(roleId);
+        if (!CollectionUtils.isEmpty(userIds)) throw new BizException("该角色正在被用户使用");
+
+        // 删除并移除缓存
+        if (SqlHelper.retBool(roleMapper.deleteById(role))) {
+            roleCache.delete(roleId);
+            return Boolean.TRUE;
+        }else {
+            log.warn("删除角色ID：{} 数据失败", roleId);
+            throw new BizException("删除失败");
         }
     }
 

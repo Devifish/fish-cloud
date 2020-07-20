@@ -35,11 +35,14 @@ public class UserService {
     /**
      * 根据用户ID查询单个信息
      *
-     * @param id 用户ID
+     * @param userId 用户ID
      * @return User
      */
-    public User selectById(Long id) {
-        return userCache.getIfAbsent(id, userMapper::selectById);
+    public User selectById(Long userId) {
+        if (userId == null)
+            throw new BizException("用户ID不能为空");
+
+        return userCache.getIfAbsent(userId, userMapper::selectById);
     }
 
     /**
@@ -138,7 +141,6 @@ public class UserService {
     @Transactional
     public Boolean update(User user) {
         var userId = user.getId();
-        if (userId == null) throw new BizException("用户基础参数不能为空");
 
         // 检查用户是否存在
         var old_user = selectById(userId);

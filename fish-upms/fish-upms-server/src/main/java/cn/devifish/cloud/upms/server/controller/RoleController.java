@@ -69,4 +69,16 @@ public class RoleController {
         return roleService.updateAuthoritiesByRoleId(roleId, authorities);
     }
 
+    /**
+     * 删除角色
+     * 必须与用户进行解绑
+     *
+     * @param roleId 角色ID
+     * @return 是否成功
+     */
+    @DeleteMapping("/delete/id/{roleId}")
+    public Boolean delete(@PathVariable Long roleId) {
+        return roleService.delete(roleId);
+    }
+
 }
