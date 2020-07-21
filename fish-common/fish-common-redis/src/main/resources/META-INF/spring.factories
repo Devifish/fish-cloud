@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.devifish.cloud.common.redis.config.RedisConfiguration
+  cn.devifish.cloud.common.redis.config.RedisConfiguration,\
+  cn.devifish.cloud.common.redis.config.CachingConfiguration

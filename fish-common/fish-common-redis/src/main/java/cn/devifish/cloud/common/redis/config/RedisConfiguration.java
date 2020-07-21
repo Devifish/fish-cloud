@@ -22,7 +22,7 @@ import org.springframework.integration.redis.util.RedisLockRegistry;
  * @date 2020/6/30 15:58
  */
 @Slf4j
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @RequiredArgsConstructor
 public class RedisConfiguration {
 
@@ -33,8 +33,8 @@ public class RedisConfiguration {
     public RedisTemplate<String, Object> redisTemplate() {
         log.info("Initializing Redis Template");
 
-        var jsonRedisSerializer = createJsonRedisSerializer();
         var redisTemplate = new RedisTemplate<String, Object>();
+        var jsonRedisSerializer = jsonRedisSerializer();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(RedisSerializer.string());
         redisTemplate.setValueSerializer(jsonRedisSerializer);
@@ -43,7 +43,8 @@ public class RedisConfiguration {
         return redisTemplate;
     }
 
-    public RedisSerializer<?> createJsonRedisSerializer() {
+    @Bean
+    public GenericJackson2JsonRedisSerializer jsonRedisSerializer() {
         var objectMapper = this.objectMapper.copy();
         var validator = objectMapper.getPolymorphicTypeValidator();
         objectMapper.activateDefaultTyping(validator, DefaultTyping.NON_FINAL, As.PROPERTY);
