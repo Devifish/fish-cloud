@@ -20,16 +20,17 @@ services:
     depends_on:
       - mariadb
     restart: unless-stopped
-    
+
   redis:
     image: redis:6.0.5
     container_name: redis
     command: redis-server --requirepass 123456
     ports:
-      - "6379:6379"
+      - 6379:6379
     volumes:
-    - ${REDIS_DATA_DIR}:/data
-    
+      - ${REDIS_DATA_DIR}:/data
+    restart: unless-stopped
+
   mariadb:
     image: linuxserver/mariadb
     container_name: mariadb
@@ -39,7 +40,7 @@ services:
       - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=123456
     ports:
-      - "3306:3306"
+      - 3306:3306
     volumes:
       - ${MARIADB_DATA_DIR}:/config
     restart: unless-stopped
