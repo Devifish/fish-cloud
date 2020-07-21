@@ -77,8 +77,8 @@ public class JacksonConfiguration {
      * @return SimpleModule
      */
     private SimpleModule smartLongModule() {
-        SimpleModule module = new SimpleModule();
-        SmartLongSerializer smartLongSerializer = new SmartLongSerializer();
+        var module = new SimpleModule();
+        var smartLongSerializer = new SmartLongSerializer();
         module.addSerializer(Long.class, smartLongSerializer);
         module.addSerializer(Long.TYPE, smartLongSerializer);
         return module;
@@ -109,10 +109,10 @@ public class JacksonConfiguration {
             }
 
             // 当数据超过Javascript Number类型最大值时转换为String
-            long temp = value;
+            var temp = (long) value;
             if (temp >= JAVASCRIPT_NUMBER_MAX_SIZE) {
                 gen.writeString(value.toString());
-            }else {
+            } else {
                 gen.writeNumber(temp);
             }
         }
