@@ -1,6 +1,10 @@
 package cn.devifish.cloud.common.core.config;
 
 import cn.devifish.cloud.common.core.constant.DateTimeConstant;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -15,6 +19,7 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -42,7 +47,7 @@ public class JacksonConfiguration {
             builder.locale(Locale.CHINA);
             builder.timeZone(TimeZone.getTimeZone(DateTimeConstant.TIME_ZONE));
             builder.simpleDateFormat(DateTimeConstant.DATE_TIME_PATTERN);
-            builder.modules(initJavaTimeModule());
+            builder.modules(initJavaTimeModule(), smartLongModule());
         };
     }
 
@@ -65,4 +70,51 @@ public class JacksonConfiguration {
         javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(timeFormatter));
         return javaTimeModule;
     }
+
+    /**
+     * 对Long类型数据智能序列化模块
+     *
+     * @return SimpleModule
+     */
+    private SimpleModule smartLongModule() {
+        SimpleModule module = new SimpleModule();
+        SmartLongSerializer smartLongSerializer = new SmartLongSerializer();
+        module.addSerializer(Long.class, smartLongSerializer);
+        module.addSerializer(Long.TYPE, smartLongSerializer);
+        return module;
+    }
+
+    /**
+     * SmartLongSerializer
+     * 智能序列化Long类型数据
+     * 当数据超过Javascript Number类型最大值时转换为String
+     *
+     * @author Devifish
+     * @date 2019/8/9 15:35
+     */
+    private static class SmartLongSerializer extends StdSerializer<Long> {
+
+        private final static long JS_NUMBER_MAX_SIZE = 1L << 52;
+
+        protected SmartLongSerializer() {
+            super(Long.class);
+        }
+
+        @Override
+        public void serialize(Long value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+            if (value == null) {
+                gen.writeNull();
+                return;
+            }
+
+            // 当数据超过Javascript Number类型最大值时转换为String
+            long temp = value;
+            if (temp >= JS_NUMBER_MAX_SIZE) {
+                gen.writeString(value.toString());
+            }else {
+                gen.writeNumber(temp);
+            }
+        }
+    }
+
 }
