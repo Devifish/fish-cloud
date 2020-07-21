@@ -94,7 +94,8 @@ public class JacksonConfiguration {
      */
     private static class SmartLongSerializer extends StdSerializer<Long> {
 
-        private final static long JS_NUMBER_MAX_SIZE = 1L << 52;
+        private final static long JAVASCRIPT_NUMBER_BITS = 53L;
+        private final static long JAVASCRIPT_NUMBER_MAX_SIZE = ~(-1L << JAVASCRIPT_NUMBER_BITS);
 
         protected SmartLongSerializer() {
             super(Long.class);
@@ -109,7 +110,7 @@ public class JacksonConfiguration {
 
             // 当数据超过Javascript Number类型最大值时转换为String
             long temp = value;
-            if (temp >= JS_NUMBER_MAX_SIZE) {
+            if (temp >= JAVASCRIPT_NUMBER_MAX_SIZE) {
                 gen.writeString(value.toString());
             }else {
                 gen.writeNumber(temp);
