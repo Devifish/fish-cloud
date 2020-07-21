@@ -126,7 +126,7 @@ public class UserService {
         if (SqlHelper.retBool(userMapper.insert(user))) {
             log.info("注册用户：{} 成功", username);
             return Boolean.TRUE;
-        }else {
+        } else {
             log.info("注册用户：{} 失败", username);
             throw new BizException("注册用户失败");
         }
@@ -167,12 +167,31 @@ public class UserService {
         if (SqlHelper.retBool(userMapper.updateById(user))) {
             userCache.delete(userId);
             return Boolean.TRUE;
-        }else {
+        } else {
             log.warn("修改用户：{} 的用户信息失败", username);
             throw new BizException("修改失败");
         }
     }
 
+    /**
+     * 根据用户ID删除用户
+     *
+     * @param userId 用户ID
+     * @return 是否成功
+     */
+    @Transactional
+    public Boolean delete(Long userId) {
+        User user = selectById(userId);
+        if (user == null) throw new BizException("该用户不存在");
 
+        // 更新并移除缓存
+        if (SqlHelper.retBool(userMapper.deleteById(userId))) {
+            userCache.delete(userId);
+            return Boolean.TRUE;
+        } else {
+            log.warn("删除用户ID：{} 失败", userId);
+            throw new BizException("删除失败");
+        }
+    }
 
 }

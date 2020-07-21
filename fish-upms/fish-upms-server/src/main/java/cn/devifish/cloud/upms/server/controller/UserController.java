@@ -5,10 +5,7 @@ import cn.devifish.cloud.upms.common.vo.UserVo;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * UserController
@@ -61,6 +58,17 @@ public class UserController {
     @GetMapping("/exist/username/{username}")
     public Boolean existByUsername(@PathVariable String username) {
         return userService.existByUsername(username);
+    }
+
+    /**
+     * 根据用户ID删除用户
+     *
+     * @param userId 用户ID
+     * @return 是否成功
+     */
+    @DeleteMapping("/delete/id/{userId}")
+    public Boolean delete(@PathVariable Long userId) {
+        return userService.delete(userId);
     }
 
 }

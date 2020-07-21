@@ -36,4 +36,10 @@ public class OAuthClient implements Serializable {
     /** 权限 **/
     private String authorities;
 
+    /** AccessToken有效时间（秒） **/
+    private Integer accessTokenValidity;
+
+    /** RefreshToken有效时间（秒） **/
+    private Integer refreshTokenValidity;
+
 }

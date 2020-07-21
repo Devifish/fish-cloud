@@ -1,5 +1,6 @@
 package cn.devifish.cloud.upms.server.security;
 
+import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import cn.devifish.cloud.upms.common.entity.OAuthClient;
 import cn.devifish.cloud.upms.server.service.OAuthService;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import java.util.Optional;
 
 /**
  * OAuth2ClientDetailsService
@@ -56,6 +59,14 @@ public class OAuth2ClientDetailsService implements ClientDetailsService {
                 oauthClient.getGrantTypes(), oauthClient.getAuthorities());
 
         details.setClientSecret(oauthClient.getClientSecret());
+
+        // 如果未设置有效时间则使用默认值
+        details.setAccessTokenValiditySeconds(
+                Optional.ofNullable(oauthClient.getAccessTokenValidity())
+                        .orElse((int) SecurityConstant.DEFAULT_ACCESS_TOKEN_VALIDITY));
+        details.setRefreshTokenValiditySeconds(
+                Optional.ofNullable(oauthClient.getRefreshTokenValidity())
+                        .orElse((int) SecurityConstant.DEFAULT_REFRESH_TOKEN_VALIDITY));
         return details;
     }
 
