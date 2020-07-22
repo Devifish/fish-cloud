@@ -1,3 +1,6 @@
+server:
+  port: 20000
+
 spring:
   application:
     name: fish-file-server

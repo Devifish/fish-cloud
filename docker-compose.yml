@@ -1,8 +1,8 @@
 version: "3"
 services:
-  nacos:
+  nacos-server:
     image: nacos/nacos-server:1.3.1
-    container_name: nacos
+    container_name: nacos-server
     environment:
       - MODE=standalone
       - NACOS_APPLICATION_PORT=8848
@@ -43,4 +43,18 @@ services:
       - 3306:3306
     volumes:
       - ${MARIADB_DATA_DIR}:/config
+    restart: unless-stopped
+
+  fish-upms-server:
+    image: fish-upms-server
+    container_name: fish-upms-server
+    build:
+      context: ./fish-upms/fish-upms-server/target
+      dockerfile: ../Dockerfile
+    ports:
+      - 10100:10100
+    depends_on:
+      - mariadb
+      - redis
+      - nacos-server
     restart: unless-stopped
