@@ -9,7 +9,7 @@ ARG APPLICATION_ACTIVE=prod
 
 WORKDIR /server
 COPY ${APPLICATION_NAME}.jar ./
-EXPOSE 8000
+EXPOSE 10000
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo 'Asia/Shanghai' >/etc/timezone

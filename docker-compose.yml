@@ -52,7 +52,7 @@ services:
       context: ./fish-gateway/target
       dockerfile: ../Dockerfile
     ports:
-      - 8000:8000
+      - 10000:10000
     depends_on:
       - nacos-server
     restart: unless-stopped
