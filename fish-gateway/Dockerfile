@@ -4,7 +4,7 @@ ARG JDK_VERSION=11
 FROM openjdk:${JDK_VERSION}-jdk
 MAINTAINER Devifish <devifish@outlook.com>
 
-ARG APPLICATION_NAME=fish-gateway-server
+ARG APPLICATION_NAME=fish-gateway
 ARG APPLICATION_ACTIVE=prod
 
 WORKDIR /server
