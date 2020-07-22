@@ -1,7 +1,7 @@
-ARG JDK_VERSION=11
+ARG JAVA_VERSION=11.0.8
 
 # Runner image
-FROM openjdk:${JDK_VERSION}-jdk
+FROM openjdk:${JAVA_VERSION}-jdk
 MAINTAINER Devifish <devifish@outlook.com>
 
 ARG APPLICATION_NAME=fish-file-server
