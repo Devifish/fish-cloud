@@ -45,6 +45,18 @@ services:
       - ${MARIADB_DATA_DIR}:/config
     restart: unless-stopped
 
+  fish-gateway-server:
+    image: fish-gateway-server
+    container_name: fish-gateway-server
+    build:
+      context: ./fish-gateway/target
+      dockerfile: ../Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - nacos-server
+    restart: unless-stopped
+
   fish-upms-server:
     image: fish-upms-server
     container_name: fish-upms-server
@@ -54,7 +66,20 @@ services:
     ports:
       - 10100:10100
     depends_on:
+      - nacos-server
       - mariadb
       - redis
+    restart: unless-stopped
+
+  fish-message-server:
+    image: fish-message-server
+    container_name: fish-message-server
+    build:
+      context: ./fish-message/fish-message-server/target
+      dockerfile: ../Dockerfile
+    ports:
+      - 10200:10200
+    depends_on:
       - nacos-server
+      - redis
     restart: unless-stopped
