@@ -25,7 +25,6 @@ Mybatis Plus | 3.3.2
 ```
 └── fish-common --------------------------------- 公共组件工具包
      ├── fish-common-core ----------------------- 公共核心组件
-     ├── fish-common-dubbo ---------------------- 公共RPC组件(Dubbo) [TODO]
      ├── fish-common-mybatis -------------------- 公共ORM组件(Mybatis)
      ├── fish-common-rabbitmq ------------------- 公共消息队列组件(RabbitMQ) [TODO]
      ├── fish-common-redis ---------------------- 公共缓存组件(Redis)

@@ -25,7 +25,6 @@
         <module>fish-common-security</module>
         <module>fish-common-mybatis</module>
         <module>fish-common-redis</module>
-        <module>fish-common-dubbo</module>
         <module>fish-common-sentinel</module>
         <module>fish-common-rabbitmq</module>
         <module>fish-common-swagger</module>
