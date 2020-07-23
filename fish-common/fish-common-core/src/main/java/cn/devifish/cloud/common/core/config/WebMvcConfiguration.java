@@ -1,7 +1,5 @@
 package cn.devifish.cloud.common.core.config;
 
-import cn.devifish.cloud.common.core.constant.DateTimeConstant;
-import cn.devifish.cloud.common.core.convert.ConverterEnumFactory;
 import cn.devifish.cloud.common.core.handler.RestfulResponseMethodProcessor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -10,11 +8,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -27,21 +24,12 @@ import java.util.Objects;
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = Type.SERVLET)
-public class WebMvcConfiguration implements WebMvcConfigurer {
+public class WebMvcConfiguration extends WebConfigurerAdapter implements WebMvcConfigurer {
 
     @Override
     @SuppressWarnings("NullableProblems")
     public void addFormatters(FormatterRegistry registry) {
-        //日期时间转换格式
-        var registrar = new DateTimeFormatterRegistrar();
-        registrar.setTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.TIME_PATTERN));
-        registrar.setDateFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_PATTERN));
-        registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern(DateTimeConstant.DATE_TIME_PATTERN));
-        registrar.registerFormatters(registry);
-
-        //枚举转换格式
-        var converterEnumFactory = new ConverterEnumFactory();
-        registry.addConverterFactory(converterEnumFactory);
+        super.addFormatters(registry);
     }
 
     @Bean

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 
 /**
  * GlobalExceptionAdvice
@@ -31,8 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 @ConditionalOnClass(HttpServletRequest.class)
 public class GlobalExceptionAdvice {
-
-    private final HttpServletRequest request;
 
     /**
      * 全局异常默认处理
@@ -68,20 +67,18 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RestfulEntity<?> requestMethodNotSupportedException(HttpRequestMethodNotSupportedException exception) {
-        log.warn("URI: {} 不支持 [{}] 请求", request.getRequestURI(), exception.getMethod());
-        return RestfulEntity.error(MessageCode.BadRequest);
+        var supportedMethods = exception.getSupportedMethods();
+        return RestfulEntity.error(MessageCode.BadRequest, "请求方式仅支持: " + Arrays.toString(supportedMethods));
     }
 
     /**
      * 消息无法读取异常
      *
-     * @param exception exception
      * @return error
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
-    public RestfulEntity<?> messageNotReadableException(HttpMessageNotReadableException exception) {
-        log.warn(exception.getMessage());
+    public RestfulEntity<?> messageNotReadableException() {
         return RestfulEntity.error(MessageCode.PreconditionFailed, "参数不匹配");
     }
 
@@ -94,8 +91,8 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     public RestfulEntity<?> missingServletRequestParameterException(MissingServletRequestParameterException exception) {
-        log.warn(exception.getMessage());
-        return RestfulEntity.error(MessageCode.PreconditionFailed, "缺少必要参数: " + exception.getParameterName());
+        var parameterName = exception.getParameterName();
+        return RestfulEntity.error(MessageCode.PreconditionFailed, "缺少必要参数: " + parameterName);
     }
 
     /**
