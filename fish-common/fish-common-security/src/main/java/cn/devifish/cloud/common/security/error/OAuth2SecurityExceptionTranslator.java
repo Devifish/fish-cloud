@@ -19,6 +19,7 @@ import java.io.IOException;
 
 /**
  * OAuth2SecurityExceptionTranslator
+ * OAuth2安全异常内容转换器
  *
  * @author Devifish
  * @date 2020/7/24 11:21

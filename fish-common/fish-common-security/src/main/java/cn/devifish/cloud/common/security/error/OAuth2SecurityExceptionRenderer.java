@@ -18,6 +18,7 @@ import java.util.Objects;
 
 /**
  * OAuth2SecurityExceptionRenderer
+ * OAuth2安全异常内容渲染器
  *
  * @author Devifish
  * @date 2020/7/24 10:55

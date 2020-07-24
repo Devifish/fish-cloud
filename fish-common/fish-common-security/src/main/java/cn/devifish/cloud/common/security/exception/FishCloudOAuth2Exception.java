@@ -5,6 +5,8 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 
 /**
  * FishCloudOAuth2Exception
+ * 框架OAuth2统一异常类型
+ * 用于内容转换及输出
  *
  * @author Devifish
  * @date 2020/7/24 15:24

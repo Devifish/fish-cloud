@@ -8,7 +8,8 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import java.io.IOException;
 
 /**
- * OAuth2ExceptionSerializer
+ * FishCloudOAuth2ExceptionSerializer
+ * 框架OAuth2异常JSON序列化工具
  *
  * @author Devifish
  * @date 2020/7/24 15:13
