@@ -1,10 +1,8 @@
 package cn.devifish.cloud.common.core.config;
 
 import cn.devifish.cloud.common.core.constant.DateTimeConstant;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import cn.devifish.cloud.common.core.convert.SmartLongSerializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -19,7 +17,6 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -84,38 +81,6 @@ public class JacksonConfiguration {
         return module;
     }
 
-    /**
-     * SmartLongSerializer
-     * 智能序列化Long类型数据
-     * 当数据超过Javascript Number类型最大值时转换为String
-     *
-     * @author Devifish
-     * @date 2019/8/9 15:35
-     */
-    private static class SmartLongSerializer extends StdSerializer<Long> {
 
-        private final static long JAVASCRIPT_NUMBER_BITS = 53L;
-        private final static long JAVASCRIPT_NUMBER_MAX_SIZE = ~(-1L << JAVASCRIPT_NUMBER_BITS);
-
-        protected SmartLongSerializer() {
-            super(Long.class);
-        }
-
-        @Override
-        public void serialize(Long value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-            if (value == null) {
-                gen.writeNull();
-                return;
-            }
-
-            // 当数据超过Javascript Number类型最大值时转换为String
-            var temp = (long) value;
-            if (temp >= JAVASCRIPT_NUMBER_MAX_SIZE) {
-                gen.writeString(value.toString());
-            } else {
-                gen.writeNumber(temp);
-            }
-        }
-    }
 
 }

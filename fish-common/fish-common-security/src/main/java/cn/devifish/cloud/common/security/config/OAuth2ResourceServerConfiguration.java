@@ -1,5 +1,7 @@
 package cn.devifish.cloud.common.security.config;
 
+import cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionRenderer;
+import cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionTranslator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +10,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.util.List;
 
@@ -27,6 +33,8 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerAdapter {
 
+    private final OAuth2SecurityExceptionRenderer exceptionRenderer;
+    private final OAuth2SecurityExceptionTranslator exceptionTranslator;
     private final TokenStore tokenStore;
     private final OpenApiUrlProperties openApiUrlProperties;
 
@@ -56,7 +64,25 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.tokenStore(tokenStore);
+        resources.authenticationEntryPoint(getAuthenticationEntryPoint())
+                .accessDeniedHandler(getAccessDeniedHandler())
+                .tokenStore(tokenStore);
     }
+
+    private AuthenticationEntryPoint getAuthenticationEntryPoint() {
+        OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        authenticationEntryPoint.setExceptionRenderer(exceptionRenderer);
+        authenticationEntryPoint.setExceptionTranslator(exceptionTranslator);
+        return authenticationEntryPoint;
+    }
+
+    private AccessDeniedHandler getAccessDeniedHandler() {
+        var accessDeniedHandler = new OAuth2AccessDeniedHandler();
+        accessDeniedHandler.setExceptionRenderer(exceptionRenderer);
+        accessDeniedHandler.setExceptionTranslator(exceptionTranslator);
+        return accessDeniedHandler;
+    }
+
+
 
 }
