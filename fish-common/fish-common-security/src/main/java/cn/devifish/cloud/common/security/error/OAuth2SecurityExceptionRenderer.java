@@ -60,12 +60,12 @@ public class OAuth2SecurityExceptionRenderer implements OAuth2ExceptionRenderer 
         }
     }
 
-    private HttpInputMessage createHttpInputMessage(NativeWebRequest webRequest) throws Exception {
+    private HttpInputMessage createHttpInputMessage(NativeWebRequest webRequest) {
         var servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
         return new ServletServerHttpRequest(Objects.requireNonNull(servletRequest));
     }
 
-    private HttpOutputMessage createHttpOutputMessage(NativeWebRequest webRequest) throws Exception {
+    private HttpOutputMessage createHttpOutputMessage(NativeWebRequest webRequest) {
         var servletResponse = (HttpServletResponse) webRequest.getNativeResponse();
         return new ServletServerHttpResponse(Objects.requireNonNull(servletResponse));
     }

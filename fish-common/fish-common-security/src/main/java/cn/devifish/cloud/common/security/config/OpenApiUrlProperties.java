@@ -36,7 +36,7 @@ public class OpenApiUrlProperties implements InitializingBean {
     private List<String> urls = new ArrayList<>();
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         var openApiUrlPatterns = scannerOpenApiRequestMappingUrlPatterns();
 
         //添加注解获取到的URL

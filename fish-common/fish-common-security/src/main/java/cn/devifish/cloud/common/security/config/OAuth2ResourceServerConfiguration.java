@@ -63,14 +63,14 @@ public class OAuth2ResourceServerConfiguration extends ResourceServerConfigurerA
      * @param resources spring security
      */
     @Override
-    public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+    public void configure(ResourceServerSecurityConfigurer resources) {
         resources.authenticationEntryPoint(getAuthenticationEntryPoint())
                 .accessDeniedHandler(getAccessDeniedHandler())
                 .tokenStore(tokenStore);
     }
 
     private AuthenticationEntryPoint getAuthenticationEntryPoint() {
-        OAuth2AuthenticationEntryPoint authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        var authenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
         authenticationEntryPoint.setExceptionRenderer(exceptionRenderer);
         authenticationEntryPoint.setExceptionTranslator(exceptionTranslator);
         return authenticationEntryPoint;

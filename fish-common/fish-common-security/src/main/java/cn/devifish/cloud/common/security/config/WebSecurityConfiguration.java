@@ -25,10 +25,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
      * 防止进入Security拦截器占用CPU资源
      *
      * @param web WebSecurity
-     * @throws Exception 异常
      */
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/favor.ico", "/actuator/**", "/error");
     }
 

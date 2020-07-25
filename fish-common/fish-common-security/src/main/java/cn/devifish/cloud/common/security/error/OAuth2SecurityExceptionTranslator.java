@@ -16,8 +16,6 @@ import org.springframework.security.web.util.ThrowableAnalyzer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
-import java.io.IOException;
-
 /**
  * OAuth2SecurityExceptionTranslator
  * OAuth2安全异常内容转换器
@@ -32,7 +30,7 @@ public class OAuth2SecurityExceptionTranslator implements WebResponseExceptionTr
     private final ThrowableAnalyzer throwableAnalyzer = new DefaultThrowableAnalyzer();
 
     @Override
-    public ResponseEntity<OAuth2Exception> translate(Exception e) throws Exception {
+    public ResponseEntity<OAuth2Exception> translate(Exception e) {
 
         // Try to extract a SpringSecurityException from the stacktrace
         var causeChain = throwableAnalyzer.determineCauseChain(e);
@@ -62,7 +60,7 @@ public class OAuth2SecurityExceptionTranslator implements WebResponseExceptionTr
         return handleOAuth2Exception(new ServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e));
     }
 
-    private ResponseEntity<OAuth2Exception> handleOAuth2Exception(OAuth2Exception exception) throws IOException {
+    private ResponseEntity<OAuth2Exception> handleOAuth2Exception(OAuth2Exception exception) {
         var status = exception.getHttpErrorCode();
         var headers = new HttpHeaders();
         if (status == HttpStatus.UNAUTHORIZED.value() || (exception instanceof InsufficientScopeException))
