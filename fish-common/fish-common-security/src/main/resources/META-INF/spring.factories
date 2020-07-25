@@ -3,6 +3,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.devifish.cloud.common.security.config.OAuth2TokenConfiguration,\
   cn.devifish.cloud.common.security.config.WebSecurityConfiguration,\
   cn.devifish.cloud.common.security.config.PasswordEncoderConfiguration,\
-  cn.devifish.cloud.common.security.config.MethodSecurityConfiguration,\
   cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionRenderer,\
   cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionTranslator
