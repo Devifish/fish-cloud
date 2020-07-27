@@ -45,6 +45,19 @@ services:
       - ${MARIADB_DATA_DIR}:/config
     restart: unless-stopped
 
+  rabbitmq:
+    image: rabbitmq:3.8.5-management
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - ${RABBITMQ_DATA_DIR}:/var/lib/rabbitmq
+    restart: unless-stopped
+
   fish-gateway-server:
     image: fish-gateway-server
     container_name: fish-gateway-server
