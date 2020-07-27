@@ -9,7 +9,7 @@
         <result column="name" property="name"/>
         <result column="code" property="code"/>
         <result column="remark" property="remark"/>
-        <result column="authorities" property="authorities"/>
+        <result column="authorities" property="authorities" typeHandler="cn.devifish.cloud.common.mybatis.handler.MybatisJsonTypeHandler"/>
         <result column="system_flag" property="systemFlag"/>
         <result column="r_create_time" property="createTime"/>
         <result column="r_update_time" property="updateTime"/>

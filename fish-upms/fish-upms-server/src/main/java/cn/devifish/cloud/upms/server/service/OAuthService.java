@@ -104,12 +104,11 @@ public class OAuthService {
         var accessTokens = findAllTokenByUsernameAndClientId(clientId, username);
         if (CollectionUtils.isEmpty(accessTokens)) return Boolean.FALSE;
 
-        //遍历注销全部已存在的Token
-        for (var accessToken : accessTokens) {
-            var refreshToken = accessToken.getRefreshToken();
-            tokenStore.removeAccessToken(accessToken);
-            tokenStore.removeRefreshToken(refreshToken);
-        }
+        // 遍历注销全部已存在的Token
+        accessTokens.stream()
+                .map(OAuth2AccessToken::getValue)
+                .forEach(this::logout);
+
         return Boolean.TRUE;
     }
 

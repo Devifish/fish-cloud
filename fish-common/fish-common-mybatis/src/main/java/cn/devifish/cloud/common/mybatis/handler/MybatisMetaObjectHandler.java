@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Component
 @ConditionalOnClass(MetaObjectHandler.class)
-public class MyBatisMetaObjectHandler implements MetaObjectHandler {
+public class MybatisMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {

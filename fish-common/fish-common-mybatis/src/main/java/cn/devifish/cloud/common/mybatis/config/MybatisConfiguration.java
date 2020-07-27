@@ -1,7 +1,7 @@
 package cn.devifish.cloud.common.mybatis.config;
 
 import cn.devifish.cloud.common.core.generator.IdGenerator;
-import cn.devifish.cloud.common.mybatis.handler.MyBatisMetaObjectHandler;
+import cn.devifish.cloud.common.mybatis.handler.MybatisMetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @Slf4j
 @Configuration
-@Import(MyBatisMetaObjectHandler.class)
+@Import(MybatisMetaObjectHandler.class)
 @RequiredArgsConstructor
 @EnableTransactionManagement
 @MapperScan(basePackages = "cn.devifish.cloud.**.mapper", annotationClass = Mapper.class)

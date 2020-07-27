@@ -5,6 +5,7 @@ import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.server.service.RoleService;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,7 +59,7 @@ public class OAuth2UserDetailsService implements UserDetailsService {
         //获取用户权限
         var userId = user.getId();
         var authorities = roleService.selectAuthoritiesByUserId(userId);
-        var authorityList = authorities == null
+        var authorityList = ArrayUtils.isEmpty(authorities)
                 ? Collections.<GrantedAuthority>emptyList()
                 : AuthorityUtils.createAuthorityList(authorities);
 

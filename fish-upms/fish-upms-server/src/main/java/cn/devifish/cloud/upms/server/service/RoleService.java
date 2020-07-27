@@ -6,7 +6,6 @@ import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.server.cache.RoleCache;
 import cn.devifish.cloud.upms.server.mapper.RoleMapper;
 import cn.devifish.cloud.upms.server.mapper.UserRoleRelationMapper;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * RoleService
@@ -77,14 +73,14 @@ public class RoleService {
         // 将RoleList转换为AuthoritiesArray
         return roles.stream()
                 .map(role -> {
-                    var authoritiesJson = role.getAuthorities();
-                    var authorities = JSON.parseArray(authoritiesJson, String.class);
-
-                    // 将标准角色权限添加到权限列表
                     var code = role.getCode();
-                    if (StringUtils.startsWith(code, SecurityConstant.DEFAULT_ROLE_PREFIX)) {
+                    var authorities = Optional.ofNullable(role.getAuthorities())
+                            .orElseGet(HashSet::new);
+
+                    // 如果角色符合规则，那么添加到权限列表
+                    if (StringUtils.startsWith(code, SecurityConstant.DEFAULT_ROLE_PREFIX))
                         authorities.add(code);
-                    }
+
                     return authorities;
                 })
                 .flatMap(Collection::stream)
@@ -124,8 +120,7 @@ public class RoleService {
         }
 
         // 修改角色权限
-        var authoritiesJson = JSON.toJSONString(authorities);
-        role.setAuthorities(authoritiesJson);
+        role.setAuthorities(authorities);
         return update(role);
     }
 
@@ -148,7 +143,7 @@ public class RoleService {
         // 设置默认值
         role.setId(null);
         if (role.getSystemFlag() == null) role.setSystemFlag(Boolean.FALSE);
-        if (role.getAuthorities() == null) role.setAuthorities("[]");
+        if (role.getAuthorities() == null) role.setAuthorities(Collections.emptySet());
 
         // 保存角色数据
         if (SqlHelper.retBool(roleMapper.insert(role))) {

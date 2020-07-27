@@ -1,8 +1,12 @@
 package cn.devifish.cloud.upms.common.entity;
 
 import cn.devifish.cloud.common.core.BaseEntity;
+import cn.devifish.cloud.common.mybatis.handler.MybatisJsonTypeHandler;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.Set;
 
 /**
  * Role
@@ -25,7 +29,8 @@ public class Role extends BaseEntity {
     private String remark;
 
     /** 权限 **/
-    private String authorities;
+    @TableField(typeHandler = MybatisJsonTypeHandler.class)
+    private Set<String> authorities;
 
     /** 系统角色标记 **/
     private Boolean systemFlag;
