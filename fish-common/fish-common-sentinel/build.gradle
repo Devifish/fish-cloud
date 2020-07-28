@@ -1,0 +1,5 @@
+description "公共sentinel降级限流组件"
+
+dependencies {
+    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-sentinel"
+}

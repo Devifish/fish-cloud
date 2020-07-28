@@ -10,4 +10,14 @@ pluginManagement {
 rootProject.name = "fish-cloud"
 
 include ":fish-common:fish-common-core"
+include ":fish-common:fish-common-mybatis"
+include ":fish-common:fish-common-rabbitmq"
+include ":fish-common:fish-common-redis"
+include ":fish-common:fish-common-security"
+include ":fish-common:fish-common-sentinel"
+//include ":fish-common:fish-common-swagger"
+
+include ":fish-upms:fish-upms-common"
+include ":fish-upms:fish-upms-server"
+
 include ":fish-gateway"

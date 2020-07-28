@@ -1,0 +1,10 @@
+description "公共Redis组件"
+
+dependencies {
+    implementation project(":fish-common:fish-common-core")
+
+    compile "org.springframework.boot:spring-boot-starter-data-redis"
+    compile "org.springframework.integration:spring-integration-redis"
+
+    implementation "org.apache.commons:commons-pool2"
+}

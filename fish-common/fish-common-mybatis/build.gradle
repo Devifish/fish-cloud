@@ -1,0 +1,10 @@
+description "公共mybatis组件"
+
+dependencies {
+    implementation project(":fish-common:fish-common-core")
+
+    compile "org.springframework.boot:spring-boot-starter-jdbc"
+
+    compile "com.baomidou:mybatis-plus-boot-starter"
+    runtimeOnly "mysql:mysql-connector-java"
+}

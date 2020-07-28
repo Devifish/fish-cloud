@@ -1,17 +1,20 @@
 apply plugin: "application"
 apply plugin: "org.springframework.boot"
 
-description = "路由网关反向代理服务访问"
-mainClassName = "cn.devifish.cloud.gateway.GatewayApplication"
+description = "用户权限服务模块"
+mainClassName = "cn.devifish.cloud.upms.server.UpmsApplication"
 
 dependencies {
+    implementation project(":fish-upms:fish-upms-common")
     implementation project(":fish-common:fish-common-core")
+    implementation project(":fish-common:fish-common-security")
+    implementation project(":fish-common:fish-common-redis")
+    implementation project(":fish-common:fish-common-mybatis")
     implementation project(":fish-common:fish-common-sentinel")
 
-    implementation "org.springframework.cloud:spring-cloud-starter-gateway"
     implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-web"
 
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
-    implementation "com.alibaba.cloud:spring-cloud-alibaba-sentinel-gateway"
 }
