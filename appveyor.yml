@@ -7,10 +7,7 @@ environment:
 
 # 缓存 Maven
 cache:
-  - /home/appveyor/.m2/
+  - /home/appveyor/.gradle/
 
 build_script:
-  - sh: mvn install -DskipTests=true -B -V -DminimumPriority=1
-
-test_script:
-  - sh: mvn test
+  - sh: chmod +x ./gradlew && ./gradlew bootJar
