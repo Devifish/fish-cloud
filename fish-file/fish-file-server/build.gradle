@@ -4,8 +4,6 @@ apply plugin: "org.springframework.boot"
 description = "文件服务模块"
 mainClassName = "cn.devifish.cloud.file.server.FileApplication"
 
-jar { enabled = true }
-
 dependencies {
     implementation project(":fish-file:fish-file-common")
     implementation project(":fish-common:fish-common-core")

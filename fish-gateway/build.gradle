@@ -4,8 +4,6 @@ apply plugin: "org.springframework.boot"
 description = "路由网关反向代理服务访问"
 mainClassName = "cn.devifish.cloud.gateway.GatewayApplication"
 
-jar { enabled = true }
-
 dependencies {
     implementation project(":fish-common:fish-common-core")
     implementation project(":fish-common:fish-common-sentinel")
