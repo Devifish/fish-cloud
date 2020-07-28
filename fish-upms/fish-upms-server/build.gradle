@@ -4,6 +4,8 @@ apply plugin: "org.springframework.boot"
 description = "用户权限服务模块"
 mainClassName = "cn.devifish.cloud.upms.server.UpmsApplication"
 
+jar { enabled = true }
+
 dependencies {
     implementation project(":fish-upms:fish-upms-common")
     implementation project(":fish-common:fish-common-core")

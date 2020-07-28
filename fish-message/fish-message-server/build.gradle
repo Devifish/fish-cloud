@@ -4,6 +4,8 @@ apply plugin: "org.springframework.boot"
 description = "消息服务模块"
 mainClassName = "cn.devifish.cloud.message.server.MessageApplication"
 
+jar { enabled = true }
+
 dependencies {
     implementation project(":fish-message:fish-message-common")
     implementation project(":fish-common:fish-common-core")

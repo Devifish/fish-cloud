@@ -4,6 +4,8 @@ apply plugin: "org.springframework.boot"
 description = "搜索服务模块"
 mainClassName = "cn.devifish.cloud.message.server.MessageApplication"
 
+jar { enabled = true }
+
 dependencies {
     implementation project(":fish-search:fish-search-common")
     implementation project(":fish-common:fish-common-core")
