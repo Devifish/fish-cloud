@@ -6,12 +6,15 @@ plugins {
 description = 'Spring Cloud 微服务开发框架'
 
 ext {
-    set('springBootVersion', '2.3.2.RELEASE')
-    set('springCloudVersion', 'Hoxton.SR6')
-    set('springCloudAlibabaVersion', '2.2.1.RELEASE')
+    javaVersion = JavaVersion.VERSION_11
+    library = [
+        springBootVersion = "2.3.2.RELEASE",
+        springCloudVersion = "Hoxton.SR6",
+        springCloudAlibabaVersion = "2.2.1.RELEASE",
 
-    set('fastjsonVersion', '1.2.72')
-    set('mybatisPlusVersion', '3.3.1')
+        fastjsonVersion = "1.2.72",
+        mybatisPlusVersion = "3.3.1"
+    ]
 }
 
 allprojects {
@@ -21,11 +24,10 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
 
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = "${javaVersion}"
+    targetCompatibility = "${javaVersion}"
 
     dependencies {
         compileOnly "org.projectlombok:lombok"
