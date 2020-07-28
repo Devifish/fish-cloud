@@ -1,0 +1,5 @@
+description "消息服务公共模块"
+
+dependencies {
+    implementation project(":fish-common:fish-common-core")
+}

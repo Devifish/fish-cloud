@@ -1,0 +1,5 @@
+description "文件服务公共模块"
+
+dependencies {
+    implementation project(":fish-common:fish-common-core")
+}

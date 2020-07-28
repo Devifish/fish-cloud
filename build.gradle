@@ -11,7 +11,12 @@ ext {
     set('springCloudAlibabaVersion', '2.2.1.RELEASE')
 
     set('fastjsonVersion', '1.2.72')
-    set('mybatisPlusVersion', '3.3.2')
+    set('mybatisPlusVersion', '3.3.1')
+}
+
+allprojects {
+    group = 'cn.devifish.cloud'
+    version = '1.0.0'
 }
 
 subprojects {
@@ -19,9 +24,8 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'cn.devifish.cloud'
-    version = '1.0.0'
-    sourceCompatibility = '11'
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     dependencies {
         compileOnly "org.projectlombok:lombok"

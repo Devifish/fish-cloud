@@ -1,0 +1,17 @@
+apply plugin: "application"
+apply plugin: "org.springframework.boot"
+
+description = "文件服务模块"
+mainClassName = "cn.devifish.cloud.file.server.FileApplication"
+
+dependencies {
+    implementation project(":fish-file:fish-file-common")
+    implementation project(":fish-common:fish-common-core")
+    implementation project(":fish-common:fish-common-sentinel")
+
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
+    implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
+}

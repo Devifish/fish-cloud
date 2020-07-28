@@ -15,7 +15,16 @@ include ":fish-common:fish-common-rabbitmq"
 include ":fish-common:fish-common-redis"
 include ":fish-common:fish-common-security"
 include ":fish-common:fish-common-sentinel"
-//include ":fish-common:fish-common-swagger"
+include ":fish-common:fish-common-swagger"
+
+include ":fish-file:fish-file-common"
+include ":fish-file:fish-file-server"
+
+include ":fish-message:fish-message-common"
+include ":fish-message:fish-message-server"
+
+include ":fish-search:fish-search-common"
+include ":fish-search:fish-search-server"
 
 include ":fish-upms:fish-upms-common"
 include ":fish-upms:fish-upms-server"
