@@ -1,0 +1,13 @@
+pluginManagement {
+    repositories {
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url 'https://repo.spring.io/plugins-release' }
+    }
+}
+
+rootProject.name = "fish-cloud"
+
+include ":fish-common:fish-common-core"
+include ":fish-gateway"

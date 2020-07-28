@@ -1,0 +1,48 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.2.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+}
+
+description = 'Spring Cloud 微服务开发框架'
+
+ext {
+    set('springBootVersion', '2.3.2.RELEASE')
+    set('springCloudVersion', 'Hoxton.SR6')
+    set('springCloudAlibabaVersion', '2.2.1.RELEASE')
+
+    set('fastjsonVersion', '1.2.72')
+    set('mybatisPlusVersion', '3.3.2')
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'cn.devifish.cloud'
+    version = '1.0.0'
+    sourceCompatibility = '11'
+
+    dependencies {
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+
+    dependencyManagement {
+        imports { mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}" }
+        imports { mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}" }
+        imports { mavenBom "com.alibaba.cloud:spring-cloud-alibaba-dependencies:${springCloudAlibabaVersion}" }
+
+        dependencies {
+            dependency "com.alibaba:fastjson:${fastjsonVersion}"
+            dependency "com.baomidou:mybatis-plus-core:${mybatisPlusVersion}"
+            dependency "com.baomidou:mybatis-plus-annotation:${mybatisPlusVersion}"
+            dependency "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
+        }
+    }
+
+    repositories {
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+    }
+}
