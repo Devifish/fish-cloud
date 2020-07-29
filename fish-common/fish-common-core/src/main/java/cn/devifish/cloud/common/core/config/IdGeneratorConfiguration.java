@@ -2,7 +2,7 @@ package cn.devifish.cloud.common.core.config;
 
 import cn.devifish.cloud.common.core.generator.IdGenerator;
 import cn.devifish.cloud.common.core.generator.SnowflakeIdGenerator;
-import cn.devifish.cloud.common.core.util.NetworkUtil;
+import cn.devifish.cloud.common.core.util.NetworkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,9 +36,11 @@ public class IdGeneratorConfiguration {
      */
     @PostConstruct
     private void init() {
-        var localMacAddress = NetworkUtil.getLocalMacAddress();
+        var localMacAddress = NetworkUtils.getLocalMacAddress();
+
         this.dataCenterId = Math.abs(applicationName.hashCode() % SnowflakeIdGenerator.MAX_DATA_CENTER_ID);
         this.machineId = Math.abs(localMacAddress.hashCode() % SnowflakeIdGenerator.MAX_MACHINE_ID);
+        log.info("Using generated snowflakeIdGenerator dataCenterId: {} machineId: {}", this.dataCenterId, this.machineId);
     }
 
     @Bean

@@ -15,7 +15,7 @@ import java.util.function.Function;
  * @author Devifish
  * @date 2020/7/3 10:42
  */
-public class NetworkUtil {
+public class NetworkUtils {
 
     /**
      * 获取本机网卡IP地址，规则如下：
