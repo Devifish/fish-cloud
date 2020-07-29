@@ -1,5 +1,7 @@
+apply plugin: 'java-library'
+
 description "公共Swagger文档组件"
 
 dependencies {
-    implementation project(":fish-common:fish-common-core")
+    api project(":fish-common:fish-common-core")
 }

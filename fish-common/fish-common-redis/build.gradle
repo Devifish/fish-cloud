@@ -1,10 +1,12 @@
+apply plugin: 'java-library'
+
 description "公共Redis组件"
 
 dependencies {
-    implementation project(":fish-common:fish-common-core")
+    api project(":fish-common:fish-common-core")
 
-    compile "org.springframework.boot:spring-boot-starter-data-redis"
-    compile "org.springframework.integration:spring-integration-redis"
+    api "org.springframework.boot:spring-boot-starter-data-redis"
+    api "org.springframework.integration:spring-integration-redis"
 
     implementation "org.apache.commons:commons-pool2"
 }

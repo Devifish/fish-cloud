@@ -1,6 +1,8 @@
+apply plugin: 'java-library'
+
 description "用户权限服务公共模块"
 
 dependencies {
-    implementation project(":fish-common:fish-common-core")
-    implementation project(":fish-common:fish-common-mybatis")
+    api project(":fish-common:fish-common-core")
+    compileOnly project(":fish-common:fish-common-mybatis")
 }

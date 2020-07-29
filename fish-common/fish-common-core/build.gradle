@@ -1,13 +1,15 @@
+apply plugin: 'java-library'
+
 description "公共核心组件"
 
 dependencies {
-    compile "org.springframework.cloud:spring-cloud-commons"
-    compile "org.springframework.boot:spring-boot-starter-json"
-    compile "org.springframework.boot:spring-boot-starter-aop"
+    api "org.springframework.cloud:spring-cloud-commons"
+    api "org.springframework.boot:spring-boot-starter-json"
+    api "org.springframework.boot:spring-boot-starter-aop"
     compileOnly "org.springframework.boot:spring-boot-starter-web"
     compileOnly "org.springframework.boot:spring-boot-starter-webflux"
 
-    compile "org.apache.commons:commons-lang3"
-    compile "com.alibaba:fastjson"
+    api "org.apache.commons:commons-lang3"
+    api "com.alibaba:fastjson"
     compileOnly "com.baomidou:mybatis-plus-annotation"
 }

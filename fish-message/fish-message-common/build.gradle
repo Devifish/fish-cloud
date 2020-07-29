@@ -1,5 +1,7 @@
+apply plugin: 'java-library'
+
 description "消息服务公共模块"
 
 dependencies {
-    implementation project(":fish-common:fish-common-core")
+    api project(":fish-common:fish-common-core")
 }

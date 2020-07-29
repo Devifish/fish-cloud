@@ -1,11 +1,13 @@
+apply plugin: 'java-library'
+
 description "公共安全组件"
 
 dependencies {
-    implementation project(":fish-common:fish-common-core")
+    api project(":fish-common:fish-common-core")
     implementation project(":fish-common:fish-common-redis")
 
-    compile "org.springframework.cloud:spring-cloud-starter-security"
-    compile "org.springframework.cloud:spring-cloud-starter-oauth2"
+    api "org.springframework.cloud:spring-cloud-starter-security"
+    api "org.springframework.cloud:spring-cloud-starter-oauth2"
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
     compileOnly "org.springframework.boot:spring-boot-starter-web"
 }
