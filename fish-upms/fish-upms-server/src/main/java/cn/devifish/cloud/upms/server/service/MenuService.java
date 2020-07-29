@@ -2,15 +2,17 @@ package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
+import cn.devifish.cloud.upms.common.dto.MenuDTO;
 import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.common.enums.MenuType;
-import cn.devifish.cloud.upms.common.vo.MenuVo;
+import cn.devifish.cloud.upms.common.vo.MenuVO;
 import cn.devifish.cloud.upms.server.cache.MenuCache;
 import cn.devifish.cloud.upms.server.mapper.MenuMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,10 +63,10 @@ public class MenuService {
      *
      * @return List<MenuVo>
      */
-    public List<MenuVo> selectAllVo() {
+    public List<MenuVO> selectAllVo() {
         var menus = selectAll();
         return menus.stream()
-                .map(MenuVo::new)
+                .map(MenuVO::new)
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +77,7 @@ public class MenuService {
      *
      * @return TreeSet<Menu>
      */
-    public Set<MenuVo> selectMenuTree() {
+    public Set<MenuVO> selectMenuTree() {
         return buildMenuVoTree(selectAllVo(), null, null, false);
     }
 
@@ -86,7 +88,7 @@ public class MenuService {
      *
      * @return TreeSet<Menu>
      */
-    public Set<MenuVo> currentMenuTree() {
+    public Set<MenuVO> currentMenuTree() {
         var authorities = SecurityUtil.getAuthorities();
         var authoritiesSet = AuthorityUtils.authorityListToSet(authorities);
         return buildMenuVoTree(selectAllVo(), null, authoritiesSet, true);
@@ -103,16 +105,16 @@ public class MenuService {
      * @param valid 是否校验权限
      * @return 菜单树
      */
-    private Set<MenuVo> buildMenuVoTree(Collection<MenuVo> collection, Long parentId, Set<String> authorities, boolean valid) {
+    private Set<MenuVO> buildMenuVoTree(Collection<MenuVO> collection, Long parentId, Set<String> authorities, boolean valid) {
         var iterator = collection.iterator();
 
-        Set<MenuVo> temp = null;
+        Set<MenuVO> temp = null;
         while (iterator.hasNext()) {
             var menuVo = iterator.next();
             if (!Objects.equals(menuVo.getParentId(), parentId)) continue;
             if (valid && StringUtils.isNotEmpty(menuVo.getPermission()) && !authorities.contains(menuVo.getPermission())) continue;
-            if (temp == null) temp = new TreeSet<>(Comparator.comparing(MenuVo::getSort,
-                    Comparator.nullsLast(Integer::compareTo)).thenComparingLong(MenuVo::getId));
+            if (temp == null) temp = new TreeSet<>(Comparator.comparing(MenuVO::getSort,
+                    Comparator.nullsLast(Integer::compareTo)).thenComparingLong(MenuVO::getId));
 
             // 搜索是否存在子节点
             iterator.remove();
@@ -144,16 +146,41 @@ public class MenuService {
     }
 
     /**
+     * 根据菜单ID查询是否存在
+     *
+     * @param menuId 菜单ID
+     * @return boolean
+     */
+    public Boolean existById(Long menuId) {
+        if (menuId == null) return Boolean.FALSE;
+        return selectById(menuId) != null;
+    }
+
+    /**
      * 根据菜单授权码查询是否存在
      *
      * @param permission 菜单授权码
      * @return boolean
      */
     public Boolean existByPermission(String permission) {
-        if (StringUtils.isEmpty(permission)) return false;
+        if (StringUtils.isEmpty(permission)) return Boolean.FALSE;
 
-        // 获取角色统计数据
+        // 获取菜单统计数据
         var count = SqlHelper.retCount(1);
+        return count > 0;
+    }
+
+    /**
+     * 根据菜单父级Id查询是否存在
+     *
+     * @param parentId 父级Id
+     * @return boolean
+     */
+    public Boolean existByParentId(Long parentId) {
+        if (parentId == null) return Boolean.FALSE;
+
+        // 获取菜单统计数据
+        int count = SqlHelper.retCount(menuMapper.countByParentId(parentId));
         return count > 0;
     }
 
@@ -173,6 +200,12 @@ public class MenuService {
         if (StringUtils.isEmpty(name)) throw new BizException("菜单名不能为空");
         if (existByPermission(permission)) throw new BizException("菜单授权码已存在");
 
+        // 校验父级ID是否存在
+        var parentId = menu.getParentId();
+        if (parentId != null && !existById(parentId)) {
+            throw new BizException("父级菜单不存在");
+        }
+
         // 设置默认值
         menu.setId(null);
         if (menu.getEnable() == null) menu.setEnable(Boolean.TRUE);
@@ -186,6 +219,20 @@ public class MenuService {
             log.info("保存菜单数据：{} 失败", menu);
             throw new BizException("保存菜单失败");
         }
+    }
+
+    /**
+     * 保存菜单数据
+     * 包含各项参数校验及数据转换
+     *
+     * @param menuDTO 菜单DTO
+     * @return 是否成功
+     */
+    @Transactional
+    public Boolean insert(MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuDTO, menu);
+        return insert(menu);
     }
 
     /**
@@ -211,6 +258,12 @@ public class MenuService {
                 throw new BizException("菜单授权码已存在");
         }
 
+        // 校验父级ID是否存在
+        var parentId = menu.getParentId();
+        if (parentId != null && !existById(parentId)) {
+            throw new BizException("父级菜单不存在");
+        }
+
         // 更新并移除缓存
         if (SqlHelper.retBool(menuMapper.updateById(menu))) {
             menuCache.delete();
@@ -221,6 +274,43 @@ public class MenuService {
         }
     }
 
+    /**
+     * 更新菜单数据
+     * 包含各项参数校验及数据转换
+     *
+     * @param menuId 菜单Id
+     * @param menuDTO 菜单DTO
+     * @return 是否成功
+     */
+    public Boolean update(Long menuId, MenuDTO menuDTO) {
+        Menu menu = new Menu();
+        BeanUtils.copyProperties(menuDTO, menu);
+        menu.setId(menuId);
+        return update(menu);
+    }
 
+    /**
+     * 删除菜单
+     * 必须与子菜单进行解绑
+     *
+     * @param menuId 菜单ID
+     * @return 是否成功
+     */
+    public Boolean delete(Long menuId) {
+        var menu = selectById(menuId);
+
+        // 校验数据
+        if (menu == null) throw new BizException("该菜单不存在");
+        if (!existByParentId(menuId)) throw new BizException("存在子菜单, 无法删除");
+
+        // 删除并移除缓存
+        if (SqlHelper.retBool(menuMapper.deleteById(menuId))) {
+            menuCache.delete();
+            return Boolean.TRUE;
+        }else {
+            log.warn("删除菜单ID：{} 数据失败", menuId);
+            throw new BizException("删除失败");
+        }
+    }
 
 }

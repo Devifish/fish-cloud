@@ -32,4 +32,20 @@ public interface MenuMapper extends BaseMapper<Menu> {
      */
     Set<String> selectAllPermission();
 
+    /**
+     * 根据父级ID查询菜单
+     *
+     * @param parentId 父级ID
+     * @return List<Menu>
+     */
+    List<Menu> selectByParentId(Long parentId);
+
+    /**
+     * 根据父级ID统计菜单
+     *
+     * @param parentId 父级ID
+     * @return count
+     */
+    Integer countByParentId(Long parentId);
+
 }

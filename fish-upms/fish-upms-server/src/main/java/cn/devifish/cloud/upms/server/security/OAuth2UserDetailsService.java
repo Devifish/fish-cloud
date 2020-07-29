@@ -1,6 +1,7 @@
 package cn.devifish.cloud.upms.server.security;
 
 import cn.devifish.cloud.common.security.BasicUser;
+import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.server.service.RoleService;
 import cn.devifish.cloud.upms.server.service.UserService;
@@ -55,6 +56,8 @@ public class OAuth2UserDetailsService implements UserDetailsService {
      */
     private UserDetails buildUserDetails(User user) {
         Assert.notNull(user, "user不能为NULL");
+
+        BasicUser principal = SecurityUtil.getPrincipal();
 
         //获取用户权限
         var userId = user.getId();

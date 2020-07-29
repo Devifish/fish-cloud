@@ -1,10 +1,12 @@
 package cn.devifish.cloud.upms.server.controller;
 
 import cn.devifish.cloud.common.security.annotation.OpenApi;
-import cn.devifish.cloud.upms.common.vo.UserVo;
+import cn.devifish.cloud.upms.common.dto.UserDTO;
+import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -27,9 +29,9 @@ public class UserController {
      * @return UserVo
      */
     @GetMapping("/current")
-    public UserVo current() {
+    public UserVO current() {
         var user = userService.currentUser();
-        var userVo = new UserVo();
+        var userVo = new UserVO();
         BeanUtils.copyProperties(user, userVo);
         return userVo;
     }
@@ -41,9 +43,9 @@ public class UserController {
      * @return User
      */
     @GetMapping("/select/id/{userId}")
-    public UserVo selectById(@PathVariable Long userId) {
+    public UserVO selectById(@PathVariable Long userId) {
         var user = userService.selectById(userId);
-        var userVo = new UserVo();
+        var userVo = new UserVO();
         BeanUtils.copyProperties(user, userVo);
         return userVo;
     }
@@ -58,6 +60,20 @@ public class UserController {
     @GetMapping("/exist/username/{username}")
     public Boolean existByUsername(@PathVariable String username) {
         return userService.existByUsername(username);
+    }
+
+    /**
+     * 更新用户信息
+     * 包含各项参数校验及数据转换
+     *
+     * @param username 用户名
+     * @param userDTO 用户参数
+     * @return 是否成功
+     */
+    @PutMapping("/update/{username}")
+    @PreAuthorize("principal.username == #username")
+    public Boolean update(@PathVariable String username, @RequestBody UserDTO userDTO) {
+        return userService.update(username, userDTO);
     }
 
     /**

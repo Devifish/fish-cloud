@@ -39,7 +39,7 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security.allowFormAuthenticationForClients()
                 .tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()");
@@ -51,7 +51,7 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
      * @param endpoints spring security
      */
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 .exceptionTranslator(exceptionTranslator)
                 .authenticationManager(authenticationManager)

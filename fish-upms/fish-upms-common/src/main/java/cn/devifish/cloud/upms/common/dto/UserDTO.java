@@ -1,25 +1,23 @@
-package cn.devifish.cloud.upms.common.vo;
+package cn.devifish.cloud.upms.common.dto;
 
 import cn.devifish.cloud.upms.common.enums.SexEnum;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * UserVo
- * 用户Vo
+ * UserDTO
+ * 用户DTO
  *
  * @author Devifish
- * @date 2020/7/11 15:08
+ * @date 2020/7/29 15:45
  */
 @Data
-public class UserVo {
+public class UserDTO implements Serializable {
 
-    /** 主键ID **/
-    private Long id;
-
-    /** 用户名 **/
-    private String username;
+    /** 密码 **/
+    private String password;
 
     /** 昵称 **/
     private String nickname;

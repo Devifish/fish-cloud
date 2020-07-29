@@ -1,13 +1,11 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.upms.common.dto.MenuDTO;
 import cn.devifish.cloud.upms.common.entity.Menu;
-import cn.devifish.cloud.upms.common.vo.MenuVo;
+import cn.devifish.cloud.upms.common.vo.MenuVO;
 import cn.devifish.cloud.upms.server.service.MenuService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
@@ -44,7 +42,7 @@ public class MenuController {
      * @return TreeSet<Menu>
      */
     @GetMapping("/select/menu-tree")
-    public Set<MenuVo> selectMenuTree() {
+    public Set<MenuVO> selectMenuTree() {
         return menuService.selectMenuTree();
     }
 
@@ -56,8 +54,45 @@ public class MenuController {
      * @return TreeSet<Menu>
      */
     @GetMapping("/current/menu-tree")
-    public Set<MenuVo> currentMenuTree() {
+    public Set<MenuVO> currentMenuTree() {
         return menuService.currentMenuTree();
+    }
+
+    /**
+     * 保存菜单数据
+     * 包含各项参数校验及数据转换
+     *
+     * @param menuDTO 菜单DTO
+     * @return 是否成功
+     */
+    @PostMapping("/insert")
+    public Boolean insert(@RequestBody MenuDTO menuDTO) {
+        return menuService.insert(menuDTO);
+    }
+
+    /**
+     * 更新菜单数据
+     * 包含各项参数校验及数据转换
+     *
+     * @param menuId 菜单Id
+     * @param menuDTO 菜单DTO
+     * @return 是否成功
+     */
+    @PutMapping("/update/{menuId}")
+    public Boolean update(@PathVariable Long menuId, @RequestBody MenuDTO menuDTO) {
+        return menuService.update(menuId, menuDTO);
+    }
+
+    /**
+     * 删除菜单
+     * 必须与子菜单进行解绑
+     *
+     * @param menuId 菜单ID
+     * @return 是否成功
+     */
+    @DeleteMapping("/delete/{menuId}")
+    public Boolean delete(@PathVariable Long menuId) {
+        return menuService.delete(menuId);
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.Set;
  * @date 2020/7/20 15:09
  */
 @Data
-public class MenuVo implements Serializable {
+public class MenuVO implements Serializable {
 
     /** 主键ID **/
     private Long id;
@@ -42,12 +42,12 @@ public class MenuVo implements Serializable {
     private Integer sort;
 
     /** 子节点 **/
-    private Set<MenuVo> children;
+    private Set<MenuVO> children;
 
-    public MenuVo() {
+    public MenuVO() {
     }
 
-    public MenuVo(Menu menu) {
+    public MenuVO(Menu menu) {
         this.id = menu.getId();
         this.name = menu.getName();
         this.url = menu.getUrl();

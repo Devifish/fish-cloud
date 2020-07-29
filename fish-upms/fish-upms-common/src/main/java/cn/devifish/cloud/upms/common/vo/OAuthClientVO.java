@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @date 2020/7/7 18:25
  */
 @Data
-public class OAuthClientVo implements Serializable {
+public class OAuthClientVO implements Serializable {
 
     /** 客户端ID **/
     private String clientId;
