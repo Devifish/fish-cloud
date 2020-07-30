@@ -1,9 +1,9 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.upms.common.vo.OAuthClientVO;
 import cn.devifish.cloud.upms.server.service.OAuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +30,7 @@ public class OAuthController {
     @GetMapping("/select/client/id/{clientId}")
     public OAuthClientVO selectClientByClientId(@PathVariable String clientId) {
         var oauthClient = oauthService.selectByClientId(clientId);
-        var oauthClientVo = new OAuthClientVO();
-        BeanUtils.copyProperties(oauthClient, oauthClientVo);
-        return oauthClientVo;
+        return BeanUtils.copyProperties(oauthClient, OAuthClientVO::new);
     }
 
     /**

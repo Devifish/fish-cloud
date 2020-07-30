@@ -1,6 +1,7 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.upms.common.dto.MenuDTO;
 import cn.devifish.cloud.upms.common.entity.Menu;
@@ -12,7 +13,6 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -230,8 +230,7 @@ public class MenuService {
      */
     @Transactional
     public Boolean insert(MenuDTO menuDTO) {
-        Menu menu = new Menu();
-        BeanUtils.copyProperties(menuDTO, menu);
+        var menu = BeanUtils.copyProperties(menuDTO, Menu::new);
         return insert(menu);
     }
 
@@ -283,8 +282,7 @@ public class MenuService {
      * @return 是否成功
      */
     public Boolean update(Long menuId, MenuDTO menuDTO) {
-        Menu menu = new Menu();
-        BeanUtils.copyProperties(menuDTO, menu);
+        var menu = BeanUtils.copyProperties(menuDTO, Menu::new, "id");
         menu.setId(menuId);
         return update(menu);
     }
@@ -296,6 +294,7 @@ public class MenuService {
      * @param menuId 菜单ID
      * @return 是否成功
      */
+    @Transactional
     public Boolean delete(Long menuId) {
         var menu = selectById(menuId);
 

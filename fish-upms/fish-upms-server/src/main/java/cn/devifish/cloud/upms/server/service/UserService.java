@@ -1,6 +1,7 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
 import cn.devifish.cloud.upms.common.entity.User;
@@ -11,7 +12,6 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -185,8 +185,9 @@ public class UserService {
      */
     @Transactional
     public Boolean update(String username, UserDTO userDTO) {
-        User user = selectByUsername(username);
+        var user = selectByUsername(username);
         if (user == null) throw new BizException("该用户不存在");
+
         BeanUtils.copyProperties(userDTO, user);
         return update(user);
     }
@@ -199,7 +200,7 @@ public class UserService {
      */
     @Transactional
     public Boolean delete(Long userId) {
-        User user = selectById(userId);
+        var user = selectById(userId);
         if (user == null) throw new BizException("该用户不存在");
 
         // 更新并移除缓存

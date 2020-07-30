@@ -1,11 +1,11 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
 import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +31,7 @@ public class UserController {
     @GetMapping("/current")
     public UserVO current() {
         var user = userService.currentUser();
-        var userVo = new UserVO();
-        BeanUtils.copyProperties(user, userVo);
-        return userVo;
+        return BeanUtils.copyProperties(user, UserVO::new);
     }
 
     /**
@@ -45,9 +43,7 @@ public class UserController {
     @GetMapping("/select/id/{userId}")
     public UserVO selectById(@PathVariable Long userId) {
         var user = userService.selectById(userId);
-        var userVo = new UserVO();
-        BeanUtils.copyProperties(user, userVo);
-        return userVo;
+        return BeanUtils.copyProperties(user, UserVO::new);
     }
 
     /**
