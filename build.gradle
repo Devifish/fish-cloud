@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.2.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.3.2.RELEASE' apply false
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE' apply false
 }
 
 description = 'Spring Cloud 微服务开发框架'
@@ -18,21 +18,10 @@ ext {
 }
 
 allprojects {
-    group = 'cn.devifish.cloud'
-    version = '1.0.0'
-}
-
-subprojects {
-    apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
 
-    sourceCompatibility = "${javaVersion}"
-    targetCompatibility = "${javaVersion}"
-
-    dependencies {
-        compileOnly "org.projectlombok:lombok"
-        annotationProcessor "org.projectlombok:lombok"
-    }
+    group = 'cn.devifish.cloud'
+    version = '1.0.0'
 
     dependencyManagement {
         imports {
@@ -43,9 +32,12 @@ subprojects {
 
         dependencies {
             dependency "com.alibaba:fastjson:${fastjsonVersion}"
-            dependency "com.baomidou:mybatis-plus-core:${mybatisPlusVersion}"
-            dependency "com.baomidou:mybatis-plus-annotation:${mybatisPlusVersion}"
-            dependency "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
+
+            dependencySet(group: "com.baomidou", version: "${mybatisPlusVersion}") {
+                entry 'mybatis-plus-core'
+                entry 'mybatis-plus-annotation'
+                entry 'mybatis-plus-boot-starter'
+            }
         }
     }
 
@@ -53,4 +45,18 @@ subprojects {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         mavenCentral()
     }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    sourceCompatibility = "${javaVersion}"
+    targetCompatibility = "${javaVersion}"
+
+    dependencies {
+        compileOnly "org.projectlombok:lombok"
+        annotationProcessor "org.projectlombok:lombok"
+    }
+
+    compileJava.dependsOn(processResources)
 }
