@@ -1,14 +1,11 @@
 package cn.devifish.cloud.common.security.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * WebSecurityConfiguration
@@ -19,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  */
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
+@ConditionalOnMissingBean(WebSecurityConfiguration.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -31,20 +29,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/favor.ico", "/actuator/**", "/error");
-    }
-
-    /**
-     * 注册 AuthenticationManager
-     * OAuth2 GrantType为密码方式时依赖
-     *
-     * @return AuthenticationManager
-     * @throws Exception 异常
-     */
-    @Bean
-    @Override
-    @ConditionalOnBean(UserDetailsService.class)
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
     }
 
 }

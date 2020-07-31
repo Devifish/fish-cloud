@@ -29,7 +29,6 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
 
     private final AuthenticationManager authenticationManager;
     private final OAuth2ClientDetailsService oauth2ClientDetailsService;
-    private final OAuth2UserDetailsService oauth2UserDetailsService;
     private final OAuth2SecurityExceptionTranslator exceptionTranslator;
     private final TokenStore tokenStore;
 
@@ -55,7 +54,6 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
                 .exceptionTranslator(exceptionTranslator)
                 .authenticationManager(authenticationManager)
-                .userDetailsService(oauth2UserDetailsService)
                 .tokenStore(tokenStore);
     }
 
