@@ -92,7 +92,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @return 目标Obj
      * @throws BeansException Beans异常
      */
-    public static <T> T copyProperties(Object source, Supplier<T> targetSupplier) throws BeansException {
+    public static <T> T copyProperties(Object source, Supplier<? extends T> targetSupplier) throws BeansException {
         Assert.notNull(targetSupplier, "Target must not be null");
 
         var target = targetSupplier.get();
@@ -110,7 +110,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils {
      * @return 目标Obj
      * @throws BeansException Beans异常
      */
-    public static <T> T copyProperties(Object source, Supplier<T> targetSupplier, String... ignoreProperties) throws BeansException {
+    public static <T> T copyProperties(Object source, Supplier<? extends T> targetSupplier, String... ignoreProperties) throws BeansException {
         Assert.notNull(targetSupplier, "Target must not be null");
 
         var target = targetSupplier.get();
