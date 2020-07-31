@@ -2,7 +2,7 @@ apply plugin: "application"
 apply plugin: "org.springframework.boot"
 
 description = "搜索服务模块"
-mainClassName = " cn.devifish.cloud.search.server.SearchApplication"
+mainClassName = "cn.devifish.cloud.search.server.SearchApplication"
 
 dependencies {
     implementation project(":fish-search:fish-search-common")
