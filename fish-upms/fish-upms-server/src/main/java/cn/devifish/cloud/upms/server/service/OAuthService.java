@@ -1,5 +1,6 @@
 package cn.devifish.cloud.upms.server.service;
 
+import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import cn.devifish.cloud.upms.common.entity.OAuthClient;
 import cn.devifish.cloud.upms.server.cache.OAuthClientCache;
@@ -7,12 +8,18 @@ import cn.devifish.cloud.upms.server.mapper.OAuthClientMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.ClientDetails;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.ClientRegistrationException;
+import org.springframework.security.oauth2.provider.NoSuchClientException;
+import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class OAuthService {
+public class OAuthService implements ClientDetailsService {
 
     private final OAuthClientMapper oauthClientMapper;
     private final OAuthClientCache oauthClientCache;
@@ -38,7 +45,39 @@ public class OAuthService {
      * @return OAuthClient
      */
     public OAuthClient selectByClientId(String clientId) {
+        if (clientId == null)
+            throw new BizException("客户端ID不能为空");
+
         return oauthClientCache.getIfAbsent(clientId, oauthClientMapper::selectById);
+    }
+
+    /**
+     * 适配 Spring Cloud OAuth2 接口
+     *
+     * @param clientId 客户端ID
+     * @return ClientDetails
+     * @throws ClientRegistrationException 客户端注册异常
+     */
+    @Override
+    public ClientDetails loadClientByClientId(String clientId) throws ClientRegistrationException {
+        var oauthClient = selectByClientId(clientId);
+        if (oauthClient == null)
+            throw new NoSuchClientException("No client with requested id: " + clientId);
+
+        var details = new BaseClientDetails(
+            oauthClient.getClientId(), oauthClient.getResourceIds(), oauthClient.getScope(),
+            oauthClient.getGrantTypes(), oauthClient.getAuthorities());
+
+        // 如果未设置有效时间则使用默认值
+        details.setAccessTokenValiditySeconds(
+            Optional.ofNullable(oauthClient.getAccessTokenValidity())
+                .orElse((int) SecurityConstant.DEFAULT_ACCESS_TOKEN_VALIDITY));
+        details.setRefreshTokenValiditySeconds(
+            Optional.ofNullable(oauthClient.getRefreshTokenValidity())
+                .orElse((int) SecurityConstant.DEFAULT_REFRESH_TOKEN_VALIDITY));
+
+        details.setClientSecret(oauthClient.getClientSecret());
+        return details;
     }
 
     /**
@@ -78,18 +117,18 @@ public class OAuthService {
 
         //获取ClientDetails信息
         var clientDetails = StringUtils.isEmpty(clientId)
-                ? Collections.<OAuthClient>emptyList()
-                : Collections.singletonList(selectByClientId(clientId));
+            ? Collections.<OAuthClient>emptyList()
+            : Collections.singletonList(selectByClientId(clientId));
         if (CollectionUtils.isEmpty(clientDetails)) return Collections.emptySet();
 
         //查询该用户全平台Token
         return clientDetails.stream()
-                .map(item -> {
-                    var itemClientId = item.getClientId();
-                    return tokenStore.findTokensByClientIdAndUserName(itemClientId, username);
-                })
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+            .map(item -> {
+                var itemClientId = item.getClientId();
+                return tokenStore.findTokensByClientIdAndUserName(itemClientId, username);
+            })
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -106,8 +145,8 @@ public class OAuthService {
 
         // 遍历注销全部已存在的Token
         accessTokens.stream()
-                .map(OAuth2AccessToken::getValue)
-                .forEach(this::logout);
+            .map(OAuth2AccessToken::getValue)
+            .forEach(this::logout);
 
         return Boolean.TRUE;
     }

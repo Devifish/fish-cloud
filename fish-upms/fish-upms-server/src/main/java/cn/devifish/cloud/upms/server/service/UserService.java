@@ -2,6 +2,7 @@ package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.BeanUtils;
+import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
 import cn.devifish.cloud.upms.common.entity.User;
@@ -11,11 +12,19 @@ import cn.devifish.cloud.upms.server.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.util.Collections;
 
 /**
  * UserService
@@ -27,10 +36,11 @@ import org.springframework.util.Assert;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserMapper userMapper;
     private final UserCache userCache;
+    private final RoleService roleService;
     private final OAuthService oauthService;
     private final PasswordEncoder passwordEncoder;
 
@@ -66,7 +76,35 @@ public class UserService {
      * @return User
      */
     public User selectByUsername(String username) {
+        if (StringUtils.isEmpty(username))
+            throw new BizException("用户名不能为空");
+
         return userMapper.selectByUsername(username);
+    }
+
+    /**
+     * 适配 Spring Cloud OAuth2 接口
+     *
+     * @param username 用户名
+     * @return UserDetails
+     * @throws UsernameNotFoundException 用户未找到异常
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        var user = selectByUsername(username);
+        if (user == null)
+            throw new UsernameNotFoundException("Not found Username: " + username);
+
+        //获取用户权限
+        var userId = user.getId();
+        var authorities = roleService.selectAuthoritiesByUserId(userId);
+        var authorityList = ArrayUtils.isEmpty(authorities)
+            ? Collections.<GrantedAuthority>emptyList()
+            : AuthorityUtils.createAuthorityList(authorities);
+
+        return new BasicUser(user.getId(), user.getUsername(), user.getPassword(),
+            user.getEnabled(), true, true,
+            !user.getLocked(), authorityList);
     }
 
     /**

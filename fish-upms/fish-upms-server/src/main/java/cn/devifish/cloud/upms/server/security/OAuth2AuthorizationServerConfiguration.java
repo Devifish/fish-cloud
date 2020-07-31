@@ -1,6 +1,7 @@
 package cn.devifish.cloud.upms.server.security;
 
 import cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionTranslator;
+import cn.devifish.cloud.upms.server.service.OAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -28,13 +29,13 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
     private final AuthenticationManager authenticationManager;
-    private final OAuth2ClientDetailsService oauth2ClientDetailsService;
     private final OAuth2SecurityExceptionTranslator exceptionTranslator;
+    private final OAuthService oauthService;
     private final TokenStore tokenStore;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(oauth2ClientDetailsService);
+        clients.withClientDetails(oauthService);
     }
 
     @Override

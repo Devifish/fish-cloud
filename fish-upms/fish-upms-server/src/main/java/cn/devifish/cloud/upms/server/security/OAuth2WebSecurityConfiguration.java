@@ -1,6 +1,7 @@
 package cn.devifish.cloud.upms.server.security;
 
 import cn.devifish.cloud.common.security.config.WebSecurityConfiguration;
+import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration(proxyBeanMethods = false)
 public class OAuth2WebSecurityConfiguration extends WebSecurityConfiguration {
 
-    private final OAuth2UserDetailsService oauth2UserDetailsService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     /**
@@ -33,7 +34,7 @@ public class OAuth2WebSecurityConfiguration extends WebSecurityConfiguration {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(oauth2UserDetailsService)
+        auth.userDetailsService(userService)
             .passwordEncoder(passwordEncoder);
     }
 

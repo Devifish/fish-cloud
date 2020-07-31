@@ -10,10 +10,12 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -31,8 +33,11 @@ public class RoleService {
     private final RoleMapper roleMapper;
     private final UserRoleRelationMapper userRoleRelationMapper;
     private final RoleCache roleCache;
-    private final UserService userService;
     private final MenuService menuService;
+
+    @Lazy
+    @Resource
+    private UserService userService;
 
     /**
      * 根据角色ID查询角色数据
@@ -72,20 +77,20 @@ public class RoleService {
 
         // 将RoleList转换为AuthoritiesArray
         return roles.stream()
-                .map(role -> {
-                    var code = role.getCode();
-                    var authorities = Optional.ofNullable(role.getAuthorities())
-                            .orElseGet(HashSet::new);
+            .map(role -> {
+                var code = role.getCode();
+                var authorities = Optional.ofNullable(role.getAuthorities())
+                    .orElseGet(HashSet::new);
 
-                    // 如果角色符合规则，那么添加到权限列表
-                    if (StringUtils.startsWith(code, SecurityConstant.DEFAULT_ROLE_PREFIX))
-                        authorities.add(code);
+                // 如果角色符合规则，那么添加到权限列表
+                if (StringUtils.startsWith(code, SecurityConstant.DEFAULT_ROLE_PREFIX))
+                    authorities.add(code);
 
-                    return authorities;
-                })
-                .flatMap(Collection::stream)
-                .distinct()
-                .toArray(String[]::new);
+                return authorities;
+            })
+            .flatMap(Collection::stream)
+            .distinct()
+            .toArray(String[]::new);
     }
 
     /**
@@ -105,7 +110,7 @@ public class RoleService {
     /**
      * 根据角色ID更新角色权限
      *
-     * @param roleId 角色ID
+     * @param roleId      角色ID
      * @param authorities 权限集合
      * @return 是否成功
      */
@@ -148,7 +153,7 @@ public class RoleService {
         // 保存角色数据
         if (SqlHelper.retBool(roleMapper.insert(role))) {
             return Boolean.TRUE;
-        }else {
+        } else {
             log.info("保存角色数据：{} 失败", role);
             throw new BizException("保存角色失败");
         }
@@ -181,7 +186,7 @@ public class RoleService {
         if (SqlHelper.retBool(roleMapper.updateById(role))) {
             roleCache.delete(roleId);
             return Boolean.TRUE;
-        }else {
+        } else {
             log.warn("修改角色ID：{} 的角色数据失败", roleId);
             throw new BizException("修改失败");
         }
@@ -207,7 +212,7 @@ public class RoleService {
         if (SqlHelper.retBool(roleMapper.deleteById(role))) {
             roleCache.delete(roleId);
             return Boolean.TRUE;
-        }else {
+        } else {
             log.warn("删除角色ID：{} 数据失败", roleId);
             throw new BizException("删除失败");
         }
