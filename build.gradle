@@ -13,7 +13,6 @@ ext {
         springCloudAlibabaVersion = "2.2.1.RELEASE",
 
         fastjsonVersion = "1.2.72",
-        nacosClientVersion = "1.3.1",
         mybatisPlusVersion = "3.3.1"
     ]
 }
@@ -33,7 +32,6 @@ allprojects {
 
         dependencies {
             dependency "com.alibaba:fastjson:${fastjsonVersion}"
-            dependency "com.alibaba.nacos:nacos-client:${nacosClientVersion}"
 
             dependencySet(group: "com.baomidou", version: "${mybatisPlusVersion}") {
                 entry 'mybatis-plus-core'
