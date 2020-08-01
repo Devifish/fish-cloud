@@ -3,6 +3,7 @@ package cn.devifish.cloud.upms.common.dto;
 import cn.devifish.cloud.upms.common.enums.MenuType;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,7 @@ import java.io.Serializable;
 public class MenuDTO implements Serializable {
 
     /** 菜单名称 **/
+    @NotEmpty
     private String name;
 
     /** 菜单路径 **/

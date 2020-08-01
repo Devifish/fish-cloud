@@ -3,6 +3,7 @@ package cn.devifish.cloud.upms.common.dto;
 import cn.devifish.cloud.upms.common.enums.SexEnum;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -29,6 +30,7 @@ public class UserDTO implements Serializable {
     private String avatar;
 
     /** 邮箱 **/
+    @Email
     private String email;
 
     /** 手机号 **/

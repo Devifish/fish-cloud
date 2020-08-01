@@ -7,6 +7,7 @@ import cn.devifish.cloud.upms.server.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 /**
@@ -78,7 +79,7 @@ public class MenuController {
      * @return 是否成功
      */
     @PostMapping("/insert")
-    public Boolean insert(@RequestBody MenuDTO menuDTO) {
+    public Boolean insert(@Valid @RequestBody MenuDTO menuDTO) {
         return menuService.insert(menuDTO);
     }
 
@@ -91,7 +92,7 @@ public class MenuController {
      * @return 是否成功
      */
     @PutMapping("/update/{menuId}")
-    public Boolean update(@PathVariable Long menuId, @RequestBody MenuDTO menuDTO) {
+    public Boolean update(@PathVariable Long menuId, @Valid @RequestBody MenuDTO menuDTO) {
         return menuService.update(menuId, menuDTO);
     }
 

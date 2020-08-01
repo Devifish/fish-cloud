@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * UserController
  * 用户接口
@@ -68,7 +70,7 @@ public class UserController {
      */
     @PutMapping("/update/{username}")
     @PreAuthorize("principal.username == #username")
-    public Boolean update(@PathVariable String username, @RequestBody UserDTO userDTO) {
+    public Boolean update(@PathVariable String username, @Valid @RequestBody UserDTO userDTO) {
         return userService.update(username, userDTO);
     }
 
