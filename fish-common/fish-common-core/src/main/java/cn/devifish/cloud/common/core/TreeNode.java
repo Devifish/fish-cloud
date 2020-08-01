@@ -13,14 +13,13 @@ import java.util.Collection;
  * @date 2020/8/1 14:52
  */
 @Data
-public abstract class TreeNode<ID extends Serializable,
-    C extends Collection<? extends TreeNode<ID, C>>> implements Serializable {
+public abstract class TreeNode<C extends Collection<? extends TreeNode<C>>> implements Serializable {
 
     /** 主键ID **/
-    private ID id;
+    private Long id;
 
     /** 父节点ID **/
-    private ID parentId;
+    private Long parentId;
 
     /** 子节点数据 **/
     private C children;

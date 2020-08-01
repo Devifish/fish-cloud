@@ -17,7 +17,7 @@ import java.util.Set;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Role extends BaseEntity<Long> {
+public class Role extends BaseEntity {
 
     /** 角色名称 **/
     private String name;

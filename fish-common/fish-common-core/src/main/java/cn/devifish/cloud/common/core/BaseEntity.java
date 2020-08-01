@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
  * @date 2020/7/10 22:51
  */
 @Data
-public abstract class BaseEntity<ID extends Serializable> implements Serializable {
+public abstract class BaseEntity implements Serializable {
 
     /** 主键ID **/
     @TableId
-    private ID id;
+    private Long id;
 
     /** 创建时间 **/
     @TableField(fill = FieldFill.INSERT)
@@ -31,7 +31,7 @@ public abstract class BaseEntity<ID extends Serializable> implements Serializabl
     private LocalDateTime updateTime;
 
     public BaseEntity() {}
-    public BaseEntity(ID id) {
+    public BaseEntity(Long id) {
         this.id = id;
     }
 }

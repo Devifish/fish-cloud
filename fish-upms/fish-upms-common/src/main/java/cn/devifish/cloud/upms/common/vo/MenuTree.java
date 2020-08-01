@@ -18,7 +18,7 @@ import java.util.Set;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MenuTree extends TreeNode<Long, Set<MenuTree>> implements Comparable<MenuTree> {
+public class MenuTree extends TreeNode<Set<MenuTree>> implements Comparable<MenuTree> {
 
     /** 菜单名称 **/
     private String name;

@@ -16,7 +16,7 @@ import java.time.LocalDate;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class User extends LogicDeleteEntity<Long> {
+public class User extends LogicDeleteEntity {
 
     /** 用户名 **/
     private String username;
