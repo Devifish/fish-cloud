@@ -9,13 +9,13 @@ import cn.devifish.cloud.upms.server.mapper.UserRoleRelationMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -31,13 +31,12 @@ import java.util.*;
 public class RoleService {
 
     private final RoleMapper roleMapper;
-    private final UserRoleRelationMapper userRoleRelationMapper;
     private final RoleCache roleCache;
-    private final MenuService menuService;
+    private final UserRoleRelationMapper userRoleRelationMapper;
 
-    @Lazy
-    @Resource
-    private UserService userService;
+    // 防止IOC循环依赖
+    private final ObjectFactory<MenuService> menuServiceFactory;
+    private final ObjectFactory<UserService> userServiceFactory;
 
     /**
      * 根据角色ID查询角色数据
@@ -59,9 +58,11 @@ public class RoleService {
      * @return List<Role>
      */
     public List<Role> selectByUserId(Long userId) {
+        var userService = userServiceFactory.getObject();
         if (!userService.existById(userId))
             return Collections.emptyList();
 
+        // 查询用户角色数据
         return roleMapper.selectByUserId(userId);
     }
 
@@ -73,7 +74,8 @@ public class RoleService {
      */
     public String[] selectAuthoritiesByUserId(Long userId) {
         var roles = selectByUserId(userId);
-        if (CollectionUtils.isEmpty(roles)) return null;
+        if (CollectionUtils.isEmpty(roles))
+            return ArrayUtils.EMPTY_STRING_ARRAY;
 
         // 将RoleList转换为AuthoritiesArray
         return roles.stream()
@@ -120,6 +122,7 @@ public class RoleService {
 
         // 仅保留数据库菜单所设置的授权码
         if (!CollectionUtils.isEmpty(authorities)) {
+            var menuService = menuServiceFactory.getObject();
             var allPermission = menuService.selectAllPermission();
             authorities.retainAll(allPermission);
         }

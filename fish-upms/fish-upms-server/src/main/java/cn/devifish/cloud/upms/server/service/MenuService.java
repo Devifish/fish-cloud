@@ -6,7 +6,7 @@ import cn.devifish.cloud.common.security.util.SecurityUtil;
 import cn.devifish.cloud.upms.common.dto.MenuDTO;
 import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.common.enums.MenuType;
-import cn.devifish.cloud.upms.common.vo.MenuVO;
+import cn.devifish.cloud.upms.common.vo.MenuTree;
 import cn.devifish.cloud.upms.server.cache.MenuCache;
 import cn.devifish.cloud.upms.server.mapper.MenuMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -35,6 +35,7 @@ public class MenuService {
 
     private final MenuMapper menuMapper;
     private final MenuCache menuCache;
+    private final RoleService roleService;
 
     /**
      * 获取全部菜单数据
@@ -63,10 +64,10 @@ public class MenuService {
      *
      * @return List<MenuVo>
      */
-    public List<MenuVO> selectAllVo() {
+    public List<MenuTree> selectAllVo() {
         var menus = selectAll();
         return menus.stream()
-                .map(MenuVO::new)
+                .map(MenuTree::new)
                 .collect(Collectors.toList());
     }
 
@@ -77,8 +78,20 @@ public class MenuService {
      *
      * @return TreeSet<Menu>
      */
-    public Set<MenuVO> selectMenuTree() {
+    public Set<MenuTree> selectMenuTree() {
         return buildMenuVoTree(selectAllVo(), null, null, false);
+    }
+
+    /**
+     * 根据用户ID查询菜单树
+     * 构建树结构数据
+     * 方便前端构建菜单
+     *
+     * @return TreeSet<Menu>
+     */
+    public Set<MenuTree> selectMenuTreeByUserId(Long userId) {
+        var authorities = Set.of(roleService.selectAuthoritiesByUserId(userId));
+        return buildMenuVoTree(selectAllVo(), null, authorities, true);
     }
 
     /**
@@ -88,7 +101,7 @@ public class MenuService {
      *
      * @return TreeSet<Menu>
      */
-    public Set<MenuVO> currentMenuTree() {
+    public Set<MenuTree> currentMenuTree() {
         var authorities = SecurityUtil.getAuthorities();
         var authoritiesSet = AuthorityUtils.authorityListToSet(authorities);
         return buildMenuVoTree(selectAllVo(), null, authoritiesSet, true);
@@ -105,16 +118,15 @@ public class MenuService {
      * @param valid 是否校验权限
      * @return 菜单树
      */
-    private Set<MenuVO> buildMenuVoTree(Collection<MenuVO> collection, Long parentId, Set<String> authorities, boolean valid) {
+    private Set<MenuTree> buildMenuVoTree(Collection<MenuTree> collection, Long parentId, Set<String> authorities, boolean valid) {
         var iterator = collection.iterator();
 
-        Set<MenuVO> temp = null;
+        Set<MenuTree> temp = null;
         while (iterator.hasNext()) {
             var menuVo = iterator.next();
             if (!Objects.equals(menuVo.getParentId(), parentId)) continue;
             if (valid && StringUtils.isNotEmpty(menuVo.getPermission()) && !authorities.contains(menuVo.getPermission())) continue;
-            if (temp == null) temp = new TreeSet<>(Comparator.comparing(MenuVO::getSort,
-                    Comparator.nullsLast(Integer::compareTo)).thenComparingLong(MenuVO::getId));
+            if (temp == null) temp = new TreeSet<>();
 
             // 搜索是否存在子节点
             iterator.remove();

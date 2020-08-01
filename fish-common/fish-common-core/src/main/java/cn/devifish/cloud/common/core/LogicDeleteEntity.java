@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * LogicDeleteEntity
  * 逻辑删除实体类
@@ -14,7 +16,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class LogicDeleteEntity extends BaseEntity {
+public abstract class LogicDeleteEntity<ID extends Serializable> extends BaseEntity<ID> {
 
     /**
      * 删除标记

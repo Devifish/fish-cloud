@@ -40,7 +40,7 @@ public class RoleController {
      * @param userId 用户ID
      * @return List<Role>
      */
-    @GetMapping("/select/userId/{userId}")
+    @GetMapping("/select/user-id/{userId}")
     public List<Role> selectByUserId(@PathVariable Long userId) {
         return roleService.selectByUserId(userId);
     }

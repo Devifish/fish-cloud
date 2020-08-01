@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Menu extends BaseEntity {
+public class Menu extends BaseEntity<Long> {
 
     /** 菜单名称 **/
     private String name;

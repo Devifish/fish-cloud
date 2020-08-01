@@ -2,7 +2,7 @@ package cn.devifish.cloud.upms.server.controller;
 
 import cn.devifish.cloud.upms.common.dto.MenuDTO;
 import cn.devifish.cloud.upms.common.entity.Menu;
-import cn.devifish.cloud.upms.common.vo.MenuVO;
+import cn.devifish.cloud.upms.common.vo.MenuTree;
 import cn.devifish.cloud.upms.server.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,8 +42,20 @@ public class MenuController {
      * @return TreeSet<Menu>
      */
     @GetMapping("/select/menu-tree")
-    public Set<MenuVO> selectMenuTree() {
+    public Set<MenuTree> selectMenuTree() {
         return menuService.selectMenuTree();
+    }
+
+    /**
+     * 根据用户ID查询菜单树
+     * 构建树结构数据
+     * 方便前端构建菜单
+     *
+     * @return TreeSet<Menu>
+     */
+    @GetMapping("/select/menu-tree/user-id/{userId}")
+    public Set<MenuTree> selectMenuTreeByUserId(@PathVariable Long userId) {
+        return menuService.selectMenuTreeByUserId(userId);
     }
 
     /**
@@ -54,7 +66,7 @@ public class MenuController {
      * @return TreeSet<Menu>
      */
     @GetMapping("/current/menu-tree")
-    public Set<MenuVO> currentMenuTree() {
+    public Set<MenuTree> currentMenuTree() {
         return menuService.currentMenuTree();
     }
 
