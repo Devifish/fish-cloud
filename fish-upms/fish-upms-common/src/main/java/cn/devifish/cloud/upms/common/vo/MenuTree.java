@@ -38,10 +38,13 @@ public class MenuTree extends TreeNode<Set<MenuTree>> implements Comparable<Menu
     /** 排序 **/
     private Integer sort;
 
-    public MenuTree() {}
+    public MenuTree() {
+        super();
+    }
+
     public MenuTree(Menu menu) {
-        super.setId(menu.getId());
-        super.setParentId(menu.getParentId());
+        super(menu.getId(), menu.getParentId());
+
         this.name = menu.getName();
         this.url = menu.getUrl();
         this.type = menu.getType();

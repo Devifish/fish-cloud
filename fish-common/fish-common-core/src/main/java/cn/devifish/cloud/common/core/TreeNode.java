@@ -24,4 +24,21 @@ public abstract class TreeNode<C extends Collection<? extends TreeNode<C>>> impl
     /** 子节点数据 **/
     private C children;
 
+    public TreeNode() {}
+
+    public TreeNode(Long id, Long parentId) {
+        this.id = id;
+        this.parentId = parentId;
+    }
+
+    public TreeNode(Long id, Long parentId, C children) {
+        this.id = id;
+        this.parentId = parentId;
+        this.children = children;
+    }
+
+    public TreeNode(TreeNode<C> treeNode) {
+        this(treeNode.getId(), treeNode.getParentId(), treeNode.getChildren());
+    }
+
 }
