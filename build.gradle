@@ -13,7 +13,8 @@ ext {
         springCloudAlibabaVersion = "2.2.1.RELEASE",
 
         fastjsonVersion = "1.2.72",
-        mybatisPlusVersion = "3.3.1"
+        mybatisPlusVersion = "3.3.1",
+        aliyunSdkOssVersion = "3.10.2"
     ]
 }
 
@@ -32,6 +33,7 @@ allprojects {
 
         dependencies {
             dependency "com.alibaba:fastjson:${fastjsonVersion}"
+            dependency "com.aliyun.oss:aliyun-sdk-oss:${aliyunSdkOssVersion}"
 
             dependencySet(group: "com.baomidou", version: "${mybatisPlusVersion}") {
                 entry 'mybatis-plus-core'
