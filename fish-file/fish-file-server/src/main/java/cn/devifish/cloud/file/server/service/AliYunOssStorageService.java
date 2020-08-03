@@ -2,6 +2,7 @@ package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.file.server.config.CloudStorageProperties;
+import cn.devifish.cloud.file.server.config.CloudStorageProperties.ALiYunOSSConfig;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSException;
@@ -27,7 +28,7 @@ public class AliYunOssStorageService implements StorageService {
     private final OSS oss;
     private final CloudStorageProperties cloudStorageProperties;
 
-    private CloudStorageProperties.ALiYunOSSConfig config;
+    private ALiYunOSSConfig config;
 
     @PostConstruct
     public void init() {
