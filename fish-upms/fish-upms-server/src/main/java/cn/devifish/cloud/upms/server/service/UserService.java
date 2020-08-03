@@ -3,7 +3,8 @@ package cn.devifish.cloud.upms.server.service;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.common.security.BasicUser;
-import cn.devifish.cloud.common.security.util.SecurityUtil;
+import cn.devifish.cloud.common.security.util.AuthorityUtils;
+import cn.devifish.cloud.common.security.util.SecurityUtils;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.enums.SexEnum;
@@ -15,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -63,7 +63,7 @@ public class UserService implements UserDetailsService {
      * @return User
      */
     public User currentUser() {
-        var principal = SecurityUtil.getPrincipal();
+        var principal = SecurityUtils.getPrincipal();
         if (principal == null) throw new BizException("获取当前用户失败");
 
         return selectById(principal.getUserId());

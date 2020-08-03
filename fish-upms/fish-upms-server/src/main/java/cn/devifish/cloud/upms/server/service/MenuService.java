@@ -2,7 +2,8 @@ package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.BeanUtils;
-import cn.devifish.cloud.common.security.util.SecurityUtil;
+import cn.devifish.cloud.common.security.util.AuthorityUtils;
+import cn.devifish.cloud.common.security.util.SecurityUtils;
 import cn.devifish.cloud.upms.common.dto.MenuDTO;
 import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.common.enums.MenuType;
@@ -13,7 +14,6 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -102,7 +102,7 @@ public class MenuService {
      * @return TreeSet<Menu>
      */
     public Set<MenuTree> currentMenuTree() {
-        var authorities = SecurityUtil.getAuthorities();
+        var authorities = SecurityUtils.getAuthorities();
         var authoritiesSet = AuthorityUtils.authorityListToSet(authorities);
         return buildMenuVoTree(selectAllVo(), null, authoritiesSet, true);
     }

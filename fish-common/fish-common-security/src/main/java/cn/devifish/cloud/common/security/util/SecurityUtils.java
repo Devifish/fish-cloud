@@ -8,13 +8,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Collection;
 
 /**
- * SecurityUtil
+ * SecurityUtils
  * 安全工具类
  *
  * @author Devifish
  * @date 2020/7/11 17:15
  */
-public class SecurityUtil {
+public class SecurityUtils {
 
     /**
      * 获取当前用户鉴权信息
