@@ -1,5 +1,6 @@
 package cn.devifish.cloud.file.server.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -19,5 +20,14 @@ public interface StorageService {
      * @return 服务端路径
      */
     String upload(String path, InputStream inputStream);
+
+    /**
+     * 文件上传
+     *
+     * @param path 上传路径
+     * @param content 文件数据
+     * @return 服务端路径
+     */
+    String upload(String path, byte[] content) throws IOException;
 
 }

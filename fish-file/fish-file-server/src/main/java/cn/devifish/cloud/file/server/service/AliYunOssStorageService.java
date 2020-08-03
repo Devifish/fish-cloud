@@ -1,5 +1,6 @@
 package cn.devifish.cloud.file.server.service;
 
+import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.file.server.config.CloudStorageProperties;
 import cn.devifish.cloud.file.server.config.CloudStorageProperties.ALiYunOSSConfig;
@@ -7,10 +8,13 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -52,4 +56,20 @@ public class AliYunOssStorageService implements StorageService {
         return path;
     }
 
+    /**
+     * 文件上传
+     *
+     * @param path 上传路径
+     * @param content 文件数据
+     * @return 服务端路径
+     */
+    @Override
+    public String upload(String path, byte[] content) throws IOException {
+        if (ArrayUtils.isEmpty(content))
+            throw new BizException("内容不能为NULL");
+
+        try (InputStream inputStream = new ByteArrayInputStream(content)) {
+            return upload(path, inputStream);
+        }
+    }
 }
