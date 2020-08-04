@@ -55,8 +55,8 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
-    sourceCompatibility = "${javaVersion}"
-    targetCompatibility = "${javaVersion}"
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 
     dependencies {
         compileOnly "org.projectlombok:lombok"

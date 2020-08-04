@@ -7,10 +7,13 @@ mainClassName = "cn.devifish.cloud.message.server.MessageApplication"
 dependencies {
     implementation project(":fish-message:fish-message-common")
     implementation project(":fish-common:fish-common-core")
+    implementation project(":fish-common:fish-common-redis")
     implementation project(":fish-common:fish-common-security")
+    implementation project(":fish-common:fish-common-mybatis")
     implementation project(":fish-common:fish-common-sentinel")
 
     implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-web"
 
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
