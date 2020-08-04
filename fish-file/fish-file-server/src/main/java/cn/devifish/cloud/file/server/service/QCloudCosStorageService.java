@@ -9,6 +9,7 @@ import com.qcloud.cos.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,6 +25,7 @@ import java.io.InputStream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnClass(COSClient.class)
 @ConditionalOnBean(COSClient.class)
 public class QCloudCosStorageService implements StorageService {
 
