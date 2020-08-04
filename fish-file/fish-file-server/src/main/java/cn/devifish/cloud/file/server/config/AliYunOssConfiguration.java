@@ -1,7 +1,7 @@
 package cn.devifish.cloud.file.server.config;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.ClientBuilderConfiguration;
+import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,27 +26,40 @@ public class AliYunOssConfiguration implements InitializingBean, DisposableBean 
 
     private final CloudStorageProperties cloudStorageProperties;
 
-    private OSS ossClient;
+    private OSSClient client;
 
+    /**
+     * 初始化相关参数
+     * 来自阿里云OSS文档
+     */
     @Override
     public void afterPropertiesSet() {
         var config = cloudStorageProperties.getAliyun();
         var credentialProvider = new DefaultCredentialProvider(config.getAccessKeyId(), config.getAccessKeySecret());
+        var clientBuilderConfiguration = new ClientBuilderConfiguration();
 
-        log.info("Initializing aliyun oss");
-        this.ossClient = new OSSClientBuilder()
-            .build(config.getEndPoint(), credentialProvider);
+        log.info("Initializing aliyun oss client");
+        this.client = new OSSClient(config.getEndPoint(), credentialProvider, clientBuilderConfiguration);
     }
 
+    /**
+     * 注册Bean{@link OSSClient}
+     *
+     * @return OSSClient
+     */
     @Bean
-    public OSS ossClientBean() {
-        return ossClient;
+    public OSSClient ossClientBean() {
+        return client;
     }
 
+    /**
+     * Spring 框架停止时
+     * 注销{@link OSSClient}
+     */
     @Override
     public void destroy() {
-        log.info("Shutting down aliyun oss");
-        ossClient.shutdown();
-        ossClient = null;
+        log.info("Shutting down aliyun oss client");
+        client.shutdown();
+        client = null;
     }
 }

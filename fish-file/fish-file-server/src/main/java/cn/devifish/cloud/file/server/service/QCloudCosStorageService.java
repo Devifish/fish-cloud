@@ -2,40 +2,39 @@ package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.file.server.config.CloudStorageProperties;
-import cn.devifish.cloud.file.server.config.CloudStorageProperties.ALiYunOSSConfig;
-import com.aliyun.oss.ClientException;
-import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSException;
-import com.aliyun.oss.model.PutObjectRequest;
+import cn.devifish.cloud.file.server.config.CloudStorageProperties.QCloudCOSConfig;
+import com.qcloud.cos.COSClient;
+import com.qcloud.cos.exception.CosClientException;
+import com.qcloud.cos.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.annotation.PostConstruct;
 import java.io.InputStream;
 
 /**
- * AliYunOssStorageService
- * 阿里云OSS存储服务
+ * QCloudCosStorageService
+ * 腾讯云COS存储服务
  *
  * @author Devifish
- * @date 2020/8/3 15:52
+ * @date 2020/8/3 18:30
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@ConditionalOnBean(OSSClient.class)
-public class AliYunOssStorageService implements StorageService {
+@ConditionalOnBean(COSClient.class)
+public class QCloudCosStorageService implements StorageService {
 
     private final CloudStorageProperties cloudStorageProperties;
-    private final OSSClient client;
+    private final COSClient client;
 
-    private ALiYunOSSConfig config;
+    private QCloudCOSConfig config;
 
-    @PostConstruct
+    @PostMapping
     private void init() {
-        this.config = cloudStorageProperties.getAliyun();
+        this.config = cloudStorageProperties.getQcloud();
     }
 
     /**
@@ -47,13 +46,12 @@ public class AliYunOssStorageService implements StorageService {
      */
     @Override
     public String upload(String path, InputStream inputStream) {
-        var request = new PutObjectRequest(
-            config.getBucketName(), path, inputStream, null);
+        var request = new PutObjectRequest(config.getBucketName(), path, inputStream, null);
 
         try {
             client.putObject(request);
-        } catch (OSSException | ClientException exception){
-            log.error("AliYun OSS 上传文件失败 path: {}", path, exception);
+        } catch (CosClientException exception) {
+            log.error("QCloud COS 上传文件失败 path: {}", path, exception);
             throw new UtilException("上传文件失败");
         }
         return path;
