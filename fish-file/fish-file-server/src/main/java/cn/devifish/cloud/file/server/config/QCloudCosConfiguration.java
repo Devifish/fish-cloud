@@ -39,7 +39,7 @@ public class QCloudCosConfiguration implements InitializingBean, DisposableBean 
         var credentials = new BasicCOSCredentials(config.getSecretId(), config.getSecretKey());
         var clientConfig = new ClientConfig(new Region(config.getRegion()));
 
-        log.info("Initializing qcloud cos client");
+        log.info("Initializing QCloud COS Client");
         this.client = new COSClient(credentials, clientConfig);
     }
 
@@ -59,7 +59,7 @@ public class QCloudCosConfiguration implements InitializingBean, DisposableBean 
      */
     @Override
     public void destroy() {
-        log.info("Shutting down qcloud cos client");
+        log.info("Shutting down QCloud COS Client");
         client.shutdown();
         client = null;
     }

@@ -38,7 +38,7 @@ public class AliYunOssConfiguration implements InitializingBean, DisposableBean 
         var credentialProvider = new DefaultCredentialProvider(config.getAccessKeyId(), config.getAccessKeySecret());
         var clientBuilderConfiguration = new ClientBuilderConfiguration();
 
-        log.info("Initializing aliyun oss client");
+        log.info("Initializing ALiYun OSS Client");
         this.client = new OSSClient(config.getEndPoint(), credentialProvider, clientBuilderConfiguration);
     }
 
@@ -58,7 +58,7 @@ public class AliYunOssConfiguration implements InitializingBean, DisposableBean 
      */
     @Override
     public void destroy() {
-        log.info("Shutting down aliyun oss client");
+        log.info("Shutting down ALiYun OSS Client");
         client.shutdown();
         client = null;
     }

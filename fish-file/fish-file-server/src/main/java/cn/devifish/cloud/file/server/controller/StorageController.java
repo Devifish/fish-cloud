@@ -32,11 +32,11 @@ public class StorageController {
      */
     @PostMapping("/upload")
     public String upload(@RequestPart MultipartFile file) throws IOException {
-        if (!file.isEmpty())
-            throw new BizException("上传文件不能为空");
+        if (file.isEmpty()) throw new BizException("上传文件不能为空");
 
         try (InputStream inputStream = file.getInputStream()) {
-            return storageService.upload("/", inputStream);
+            var originalFilename = file.getOriginalFilename();
+            return storageService.upload(originalFilename, inputStream);
         }
     }
 

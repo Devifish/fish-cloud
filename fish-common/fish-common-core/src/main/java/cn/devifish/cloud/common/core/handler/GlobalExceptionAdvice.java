@@ -16,8 +16,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.MessageFormat;
 import java.util.Arrays;
 
 /**
@@ -116,6 +118,19 @@ public class GlobalExceptionAdvice {
                 })
                 .findFirst()
                 .orElse(RestfulEntity.error(MessageCode.PreconditionFailed));
+    }
+
+    /**
+     * 上传文件大小超过限定异常
+     *
+     * @param exception exception
+     * @return error
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public RestfulEntity<?> maxUploadSizeExceededExceptionHandle(MaxUploadSizeExceededException exception) {
+        var message = MessageFormat.format("上传文件大小超过 {0} bytes", exception.getMaxUploadSize());
+        return RestfulEntity.error(MessageCode.BadRequest, message);
     }
 
 }
