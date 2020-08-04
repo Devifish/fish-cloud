@@ -12,7 +12,7 @@
 依赖 | 版本
 ---|---
 Java Language | 11
-Spring Boot | 2.3.1.RELEASE
+Spring Boot | 2.3.2.RELEASE
 Spring Cloud | Hoxton.SR6
 Spring Cloud Alibaba | 2.2.1.RELEASE
 Mybatis Plus | 3.3.2
@@ -31,10 +31,10 @@ Mybatis Plus | 3.3.2
      ├── fish-common-security ------------------- 公共安全组件(Spring OAuth2)
      ├── fish-common-sentinel ------------------- 公共流量控制组件(Sentinel) [TODO]
      └── fish-common-swagger -------------------- 公共接口文档组件(Swagger) [TODO]
-└── fish-file ----------------------------------- 文件服务聚合包 [TODO]
-     ├── fish-file-common ----------------------- 文件服务公共组件 [TODO]
-     └── fish-file-server ----------------------- 文件服务 [TODO]
-├── fish-gateway -------------------------------- Gateway 路由网关 [TODO]
+└── fish-file ----------------------------------- 文件服务聚合包
+     ├── fish-file-common ----------------------- 文件服务公共组件
+     └── fish-file-server ----------------------- 文件服务
+├── fish-gateway -------------------------------- Gateway 路由网关
 └── fish-message -------------------------------- 消息服务聚合包 [TODO]
      ├── fish-message-common -------------------- 消息服务公共组件 [TODO]
      └── fish-message-server -------------------- 消息服务 [TODO]

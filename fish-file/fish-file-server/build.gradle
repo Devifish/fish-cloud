@@ -17,7 +17,6 @@ dependencies {
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
 
-    // 默认仅使用阿里云
     implementation "com.aliyun.oss:aliyun-sdk-oss"
-    compileOnly "com.qcloud:cos_api"
+    implementation "com.qcloud:cos_api"
 }
