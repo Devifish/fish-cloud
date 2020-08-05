@@ -4,4 +4,6 @@ description "文件服务公共模块"
 
 dependencies {
     api project(":fish-common:fish-common-core")
+
+    api "jakarta.validation:jakarta.validation-api"
 }

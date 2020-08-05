@@ -1,14 +1,13 @@
 package cn.devifish.cloud.file.server.controller;
 
-import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.server.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * StorageController
@@ -32,12 +31,7 @@ public class StorageController {
      */
     @PostMapping("/upload")
     public String upload(@RequestPart MultipartFile file) throws IOException {
-        if (file.isEmpty()) throw new BizException("上传文件不能为空");
-
-        try (InputStream inputStream = file.getInputStream()) {
-            var originalFilename = file.getOriginalFilename();
-            return storageService.upload(originalFilename, inputStream);
-        }
+        return uploadByMultipart(file);
     }
 
     /**
@@ -48,7 +42,7 @@ public class StorageController {
      */
     @PostMapping("/upload/multipart")
     public String uploadByMultipart(@RequestPart MultipartFile file) throws IOException {
-        return upload(file);
+        return storageService.uploadByMultipart(file);
     }
 
     /**
@@ -58,8 +52,8 @@ public class StorageController {
      * @return 路径
      */
     @PostMapping("/upload/base64")
-    public String uploadByBase64(@RequestBody Base64FileData data) throws IOException {
-        return null;
+    public String uploadByBase64(@Valid @RequestBody Base64FileData data) throws IOException {
+        return storageService.uploadByBase64(data);
     }
 
 }

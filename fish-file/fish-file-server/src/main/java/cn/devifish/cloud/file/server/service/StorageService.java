@@ -1,7 +1,9 @@
 package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.file.common.entity.Base64FileData;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -39,6 +41,34 @@ public interface StorageService {
         try (InputStream inputStream = new ByteArrayInputStream(content)) {
             return upload(path, inputStream);
         }
+    }
+
+    /**
+     * 文件上传（表单方式）
+     *
+     * @param file 文件
+     * @return 路径
+     */
+    default String uploadByMultipart(MultipartFile file) throws IOException {
+        if (file.isEmpty()) throw new BizException("上传文件不能为空");
+
+        try (InputStream inputStream = file.getInputStream()) {
+            var originalFilename = file.getOriginalFilename();
+            return upload(originalFilename, inputStream);
+        }
+    }
+
+    /**
+     * 文件上传（Base64方式）
+     *
+     * @param data Base64文件数据
+     * @return 路径
+     */
+    default String uploadByBase64(Base64FileData data) throws IOException {
+        var content = data.getContent();
+
+
+        return null;
     }
 
 }

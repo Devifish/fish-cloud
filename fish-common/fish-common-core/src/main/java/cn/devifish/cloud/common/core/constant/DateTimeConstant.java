@@ -9,9 +9,16 @@ package cn.devifish.cloud.common.core.constant;
  */
 public interface DateTimeConstant {
 
+    /** 日期时间格式 **/
     String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    /** 日期格式 **/
     String DATE_PATTERN = "yyyy-MM-dd";
+
+    /** 时间格式 **/
     String TIME_PATTERN = "HH:mm:ss";
+
+    /** 时区 **/
     String TIME_ZONE = "Asia/Shanghai";
 
 }
