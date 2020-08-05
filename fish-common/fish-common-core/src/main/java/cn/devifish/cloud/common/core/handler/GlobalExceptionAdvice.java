@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
@@ -90,10 +92,15 @@ public class GlobalExceptionAdvice {
      * @param exception exception
      * @return error
      */
-    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ExceptionHandler({MissingServletRequestParameterException.class, MissingServletRequestPartException.class})
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
-    public RestfulEntity<?> missingServletRequestParameterException(MissingServletRequestParameterException exception) {
-        var parameterName = exception.getParameterName();
+    public RestfulEntity<?> missingServletRequestParameterException(Exception exception) {
+        var parameterName = exception instanceof MissingServletRequestParameterException
+            ? ((MissingServletRequestParameterException) exception).getParameterName()
+            : exception instanceof MissingServletRequestPartException
+            ? ((MissingServletRequestPartException) exception).getRequestPartName()
+            : "null";
+
         return RestfulEntity.error(MessageCode.PreconditionFailed, "缺少必要参数: " + parameterName);
     }
 
@@ -107,30 +114,37 @@ public class GlobalExceptionAdvice {
     @ResponseStatus(HttpStatus.PRECONDITION_FAILED)
     public RestfulEntity<?> validExceptionHandler(Exception exception) {
         BindingResult bindingResult = exception instanceof MethodArgumentNotValidException
-                ? ((MethodArgumentNotValidException) exception).getBindingResult()
-                : ((BindException) exception).getBindingResult();
+            ? ((MethodArgumentNotValidException) exception).getBindingResult()
+            : ((BindException) exception).getBindingResult();
 
         return bindingResult.getFieldErrors()
-                .stream()
-                .map(error -> {
-                    String message = error.getField() + ": " + error.getDefaultMessage();
-                    return RestfulEntity.error(MessageCode.PreconditionFailed, message);
-                })
-                .findFirst()
-                .orElse(RestfulEntity.error(MessageCode.PreconditionFailed));
+            .stream()
+            .map(error -> {
+                String message = error.getField() + ": " + error.getDefaultMessage();
+                return RestfulEntity.error(MessageCode.PreconditionFailed, message);
+            })
+            .findFirst()
+            .orElse(RestfulEntity.error(MessageCode.PreconditionFailed));
     }
 
     /**
-     * 上传文件大小超过限定异常
+     * Multipart表单异常
      *
      * @param exception exception
      * @return error
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public RestfulEntity<?> maxUploadSizeExceededExceptionHandle(MaxUploadSizeExceededException exception) {
-        var message = MessageFormat.format("上传文件大小超过 {0} bytes", exception.getMaxUploadSize());
-        return RestfulEntity.error(MessageCode.BadRequest, message);
+    @ExceptionHandler(MultipartException.class)
+    public RestfulEntity<?> multipartExceptionHandle(MultipartException exception) {
+        if (exception instanceof MaxUploadSizeExceededException) {
+            var message = MessageFormat.format("上传文件大小超过 {0} bytes",
+                ((MaxUploadSizeExceededException) exception).getMaxUploadSize());
+
+            return RestfulEntity.error(MessageCode.BadRequest, message);
+        }
+
+        // 未知异常返回异常消息
+        return RestfulEntity.error(MessageCode.BadRequest, exception.getMessage());
     }
 
 }
