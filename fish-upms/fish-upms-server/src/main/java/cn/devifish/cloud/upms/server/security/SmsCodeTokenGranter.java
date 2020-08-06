@@ -1,5 +1,6 @@
 package cn.devifish.cloud.upms.server.security;
 
+import cn.devifish.cloud.upms.server.service.SmsCodeService;
 import cn.devifish.cloud.upms.server.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,15 +23,18 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
     private static final String GRANT_TYPE = "sms_code";
 
     private final UserService userService;
+    private final SmsCodeService smsCodeService;
 
     protected SmsCodeTokenGranter(
         UserService userService,
+        SmsCodeService smsCodeService,
         AuthorizationServerTokenServices tokenServices,
         ClientDetailsService clientDetailsService,
         OAuth2RequestFactory requestFactory) {
 
         super(tokenServices, clientDetailsService, requestFactory, GRANT_TYPE);
         this.userService = userService;
+        this.smsCodeService = smsCodeService;
     }
 
     @Override
@@ -40,13 +44,14 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
         var code = parameters.get("code");
         parameters.remove("code");
 
-        // 校验参数
+        // 校验用户手机号
         if (StringUtils.isEmpty(mobile)) throw new InvalidGrantException("手机号不能为空");
-        if (StringUtils.isEmpty(code)) throw new InvalidGrantException("验证码不能为空");
-
-        // 校验用户是否存在
         var user = userService.selectByMobile(mobile);
         if (user == null) throw new InvalidGrantException("该用户不存在");
+
+        // 校验验证码
+        if (StringUtils.isEmpty(code)) throw new InvalidGrantException("验证码不能为空");
+
 
         // 构建用户Token
         var userDetails = userService.loadUserByUsername(user.getUsername());

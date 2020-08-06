@@ -2,6 +2,7 @@ package cn.devifish.cloud.upms.server.security;
 
 import cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionTranslator;
 import cn.devifish.cloud.upms.server.service.OAuthService;
+import cn.devifish.cloud.upms.server.service.SmsCodeService;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +41,10 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
 
     private final AuthenticationManager authenticationManager;
     private final OAuth2SecurityExceptionTranslator exceptionTranslator;
+    private final TokenStore tokenStore;
     private final OAuthService oauthService;
     private final UserService userService;
-    private final TokenStore tokenStore;
+    private final SmsCodeService smsCodeService;
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -85,7 +87,7 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
         var tokenGranters = List.<TokenGranter>of(
             new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, oauthService, requestFactory),
             new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, oauthService, requestFactory),
-            new SmsCodeTokenGranter(userService, tokenServices, oauthService, requestFactory),
+            new SmsCodeTokenGranter(userService, smsCodeService, tokenServices, oauthService, requestFactory),
             new RefreshTokenGranter(tokenServices, oauthService, requestFactory),
             new ImplicitTokenGranter(tokenServices, oauthService, requestFactory),
             new ClientCredentialsTokenGranter(tokenServices, oauthService, requestFactory)
