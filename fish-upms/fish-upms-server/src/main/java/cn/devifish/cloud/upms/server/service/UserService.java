@@ -83,6 +83,19 @@ public class UserService implements UserDetailsService {
     }
 
     /**
+     * 根据手机号查询用户数据
+     *
+     * @param mobile 手机号
+     * @return User
+     */
+    public User selectByMobile(String mobile) {
+        if (StringUtils.isEmpty(mobile))
+            throw new BizException("手机号不能为空");
+
+        return userMapper.selectByMobile(mobile);
+    }
+
+    /**
      * 适配 Spring Cloud OAuth2 接口
      *
      * @param username 用户名
@@ -132,6 +145,20 @@ public class UserService implements UserDetailsService {
 
         // 获取用户统计数据
         var count = SqlHelper.retCount(userMapper.countByUsername(username));
+        return count > 0;
+    }
+
+    /**
+     * 根据手机号查询是否存在
+     *
+     * @param mobile 手机号查
+     * @return boolean
+     */
+    public Boolean existByMobile(String mobile) {
+        if (StringUtils.isEmpty(mobile)) return false;
+
+        // 获取用户统计数据
+        var count = SqlHelper.retCount(userMapper.countByMobile(mobile));
         return count > 0;
     }
 

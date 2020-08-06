@@ -2,6 +2,7 @@ package cn.devifish.cloud.upms.server.security;
 
 import cn.devifish.cloud.common.security.error.OAuth2SecurityExceptionTranslator;
 import cn.devifish.cloud.upms.server.service.OAuthService;
+import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -12,15 +13,24 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.CompositeTokenGranter;
+import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenGranter;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeTokenGranter;
+import org.springframework.security.oauth2.provider.implicit.ImplicitTokenGranter;
+import org.springframework.security.oauth2.provider.password.ResourceOwnerPasswordTokenGranter;
+import org.springframework.security.oauth2.provider.refresh.RefreshTokenGranter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+
+import java.util.List;
 
 /**
  * OAuth2AuthorizationServerConfiguration
  * OAuth2 身份认证服务配置
  *
- * @see org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration
  * @author Devifish
  * @date 2020/7/3 16:07
+ * @see org.springframework.boot.autoconfigure.security.oauth2.authserver.OAuth2AuthorizationServerConfiguration
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -31,6 +41,7 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
     private final AuthenticationManager authenticationManager;
     private final OAuth2SecurityExceptionTranslator exceptionTranslator;
     private final OAuthService oauthService;
+    private final UserService userService;
     private final TokenStore tokenStore;
 
     @Override
@@ -41,21 +52,46 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) {
         security.allowFormAuthenticationForClients()
-                .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
+            .tokenKeyAccess("permitAll()")
+            .checkTokenAccess("isAuthenticated()");
     }
 
     /**
      * 配置授权、令牌的访问服务 用于账户密码授权
      *
-     * @param endpoints spring security
+     * @param endpoints AuthorizationServerEndpointsConfigurer
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
-                .exceptionTranslator(exceptionTranslator)
-                .authenticationManager(authenticationManager)
-                .tokenStore(tokenStore);
+            .exceptionTranslator(exceptionTranslator)
+            .authenticationManager(authenticationManager)
+            .tokenStore(tokenStore)
+            .tokenGranter(initTokenGranters(endpoints));
+    }
+
+    /**
+     * 加载 OAuth2 TokenGranters
+     * 用于登录授权使用
+     *
+     * @param endpoints AuthorizationServerEndpointsConfigurer
+     * @return TokenGranter
+     */
+    private TokenGranter initTokenGranters(AuthorizationServerEndpointsConfigurer endpoints) {
+        var tokenServices = endpoints.getTokenServices();
+        var clientDetails = endpoints.getClientDetailsService();
+        var authorizationCodeServices = endpoints.getAuthorizationCodeServices();
+        var requestFactory = endpoints.getOAuth2RequestFactory();
+        var tokenGranters = List.<TokenGranter>of(
+            new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetails, requestFactory),
+            new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetails, requestFactory),
+            new SmsCodeTokenGranter(userService, tokenServices, clientDetails, requestFactory),
+            new RefreshTokenGranter(tokenServices, clientDetails, requestFactory),
+            new ImplicitTokenGranter(tokenServices, clientDetails, requestFactory),
+            new ClientCredentialsTokenGranter(tokenServices, clientDetails, requestFactory)
+        );
+
+        return new CompositeTokenGranter(tokenGranters);
     }
 
 }
