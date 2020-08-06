@@ -63,6 +63,7 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        endpoints.setClientDetailsService(oauthService);
         endpoints.allowedTokenEndpointRequestMethods(HttpMethod.GET, HttpMethod.POST)
             .exceptionTranslator(exceptionTranslator)
             .authenticationManager(authenticationManager)
@@ -79,16 +80,15 @@ public class OAuth2AuthorizationServerConfiguration extends AuthorizationServerC
      */
     private TokenGranter initTokenGranters(AuthorizationServerEndpointsConfigurer endpoints) {
         var tokenServices = endpoints.getTokenServices();
-        var clientDetails = endpoints.getClientDetailsService();
         var authorizationCodeServices = endpoints.getAuthorizationCodeServices();
         var requestFactory = endpoints.getOAuth2RequestFactory();
         var tokenGranters = List.<TokenGranter>of(
-            new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, clientDetails, requestFactory),
-            new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, clientDetails, requestFactory),
-            new SmsCodeTokenGranter(userService, tokenServices, clientDetails, requestFactory),
-            new RefreshTokenGranter(tokenServices, clientDetails, requestFactory),
-            new ImplicitTokenGranter(tokenServices, clientDetails, requestFactory),
-            new ClientCredentialsTokenGranter(tokenServices, clientDetails, requestFactory)
+            new ResourceOwnerPasswordTokenGranter(authenticationManager, tokenServices, oauthService, requestFactory),
+            new AuthorizationCodeTokenGranter(tokenServices, authorizationCodeServices, oauthService, requestFactory),
+            new SmsCodeTokenGranter(userService, tokenServices, oauthService, requestFactory),
+            new RefreshTokenGranter(tokenServices, oauthService, requestFactory),
+            new ImplicitTokenGranter(tokenServices, oauthService, requestFactory),
+            new ClientCredentialsTokenGranter(tokenServices, oauthService, requestFactory)
         );
 
         return new CompositeTokenGranter(tokenGranters);
