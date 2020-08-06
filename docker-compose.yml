@@ -109,4 +109,5 @@ services:
       - 20000:20000
     depends_on:
       - nacos-server
+      - redis
     restart: unless-stopped

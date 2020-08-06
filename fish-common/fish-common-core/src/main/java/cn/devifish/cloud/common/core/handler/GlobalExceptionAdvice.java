@@ -137,8 +137,9 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(MultipartException.class)
     public RestfulEntity<?> multipartExceptionHandle(MultipartException exception) {
         if (exception instanceof MaxUploadSizeExceededException) {
-            var message = MessageFormat.format("上传文件大小超过 {0} bytes",
-                ((MaxUploadSizeExceededException) exception).getMaxUploadSize());
+            var maxUploadSize = ((MaxUploadSizeExceededException) exception).getMaxUploadSize();
+            var message = MessageFormat.format("超过最大上传文件大小 {0} bytes",
+                maxUploadSize > 0 ? maxUploadSize : "unknown");
 
             return RestfulEntity.error(MessageCode.BadRequest, message);
         }

@@ -1,5 +1,6 @@
 package cn.devifish.cloud.file.server.controller;
 
+import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.server.service.StorageService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.io.IOException;
  * @author Devifish
  * @date 2020/8/3 16:48
  */
+@OpenApi
 @RestController
 @RequestMapping("/storage")
 @RequiredArgsConstructor

@@ -2,6 +2,7 @@ package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -66,9 +67,9 @@ public interface StorageService {
      */
     default String uploadByBase64(Base64FileData data) throws IOException {
         var content = data.getContent();
+        var bytes = Base64.decodeBase64(content);
 
-
-        return null;
+        return upload(data.getFilename(), bytes);
     }
 
 }

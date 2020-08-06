@@ -16,3 +16,8 @@ spring:
         file-extension: yml
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+
+  servlet:
+    multipart:
+      max-file-size: 4MB
+      max-request-size: 16MB
