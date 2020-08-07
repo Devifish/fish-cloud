@@ -119,7 +119,7 @@ public abstract class BaseCache<V, ID extends Serializable> implements Initializ
 
         //拼接Key Suffix
         if (StringUtils.isNotEmpty(suffix))
-            builder.append(RedisConstant.KEY_SUFFIX_SEPARATOR).append(suffix);
+            builder.append(RedisConstant.KEY_SEPARATOR).append(suffix);
 
         //拼接Key ID
         String keyId;

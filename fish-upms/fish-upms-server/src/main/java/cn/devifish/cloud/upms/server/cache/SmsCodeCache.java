@@ -17,7 +17,7 @@ import java.time.Duration;
 public class SmsCodeCache extends BaseCache<String, String> {
 
     @Override
-    public String getCacheKeyPrefix() {
+    public String getBaseCacheKey() {
         return SmsCodeConstant.SMS_CODE_CACHE_PREFIX;
     }
 

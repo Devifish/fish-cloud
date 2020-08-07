@@ -14,9 +14,6 @@ public interface RedisConstant {
     /** KEY分割符 **/
     String KEY_SEPARATOR = ":";
 
-    /** KEY后缀分割符 **/
-    String KEY_SUFFIX_SEPARATOR = "@";
-
     /** KEY名分割符 **/
     String KEY_NAME_SEPARATOR = "_";
 
