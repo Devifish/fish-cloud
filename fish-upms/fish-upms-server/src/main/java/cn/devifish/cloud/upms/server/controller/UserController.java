@@ -3,6 +3,7 @@ package cn.devifish.cloud.upms.server.controller;
 import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
+import cn.devifish.cloud.upms.common.enums.SmsCodeType;
 import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -83,6 +84,17 @@ public class UserController {
     @DeleteMapping("/delete/id/{userId}")
     public Boolean delete(@PathVariable Long userId) {
         return userService.delete(userId);
+    }
+
+    /**
+     * 发送用户登录验证码
+     *
+     * @param telephone 电话号码
+     * @return 是否成功
+     */
+    @PostMapping("/send/sms-code")
+    public Boolean sendSmsCode(@RequestParam String telephone, @RequestParam SmsCodeType type) {
+        return userService.sendSmsCode(telephone, type);
     }
 
 }

@@ -1,5 +1,6 @@
 package cn.devifish.cloud.upms.server.service;
 
+import cn.devifish.cloud.common.core.constant.RegexpConstant;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.BeanUtils;
 import cn.devifish.cloud.common.security.BasicUser;
@@ -8,6 +9,7 @@ import cn.devifish.cloud.common.security.util.SecurityUtils;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.enums.SexEnum;
+import cn.devifish.cloud.upms.common.enums.SmsCodeType;
 import cn.devifish.cloud.upms.server.cache.UserCache;
 import cn.devifish.cloud.upms.server.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -43,6 +45,7 @@ public class UserService implements UserDetailsService {
     private final RoleService roleService;
     private final OAuthService oauthService;
     private final PasswordEncoder passwordEncoder;
+    private final SmsCodeService smsCodeService;
 
     /**
      * 根据用户ID查询单个信息
@@ -276,6 +279,37 @@ public class UserService implements UserDetailsService {
             log.warn("删除用户ID：{} 失败", userId);
             throw new BizException("删除失败");
         }
+    }
+
+    /**
+     * 发送用户登录验证码
+     *
+     * @param telephone 电话号码
+     * @return 是否成功
+     */
+    public Boolean sendSmsCode(String telephone, SmsCodeType type) {
+        if (StringUtils.isNotEmpty(telephone) && telephone.matches(RegexpConstant.PHONE_NUM))
+            throw new BizException("请输入正确的手机号");
+
+        // 校验用户是否存在
+        var exist = existByTelephone(telephone);
+        switch (type) {
+            case UserLogin:
+            case ResetPassword:
+                if (!exist) throw new BizException("手机号不存在, 请注册或绑定后尝试");
+                break;
+            case UserRegister:
+                if (exist) throw new BizException("该手机号已注册");
+                break;
+            default:
+                throw new BizException("未知短信验证码类型");
+        }
+
+        // 发送验证码
+        var code = smsCodeService.generate(telephone, SmsCodeType.UserLogin);
+        if (StringUtils.isEmpty(code)) throw new BizException("请稍后尝试发送验证码");
+        // TODO 请求发送验证码
+        return Boolean.TRUE;
     }
 
 }

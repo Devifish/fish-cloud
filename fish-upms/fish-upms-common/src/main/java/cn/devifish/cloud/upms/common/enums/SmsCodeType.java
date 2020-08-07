@@ -11,7 +11,9 @@ import cn.devifish.cloud.common.core.BaseEnum;
  */
 public enum SmsCodeType implements BaseEnum<String> {
 
-    UserLogin("user_login");
+    UserLogin("user_login"),
+    UserRegister("user_register"),
+    ResetPassword("reset_password");
 
     private final String param;
 
