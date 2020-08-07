@@ -4,7 +4,7 @@ import cn.devifish.cloud.common.redis.BaseCache;
 import cn.devifish.cloud.upms.common.constant.SmsCodeConstant;
 import org.springframework.stereotype.Repository;
 
-import java.util.TreeMap;
+import java.time.Duration;
 
 /**
  * SmsCodeCache
@@ -14,10 +14,15 @@ import java.util.TreeMap;
  * @date 2020/8/6 18:15
  */
 @Repository
-public class SmsCodeCache extends BaseCache<TreeMap<String, String>, String> {
+public class SmsCodeCache extends BaseCache<String, String> {
 
     @Override
     public String getCacheKeyPrefix() {
         return SmsCodeConstant.SMS_CODE_CACHE_PREFIX;
+    }
+
+    @Override
+    public Duration getTimeout() {
+        return Duration.ofSeconds(SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_TIMEOUT);
     }
 }

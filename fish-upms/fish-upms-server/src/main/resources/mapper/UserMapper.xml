@@ -12,7 +12,7 @@
         <result column="realname" property="realname"/>
         <result column="avatar" property="avatar"/>
         <result column="email" property="email"/>
-        <result column="mobile" property="mobile"/>
+        <result column="telephone" property="telephone"/>
         <result column="sex" property="sex"/>
         <result column="birthday" property="birthday"/>
         <result column="enabled" property="enabled"/>
@@ -30,7 +30,7 @@
         `u`.realname,
         `u`.avatar,
         `u`.email,
-        `u`.mobile,
+        `u`.telephone,
         `u`.sex,
         `u`.birthday,
         `u`.enabled,
@@ -49,12 +49,12 @@
         </where>
     </select>
 
-    <select id="selectByMobile" resultMap="baseResultMap">
+    <select id="selectByTelephone" resultMap="baseResultMap">
         SELECT
         <include refid="baseSql"/>
         FROM upms_user AS u
         <where>
-            u.delete_flag = 0 AND u.mobile = #{mobile}
+            u.delete_flag = 0 AND u.telephone = #{telephone}
         </where>
     </select>
 
@@ -67,12 +67,12 @@
         </where>
     </select>
 
-    <select id="countByMobile" resultType="java.lang.Integer">
+    <select id="countByTelephone" resultType="java.lang.Integer">
         SELECT
         count(0)
         FROM upms_user AS u
         <where>
-            u.mobile = #{mobile}
+            u.telephone = #{telephone}
         </where>
     </select>
 

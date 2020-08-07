@@ -25,10 +25,10 @@ public interface UserMapper extends BaseMapper<User> {
     /**
      * 根据手机号查询用户数据
      *
-     * @param mobile 手机号
+     * @param telephone 手机号
      * @return User
      */
-    User selectByMobile(String mobile);
+    User selectByTelephone(String telephone);
 
     /**
      * 根据用户名称统计用户数据
@@ -43,9 +43,9 @@ public interface UserMapper extends BaseMapper<User> {
      * 根据手机号统计用户数据
      * 包含已逻辑删除数据
      *
-     * @param mobile 手机号
+     * @param telephone 手机号
      * @return 统计
      */
-    Integer countByMobile(String mobile);
+    Integer countByTelephone(String telephone);
 
 }
