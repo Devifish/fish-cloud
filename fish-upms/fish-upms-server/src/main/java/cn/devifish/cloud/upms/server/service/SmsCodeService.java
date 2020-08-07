@@ -17,6 +17,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
+
 /**
  * SmsCodeService
  * 短信验证码服务
@@ -102,8 +104,8 @@ public class SmsCodeService {
      * @return 是否正确
      */
     public boolean verify(String telephone, SmsCodeType type, String code) {
-        if (StringUtils.isEmpty(telephone)) throw new BizException("手机号不能为空");
-        if (StringUtils.isEmpty(code)) throw new BizException("验证码不能为空");
+        if (StringUtils.isEmpty(telephone)) throw new BizException(PreconditionFailed, "手机号不能为空");
+        if (StringUtils.isEmpty(code)) throw new BizException(PreconditionFailed, "验证码不能为空");
 
         var cache_code = get(telephone, type);
         if (cache_code == null)

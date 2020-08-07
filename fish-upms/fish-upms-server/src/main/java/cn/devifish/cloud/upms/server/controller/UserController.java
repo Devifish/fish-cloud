@@ -92,6 +92,7 @@ public class UserController {
      * @param telephone 电话号码
      * @return 是否成功
      */
+    @OpenApi
     @PostMapping("/send/sms-code")
     public Boolean sendSmsCode(@RequestParam String telephone, @RequestParam SmsCodeType type) {
         return userService.sendSmsCode(telephone, type);

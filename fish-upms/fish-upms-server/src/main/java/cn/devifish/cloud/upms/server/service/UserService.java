@@ -28,6 +28,8 @@ import org.springframework.util.Assert;
 
 import java.util.Collections;
 
+import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
+
 /**
  * UserService
  * 用户服务
@@ -55,7 +57,7 @@ public class UserService implements UserDetailsService {
      */
     public User selectById(Long userId) {
         if (userId == null)
-            throw new BizException("用户ID不能为空");
+            throw new BizException(PreconditionFailed, "用户ID不能为空");
 
         return userCache.getIfAbsent(userId, userMapper::selectById);
     }
@@ -80,7 +82,7 @@ public class UserService implements UserDetailsService {
      */
     public User selectByUsername(String username) {
         if (StringUtils.isEmpty(username))
-            throw new BizException("用户名不能为空");
+            throw new BizException(PreconditionFailed, "用户名不能为空");
 
         return userMapper.selectByUsername(username);
     }
@@ -93,7 +95,7 @@ public class UserService implements UserDetailsService {
      */
     public User selectByTelephone(String telephone) {
         if (StringUtils.isEmpty(telephone))
-            throw new BizException("手机号不能为空");
+            throw new BizException(PreconditionFailed, "手机号不能为空");
 
         return userMapper.selectByTelephone(telephone);
     }
@@ -178,8 +180,8 @@ public class UserService implements UserDetailsService {
         var password = user.getPassword();
 
         // 参数校验
-        if (StringUtils.isEmpty(username)) throw new BizException("用户名不能为空");
-        if (StringUtils.isEmpty(password)) throw new BizException("密码不能为空");
+        if (StringUtils.isEmpty(username)) throw new BizException(PreconditionFailed, "用户名不能为空");
+        if (StringUtils.isEmpty(password)) throw new BizException(PreconditionFailed, "密码不能为空");
         if (existByUsername(username)) throw new BizException("用户名已存在");
 
         // 加密密码
@@ -288,8 +290,9 @@ public class UserService implements UserDetailsService {
      * @return 是否成功
      */
     public Boolean sendSmsCode(String telephone, SmsCodeType type) {
-        if (StringUtils.isNotEmpty(telephone) && telephone.matches(RegexpConstant.PHONE_NUM))
-            throw new BizException("请输入正确的手机号");
+        if (type == null) throw new BizException(PreconditionFailed, "请输入正确的短信验证码类型");
+        if (StringUtils.isNotEmpty(telephone) && !telephone.matches(RegexpConstant.PHONE_NUM))
+            throw new BizException(PreconditionFailed, "请输入正确的手机号");
 
         // 校验用户是否存在
         var exist = existByTelephone(telephone);

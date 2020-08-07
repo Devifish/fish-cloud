@@ -7,6 +7,8 @@ import cn.devifish.cloud.upms.server.mapper.DeptMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
+
 /**
  * DeptService
  * 部门服务
@@ -29,7 +31,7 @@ public class DeptService {
      */
     public Dept selectById(Long deptId) {
         if (deptId == null)
-            throw new BizException("部门ID不能为空");
+            throw new BizException(PreconditionFailed, "部门ID不能为空");
 
         return deptCache.getIfAbsent(deptId, deptMapper::selectById);
     }

@@ -18,6 +18,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
+import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
+
 /**
  * RoleService
  * 角色服务
@@ -46,7 +48,7 @@ public class RoleService {
      */
     public Role selectById(Long roleId) {
         if (roleId == null)
-            throw new BizException("角色ID不能为空");
+            throw new BizException(PreconditionFailed, "角色ID不能为空");
 
         return roleCache.getIfAbsent(roleId, roleMapper::selectById);
     }
@@ -145,7 +147,7 @@ public class RoleService {
         var code = role.getCode();
 
         // 参数校验
-        if (StringUtils.isEmpty(name)) throw new BizException("角色名不能为空");
+        if (StringUtils.isEmpty(name)) throw new BizException(PreconditionFailed, "角色名不能为空");
         if (existByCode(code)) throw new BizException("角色编码已存在");
 
         // 设置默认值

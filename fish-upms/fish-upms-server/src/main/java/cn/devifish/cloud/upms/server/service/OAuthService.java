@@ -23,6 +23,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
+
 /**
  * OAuthClientService
  * OAuth2 客户端服务
@@ -46,7 +48,7 @@ public class OAuthService implements ClientDetailsService {
      */
     public OAuthClient selectByClientId(String clientId) {
         if (clientId == null)
-            throw new BizException("客户端ID不能为空");
+            throw new BizException(PreconditionFailed, "客户端ID不能为空");
 
         return oauthClientCache.getIfAbsent(clientId, oauthClientMapper::selectById);
     }

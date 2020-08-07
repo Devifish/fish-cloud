@@ -21,6 +21,8 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
+
 /**
  * MenuService
  * 菜单服务
@@ -54,7 +56,7 @@ public class MenuService {
      */
     public Menu selectById(Long menuId) {
         if (menuId == null)
-            throw new BizException("菜单ID不能为空");
+            throw new BizException(PreconditionFailed, "菜单ID不能为空");
 
         return menuCache.getIfAbsent(menuId, menuMapper::selectById);
     }
@@ -209,7 +211,7 @@ public class MenuService {
         var permission = menu.getPermission();
 
         // 参数校验
-        if (StringUtils.isEmpty(name)) throw new BizException("菜单名不能为空");
+        if (StringUtils.isEmpty(name)) throw new BizException(PreconditionFailed, "菜单名不能为空");
         if (existByPermission(permission)) throw new BizException("菜单授权码已存在");
 
         // 校验父级ID是否存在

@@ -1,5 +1,6 @@
 package cn.devifish.cloud.common.core.exception;
 
+import cn.devifish.cloud.common.core.MessageCode;
 import cn.devifish.cloud.common.core.StatusCode;
 
 /**
@@ -11,19 +12,12 @@ import cn.devifish.cloud.common.core.StatusCode;
  */
 public class BizException extends FishCloudException {
 
-    public BizException() {
-    }
-
     public BizException(String message) {
-        super(message);
+        this(MessageCode.BadRequest, message);
     }
 
     public BizException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public BizException(Throwable cause) {
-        super(cause);
+        this(MessageCode.BadRequest, message, cause);
     }
 
     public BizException(StatusCode statusCode, String message) {
