@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -57,9 +58,10 @@ public class GlobalExceptionAdvice {
      * @return error
      */
     @ExceptionHandler(FishCloudException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RestfulEntity<?> illegalArgumentException(FishCloudException exception) {
-        return RestfulEntity.error(exception);
+    public ResponseEntity<RestfulEntity<?>> illegalArgumentException(FishCloudException exception) {
+        var statusCode = exception.getStatusCode();
+        return ResponseEntity.status(statusCode.getCode())
+            .body(RestfulEntity.error(exception));
     }
 
     /**
