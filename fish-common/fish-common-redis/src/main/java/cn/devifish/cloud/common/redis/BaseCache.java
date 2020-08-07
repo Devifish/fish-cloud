@@ -4,13 +4,13 @@ import cn.devifish.cloud.common.core.constant.CommonConstant;
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.common.redis.constant.RedisConstant;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.time.Duration;
@@ -24,7 +24,7 @@ import java.util.function.Function;
  * @author Devifish
  * @date 2020/6/30 15:47
  */
-public abstract class BaseCache<V, ID extends Serializable> {
+public abstract class BaseCache<V, ID extends Serializable> implements InitializingBean {
 
     @Autowired
     protected RedisTemplate<String, Object> redisTemplate;
@@ -36,8 +36,8 @@ public abstract class BaseCache<V, ID extends Serializable> {
     private String baseCacheKey;
     private String cacheKeyPrefix;
 
-    @PostConstruct
-    protected void init() {
+    @Override
+    public void afterPropertiesSet() {
         valueOperations = redisTemplate.opsForValue();
     }
 
@@ -77,6 +77,16 @@ public abstract class BaseCache<V, ID extends Serializable> {
     }
 
     /**
+     * 缓存Key后缀
+     * 如不使用可重写该方法
+     *
+     * @return 缓存前缀
+     */
+    public String getCacheKeySuffix() {
+        return null;
+    }
+
+    /**
      * 获取缓存的超时时间
      * 可重写该方法，自定义缓存时间
      *
@@ -101,23 +111,21 @@ public abstract class BaseCache<V, ID extends Serializable> {
         var builder = new StringBuilder();
 
         //拼接Key Prefix
-        if (StringUtils.isNotEmpty(prefix)) {
+        if (StringUtils.isNotEmpty(prefix))
             builder.append(prefix).append(RedisConstant.KEY_SEPARATOR);
-        }
 
         //拼接Key Name
         builder.append(key);
 
         //拼接Key Suffix
-        if (StringUtils.isNotEmpty(suffix)) {
-            builder.append(RedisConstant.KEY_NAME_SEPARATOR).append(suffix);
-        }
+        if (StringUtils.isNotEmpty(suffix))
+            builder.append(RedisConstant.KEY_SUFFIX_SEPARATOR).append(suffix);
 
         //拼接Key ID
         String keyId;
-        if (id != null && StringUtils.isNotEmpty(keyId = String.valueOf(id))) {
+        if (id != null && StringUtils.isNotEmpty(keyId = String.valueOf(id)))
             builder.append(RedisConstant.KEY_SEPARATOR).append(keyId);
-        }
+
         return builder.toString();
     }
 
@@ -128,7 +136,17 @@ public abstract class BaseCache<V, ID extends Serializable> {
      * @return Key
      */
     public String generatorCacheKey(ID id) {
-        return generatorCacheKey(getBaseCacheKey(), id, getCacheKeyPrefix(), null);
+        return generatorCacheKey(getBaseCacheKey(), id, getCacheKeyPrefix(), getCacheKeySuffix());
+    }
+
+    /**
+     * 生成缓存KEY
+     *
+     * @param id ID
+     * @return Key
+     */
+    public String generatorCacheKey(ID id, String suffix) {
+        return generatorCacheKey(getBaseCacheKey(), id, getCacheKeyPrefix(), suffix);
     }
 
     /**
@@ -142,6 +160,17 @@ public abstract class BaseCache<V, ID extends Serializable> {
     }
 
     /**
+     * 设置缓存对象
+     *
+     * @param id ID
+     * @param value Value
+     * @param suffix 后缀
+     */
+    public void set(ID id, String suffix, V value) {
+        valueOperations.set(generatorCacheKey(id, suffix), value, getTimeout());
+    }
+
+    /**
      * 获取缓存数据
      *
      * @param id ID
@@ -152,11 +181,32 @@ public abstract class BaseCache<V, ID extends Serializable> {
         return (V) valueOperations.get(generatorCacheKey(id));
     }
 
+    /**
+     * 获取缓存数据
+     *
+     * @param id ID
+     * @param suffix 后缀
+     * @return Value
+     */
+    @SuppressWarnings("unchecked")
+    public V get(ID id, String suffix) {
+        return (V) valueOperations.get(generatorCacheKey(id, suffix));
+    }
+
     public V getIfAbsent(ID id, Function<ID, ? extends V> mappingFunction) {
         var value = get(id);
         if (value == null && mappingFunction != null) {
             value = mappingFunction.apply(id);
             if (value != null) set(id, value);
+        }
+        return value;
+    }
+
+    public V getIfAbsent(ID id, String suffix, Function<ID, ? extends V> mappingFunction) {
+        var value = get(id, suffix);
+        if (value == null && mappingFunction != null) {
+            value = mappingFunction.apply(id);
+            if (value != null) set(id, suffix, value);
         }
         return value;
     }
@@ -171,6 +221,16 @@ public abstract class BaseCache<V, ID extends Serializable> {
     }
 
     /**
+     * 删除缓存数据
+     *
+     * @param id ID
+     * @param suffix 后缀
+     */
+    public void delete(ID id, String suffix) {
+        redisTemplate.delete(generatorCacheKey(id, suffix));
+    }
+
+    /**
      * 删除全部缓存数据
      * （包含带ClientID）
      */
@@ -182,6 +242,25 @@ public abstract class BaseCache<V, ID extends Serializable> {
         }
     }
 
+    /**
+     * 获取缓存过期时间
+     *
+     * @param id ID
+     * @return 过期时间
+     */
+    public Long getExpire(ID id) {
+        return redisTemplate.getExpire(generatorCacheKey(id));
+    }
 
+    /**
+     * 获取缓存过期时间
+     *
+     * @param id ID
+     * @param suffix 后缀
+     * @return 过期时间
+     */
+    public Long getExpire(ID id, String suffix) {
+        return redisTemplate.getExpire(generatorCacheKey(id, suffix));
+    }
 
 }

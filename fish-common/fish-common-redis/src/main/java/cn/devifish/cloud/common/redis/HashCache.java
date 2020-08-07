@@ -3,7 +3,6 @@ package cn.devifish.cloud.common.redis;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -23,9 +22,8 @@ public abstract class HashCache<V, K extends Serializable> extends BaseCache<V, 
     protected HashOperations<String, K, V> hashOperations;
 
     @Override
-    @PostConstruct
-    protected void init() {
-        super.init();
+    public void afterPropertiesSet() {
+        super.afterPropertiesSet();
         hashOperations = redisTemplate.opsForHash();
     }
 
