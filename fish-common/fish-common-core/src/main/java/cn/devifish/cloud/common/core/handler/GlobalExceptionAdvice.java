@@ -60,6 +60,9 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(FishCloudException.class)
     public ResponseEntity<RestfulEntity<?>> illegalArgumentException(FishCloudException exception) {
         var statusCode = exception.getStatusCode();
+        if (statusCode == null || statusCode == MessageCode.Other)
+            statusCode = MessageCode.InternalServerError;
+
         return ResponseEntity.status(statusCode.getCode())
             .body(RestfulEntity.error(exception));
     }
