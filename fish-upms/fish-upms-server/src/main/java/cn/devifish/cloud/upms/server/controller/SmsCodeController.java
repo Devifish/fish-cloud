@@ -1,5 +1,6 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.server.service.SmsCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class SmsCodeController {
      * @param telephone 电话号码
      * @return 是否成功
      */
+    @OpenApi
     @PostMapping("/send/user-login")
     public Boolean sendByUserLogin(@RequestParam String telephone) {
         return smsCodeService.sendByUserLogin(telephone);

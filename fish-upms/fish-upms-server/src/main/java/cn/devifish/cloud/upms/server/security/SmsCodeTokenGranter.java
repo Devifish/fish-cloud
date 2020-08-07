@@ -1,9 +1,10 @@
 package cn.devifish.cloud.upms.server.security;
 
+import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.enums.SmsCodeType;
 import cn.devifish.cloud.upms.server.service.SmsCodeService;
 import cn.devifish.cloud.upms.server.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.provider.*;
@@ -11,7 +12,6 @@ import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * SmsCodeTokenGranter
@@ -46,17 +46,18 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
         var code = parameters.get("code");
         parameters.remove("code");
 
-        // 校验用户手机号
-        if (StringUtils.isEmpty(telephone)) throw new InvalidGrantException("手机号不能为空");
-        var user = userService.selectByTelephone(telephone);
-        if (user == null) throw new InvalidGrantException("该用户不存在");
+        // 校验参数
+        User user;
+        try {
+            user = userService.selectByTelephone(telephone);
+            if (user == null) throw new InvalidGrantException("该用户不存在");
+            if (!smsCodeService.verify(telephone, SmsCodeType.UserLogin, code))
+                throw new InvalidGrantException("验证码不正确, 请重试");
 
-        // 校验验证码
-        if (StringUtils.isEmpty(code)) throw new InvalidGrantException("验证码不能为空");
-        var cache_code = smsCodeService.get(telephone, SmsCodeType.UserLogin);
-        if (cache_code == null) throw new InvalidGrantException("验证码已失效, 请重新获取验证码");
-        if (!Objects.equals(cache_code, code)) throw new InvalidGrantException("验证码不正确, 请重试");
-        smsCodeService.delete(telephone, SmsCodeType.UserLogin);
+            smsCodeService.delete(telephone, SmsCodeType.UserLogin);
+        } catch (BizException exception) {
+            throw new InvalidGrantException(exception.getMessage());
+        }
 
         // 构建用户Token
         var userDetails = userService.loadUserByUsername(user.getUsername());
