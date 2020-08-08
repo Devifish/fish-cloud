@@ -26,7 +26,7 @@ Mybatis Plus | 3.3.2
 └── fish-common --------------------------------- 公共组件工具包
      ├── fish-common-core ----------------------- 公共核心组件
      ├── fish-common-mybatis -------------------- 公共ORM组件(Mybatis)
-     ├── fish-common-rabbitmq ------------------- 公共消息队列组件(RabbitMQ) [TODO]
+     ├── fish-common-rabbitmq ------------------- 公共消息队列组件(RabbitMQ)
      ├── fish-common-redis ---------------------- 公共缓存组件(Redis)
      ├── fish-common-security ------------------- 公共安全组件(Spring OAuth2)
      ├── fish-common-sentinel ------------------- 公共流量控制组件(Sentinel) [TODO]

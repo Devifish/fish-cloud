@@ -3,6 +3,5 @@ apply plugin: 'java-library'
 description "公共rabbitmq消息队列组件"
 
 dependencies {
-    api "org.springframework.cloud:spring-cloud-starter-bus-amqp"
-    api "org.springframework.cloud:spring-cloud-starter-stream-rabbit"
+    api "org.springframework.boot:spring-boot-starter-amqp"
 }
