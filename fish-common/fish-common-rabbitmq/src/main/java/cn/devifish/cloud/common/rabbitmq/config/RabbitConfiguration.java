@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory.ConfirmType;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +23,16 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration(proxyBeanMethods = false)
-public class RabbitConfiguration {
+public class RabbitConfiguration implements InitializingBean {
 
     private final CachingConnectionFactory connectionFactory;
     private final RabbitTemplateConfigurer configurer;
+
+    @Override
+    public void afterPropertiesSet() {
+        connectionFactory.setPublisherConfirmType(ConfirmType.SIMPLE);
+        connectionFactory.setPublisherReturns(true);
+    }
 
     /**
      * 注册 RabbitTemplate
@@ -51,7 +59,7 @@ public class RabbitConfiguration {
      */
     private void confirmCallback(CorrelationData data, boolean ack, String cause) {
         if (log.isDebugEnabled())
-            log.debug("消息发送成功{} ack:{} cause:{}", data, ack, cause);
+            log.debug("消息发送成功[{}] ack:{} cause:{}", data, ack, cause);
     }
 
     /**
@@ -64,7 +72,7 @@ public class RabbitConfiguration {
      * @param routingKey 路由Key
      */
     private void returnCallback(Message message, int replyCode, String replyText, String exchange, String routingKey) {
-        log.warn("消息发送失败{} replyCode:{} replyText: {} exchange: {} routingKey:{} ",
+        log.warn("消息发送失败[{}] replyCode:{} replyText: {} exchange: {} routingKey:{} ",
             message, replyCode, replyText, exchange, routingKey);
     }
 

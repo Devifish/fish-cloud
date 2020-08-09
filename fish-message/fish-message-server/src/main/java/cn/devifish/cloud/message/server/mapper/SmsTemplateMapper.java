@@ -13,4 +13,13 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SmsTemplateMapper extends BaseMapper<SmsTemplate> {
+
+    /**
+     * 根据模板编码查询短信模板数据
+     *
+     * @param code 模板编码
+     * @return SmsTemplate
+     */
+    SmsTemplate selectByCode(String code);
+
 }

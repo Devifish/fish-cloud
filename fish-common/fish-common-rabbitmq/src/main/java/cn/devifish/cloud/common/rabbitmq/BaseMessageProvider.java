@@ -50,7 +50,7 @@ public abstract class BaseMessageProvider<T> implements InitializingBean {
      *
      * @param content 内容
      */
-    public void push(T content) {
+    public void send(T content) {
         rabbitTemplate.convertAndSend(getExchange(), getRoutingKey(), content);
     }
 

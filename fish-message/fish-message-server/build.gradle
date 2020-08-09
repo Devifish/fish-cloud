@@ -11,11 +11,15 @@ dependencies {
     implementation project(":fish-common:fish-common-security")
     implementation project(":fish-common:fish-common-mybatis")
     implementation project(":fish-common:fish-common-sentinel")
+    implementation project(":fish-common:fish-common-rabbitmq")
 
     implementation "org.springframework.boot:spring-boot-starter-actuator"
     implementation "org.springframework.boot:spring-boot-starter-websocket"
     implementation "org.springframework.boot:spring-boot-starter-web"
+    compileOnly "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-config"
+    implementation "com.aliyun:aliyun-java-sdk-core"
 }
