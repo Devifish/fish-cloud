@@ -1,7 +1,11 @@
 package cn.devifish.cloud.common.rabbitmq.config;
 
+import cn.devifish.cloud.common.core.constant.CommonConstant;
+import cn.devifish.cloud.common.core.exception.UtilException;
+import cn.devifish.cloud.common.rabbitmq.constant.RabbitConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory.ConfirmType;
@@ -9,9 +13,11 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.RabbitTemplateConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.Assert;
 
 /**
  * RabbitConfiguration
@@ -27,6 +33,9 @@ public class RabbitConfiguration implements InitializingBean {
 
     private final CachingConnectionFactory connectionFactory;
     private final RabbitTemplateConfigurer configurer;
+
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     @Override
     public void afterPropertiesSet() {
@@ -47,7 +56,31 @@ public class RabbitConfiguration implements InitializingBean {
         template.setMessageConverter(new Jackson2JsonMessageConverter());
         template.setConfirmCallback(this::confirmCallback);
         template.setReturnCallback(this::returnCallback);
+
+        setExchangeIfAbsent(template);
         return template;
+    }
+
+    /**
+     * 如果未设置交换机名称
+     * 则自动设置
+     *
+     * @param template RabbitTemplate
+     */
+    private void setExchangeIfAbsent(RabbitTemplate template) {
+        Assert.notNull(template, "RabbitTemplate not null");
+        var exchange = template.getExchange();
+        if (StringUtils.isEmpty(exchange)) {
+            var name = applicationName.toLowerCase();
+            if (!StringUtils.endsWith(name, CommonConstant.APPLICATION_NAME_SUFFIX))
+                throw new UtilException("服务名称不符合规范, 自动生成exchange失败");
+
+            // 处理服务名称
+            name = StringUtils.removeEnd(name, CommonConstant.APPLICATION_NAME_SUFFIX);
+            name = name.replaceAll(CommonConstant.APPLICATION_NAME_SEPARATOR, RabbitConstant.EXCHANGE_NAME_SEPARATOR);
+
+            template.setExchange(name + RabbitConstant.EXCHANGE_NAME_SUFFIX);
+        }
     }
 
     /**

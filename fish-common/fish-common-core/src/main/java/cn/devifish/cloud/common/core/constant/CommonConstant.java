@@ -13,6 +13,6 @@ public interface CommonConstant {
     String APPLICATION_NAME_SEPARATOR = "-";
 
     /** 服务名称后缀 **/
-    String APPLICATION_NAME_SUFFIX = "-server";
+    String APPLICATION_NAME_SUFFIX = APPLICATION_NAME_SEPARATOR + "server";
 
 }
