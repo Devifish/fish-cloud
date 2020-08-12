@@ -30,7 +30,9 @@ public class RabbitUtils {
      * @return 路由名称
      */
     public static String routingName(String... name) {
-        return String.join(RabbitConstant.NAME_SEPARATOR, name);
+        return String.join(
+            RabbitConstant.NAME_SEPARATOR, name) +
+            RabbitConstant.ROUTING_NAME_SUFFIX;
     }
 
     /**
@@ -40,7 +42,9 @@ public class RabbitUtils {
      * @return 队列名称
      */
     public static String queueName(String... name) {
-        return String.join(RabbitConstant.NAME_SEPARATOR, name);
+        return String.join(
+            RabbitConstant.NAME_SEPARATOR, name) +
+            RabbitConstant.QUEUE_NAME_SUFFIX;
     }
 
 }

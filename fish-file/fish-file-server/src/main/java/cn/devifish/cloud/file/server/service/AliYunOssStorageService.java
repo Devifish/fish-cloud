@@ -28,16 +28,31 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 @ConditionalOnClass(OSSClient.class)
 @ConditionalOnBean(OSSClient.class)
-public class AliYunOssStorageService implements StorageService {
+public class AliYunOssStorageService extends AbstractStorageService {
 
     private final CloudStorageProperties cloudStorageProperties;
     private final OSSClient client;
 
     private ALiYunOSSConfig config;
+    private String pathPrefix;
 
     @PostConstruct
     private void init() {
-        this.config = cloudStorageProperties.getAliyun();
+        var config = cloudStorageProperties.getAliyun();
+
+        this.pathPrefix = config.getPrefix();
+        this.config = config;
+    }
+
+    /**
+     * 获取路径前缀
+     * 用户自动拼接完整路径使用
+     *
+     * @return 路径前缀
+     */
+    @Override
+    protected String pathPrefix() {
+        return pathPrefix;
     }
 
     /**
@@ -48,7 +63,7 @@ public class AliYunOssStorageService implements StorageService {
      * @return 服务端路径
      */
     @Override
-    public String upload(String path, InputStream inputStream) {
+    protected String upload(String path, InputStream inputStream) {
         var request = new PutObjectRequest(
             config.getBucketName(), path, inputStream, null);
 

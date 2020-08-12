@@ -27,16 +27,31 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 @ConditionalOnClass(COSClient.class)
 @ConditionalOnBean(COSClient.class)
-public class QCloudCosStorageService implements StorageService {
+public class QCloudCosStorageService extends AbstractStorageService {
 
     private final CloudStorageProperties cloudStorageProperties;
     private final COSClient client;
 
     private QCloudCOSConfig config;
+    private String pathPrefix;
 
     @PostMapping
     private void init() {
-        this.config = cloudStorageProperties.getQcloud();
+        var config = cloudStorageProperties.getQcloud();
+
+        this.pathPrefix = config.getPrefix();
+        this.config = config;
+    }
+
+    /**
+     * 获取路径前缀
+     * 用户自动拼接完整路径使用
+     *
+     * @return 路径前缀
+     */
+    @Override
+    protected String pathPrefix() {
+        return pathPrefix;
     }
 
     /**
@@ -47,7 +62,7 @@ public class QCloudCosStorageService implements StorageService {
      * @return 服务端路径
      */
     @Override
-    public String upload(String path, InputStream inputStream) {
+    protected String upload(String path, InputStream inputStream) {
         var request = new PutObjectRequest(config.getBucketName(), path, inputStream, null);
 
         try {

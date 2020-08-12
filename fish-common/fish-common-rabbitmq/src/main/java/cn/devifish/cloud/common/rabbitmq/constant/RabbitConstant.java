@@ -18,4 +18,10 @@ public interface RabbitConstant {
     /** 交换机名称后缀 **/
     String EXCHANGE_NAME_SUFFIX = EXCHANGE_NAME_SEPARATOR + "exchange";
 
+    /** 路由名称后缀 **/
+    String ROUTING_NAME_SUFFIX = NAME_SEPARATOR + "routing";
+
+    /** 队列名称后缀 **/
+    String QUEUE_NAME_SUFFIX = NAME_SEPARATOR + "queue";
+
 }
