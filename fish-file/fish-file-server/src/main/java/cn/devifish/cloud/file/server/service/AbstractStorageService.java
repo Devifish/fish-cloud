@@ -100,7 +100,10 @@ public abstract class AbstractStorageService {
         var builder = new StringBuilder();
         for (String temp : path) {
             if (StringUtils.isEmpty(temp)) continue;
-            if (StringUtils.startsWith(temp, PATH_SEPARATOR)) {
+            if (temp.endsWith(PATH_SEPARATOR))
+                temp = StringUtils.removeEnd(temp, PATH_SEPARATOR);
+
+            if (temp.startsWith(PATH_SEPARATOR)) {
                 builder.append(temp);
                 continue;
             }
