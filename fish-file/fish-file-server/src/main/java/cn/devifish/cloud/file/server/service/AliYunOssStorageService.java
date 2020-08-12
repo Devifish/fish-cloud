@@ -73,6 +73,6 @@ public class AliYunOssStorageService extends AbstractStorageService {
             log.error("AliYun OSS 上传文件失败 path: {}", path, exception);
             throw new UtilException("上传文件失败");
         }
-        return path;
+        return joinPath(config.getDomain(), path);
     }
 }

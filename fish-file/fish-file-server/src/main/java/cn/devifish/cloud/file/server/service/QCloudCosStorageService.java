@@ -71,6 +71,6 @@ public class QCloudCosStorageService extends AbstractStorageService {
             log.error("QCloud COS 上传文件失败 path: {}", path, exception);
             throw new UtilException("上传文件失败");
         }
-        return path;
+        return joinPath(config.getDomain(), path);
     }
 }
