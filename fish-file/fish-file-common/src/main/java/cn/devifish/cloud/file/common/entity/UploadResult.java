@@ -22,9 +22,6 @@ public class UploadResult implements Serializable {
     /** 文件路径 **/
     private String path;
 
-    /** 域名 **/
-    private String domain;
-
     /** 文件URL **/
     private String url;
 
@@ -37,7 +34,6 @@ public class UploadResult implements Serializable {
 
         this.filename = filename;
         this.path = path;
-        this.domain = domain;
         this.url = url;
     }
 

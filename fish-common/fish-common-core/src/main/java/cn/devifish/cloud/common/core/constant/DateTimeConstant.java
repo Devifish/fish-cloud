@@ -15,6 +15,9 @@ public interface DateTimeConstant {
     /** 日期格式 **/
     String DATE_PATTERN = "yyyy-MM-dd";
 
+    /** 月份格式 **/
+    String MONTH_PATTERN = "yyyy-MM";
+
     /** 时间格式 **/
     String TIME_PATTERN = "HH:mm:ss";
 

@@ -1,10 +1,12 @@
 package cn.devifish.cloud.file.server.service;
 
+import cn.devifish.cloud.common.core.constant.DateTimeConstant;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
+import org.joda.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
@@ -51,7 +53,7 @@ public abstract class AbstractStorageService {
             throw new BizException("内容不能为NULL");
 
         try (InputStream inputStream = new ByteArrayInputStream(content)) {
-            var fullPath = joinPath(pathPrefix(), path);
+            var fullPath = joinPath(pathPrefix(), currentMonth(), path);
             return upload(fullPath, inputStream);
         }
     }
@@ -69,7 +71,7 @@ public abstract class AbstractStorageService {
             var originalFilename = file.getOriginalFilename();
             var extension = getExtension(originalFilename);
             var filename = generateFilename(extension);
-            var fullPath = joinPath(pathPrefix(), filename);
+            var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
             return upload(fullPath, inputStream);
         }
     }
@@ -85,5 +87,15 @@ public abstract class AbstractStorageService {
         var bytes = Base64.decodeBase64(content);
 
         return upload(data.getFilename(), bytes);
+    }
+
+    /**
+     * 获取当前月份
+     *
+     * @return 当前月份
+     */
+    public String currentMonth() {
+        var now = LocalDate.now();
+        return now.toString(DateTimeConstant.MONTH_PATTERN);
     }
 }
