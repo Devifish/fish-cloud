@@ -1,6 +1,7 @@
 package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
+import cn.devifish.cloud.file.common.entity.UploadResult;
 import cn.devifish.cloud.file.server.config.CloudStorageProperties;
 import cn.devifish.cloud.file.server.config.CloudStorageProperties.QCloudCOSConfig;
 import com.qcloud.cos.COSClient;
@@ -62,7 +63,7 @@ public class QCloudCosStorageService extends AbstractStorageService {
      * @return 服务端路径
      */
     @Override
-    protected String upload(String path, InputStream inputStream) {
+    protected UploadResult upload(String path, InputStream inputStream) {
         var request = new PutObjectRequest(config.getBucketName(), path, inputStream, null);
 
         try {
@@ -71,6 +72,6 @@ public class QCloudCosStorageService extends AbstractStorageService {
             log.error("QCloud COS 上传文件失败 path: {}", path, exception);
             throw new UtilException("上传文件失败");
         }
-        return joinPath(config.getDomain(), path);
+        return new UploadResult(config.getDomain(), path);
     }
 }

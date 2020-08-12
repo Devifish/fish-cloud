@@ -2,6 +2,7 @@ package cn.devifish.cloud.file.server.controller;
 
 import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
+import cn.devifish.cloud.file.common.entity.UploadResult;
 import cn.devifish.cloud.file.server.service.AbstractStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class StorageController {
      * @return 路径
      */
     @PostMapping("/upload")
-    public String upload(@RequestPart MultipartFile file) throws IOException {
+    public UploadResult upload(@RequestPart MultipartFile file) throws IOException {
         return uploadByMultipart(file);
     }
 
@@ -43,7 +44,7 @@ public class StorageController {
      * @return 路径
      */
     @PostMapping("/upload/multipart")
-    public String uploadByMultipart(@RequestPart MultipartFile file) throws IOException {
+    public UploadResult uploadByMultipart(@RequestPart MultipartFile file) throws IOException {
         return storageService.uploadByMultipart(file);
     }
 
@@ -54,7 +55,7 @@ public class StorageController {
      * @return 路径
      */
     @PostMapping("/upload/base64")
-    public String uploadByBase64(@Valid @RequestBody Base64FileData data) throws IOException {
+    public UploadResult uploadByBase64(@Valid @RequestBody Base64FileData data) throws IOException {
         return storageService.uploadByBase64(data);
     }
 

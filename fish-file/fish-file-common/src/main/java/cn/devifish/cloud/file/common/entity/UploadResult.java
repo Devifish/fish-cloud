@@ -1,6 +1,8 @@
 package cn.devifish.cloud.file.common.entity;
 
+import cn.devifish.cloud.common.core.util.FilePathUtils;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 
@@ -20,7 +22,23 @@ public class UploadResult implements Serializable {
     /** 文件路径 **/
     private String path;
 
-    /** 文件全路径 **/
-    private String fullPath;
+    /** 域名 **/
+    private String domain;
+
+    /** 文件URL **/
+    private String url;
+
+    public UploadResult(String domain, String path) {
+        Assert.notNull(domain, "域名不能为空");
+        Assert.notNull(path, "路径不能为空");
+
+        var filename = FilePathUtils.getFilename(path);
+        var url = FilePathUtils.joinPath(domain, path);
+
+        this.filename = filename;
+        this.path = path;
+        this.domain = domain;
+        this.url = url;
+    }
 
 }
