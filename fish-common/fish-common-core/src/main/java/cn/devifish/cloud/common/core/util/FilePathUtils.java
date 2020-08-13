@@ -14,8 +14,8 @@ import java.util.UUID;
  */
 public class FilePathUtils {
 
-    protected static final String PATH_SEPARATOR = "/";
-    protected static final String EXTENSION_SEPARATOR = ".";
+    public static final String PATH_SEPARATOR = "/";
+    public static final String EXTENSION_SEPARATOR = ".";
 
     /**
      * 拼接文件路径

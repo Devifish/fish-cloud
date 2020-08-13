@@ -1,7 +1,7 @@
 package cn.devifish.cloud.file.server.service;
 
-import cn.devifish.cloud.common.core.constant.DateTimeConstant;
 import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.common.core.util.FileUtils;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import org.apache.commons.codec.binary.Base64;
@@ -23,6 +23,8 @@ import static cn.devifish.cloud.common.core.util.FilePathUtils.*;
  * @date 2020/8/3 16:37
  */
 public abstract class AbstractStorageService {
+
+    private static final String MONTH_DIR_PATTERN = "yyyy/MM";
 
     /**
      * 获取路径前缀
@@ -53,7 +55,13 @@ public abstract class AbstractStorageService {
             throw new BizException("内容不能为NULL");
 
         try (InputStream inputStream = new ByteArrayInputStream(content)) {
-            var fullPath = joinPath(pathPrefix(), currentMonth(), path);
+            var hashCode = FileUtils.md5HashCode(inputStream);
+            var extension = getExtension(path);
+            var filename = hashCode + EXTENSION_SEPARATOR + extension;
+            var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
+
+            // 重置流并上传
+            inputStream.reset();
             return upload(fullPath, inputStream);
         }
     }
@@ -68,9 +76,9 @@ public abstract class AbstractStorageService {
         if (file.isEmpty()) throw new BizException("上传文件不能为空");
 
         try (InputStream inputStream = file.getInputStream()) {
-            var originalFilename = file.getOriginalFilename();
-            var extension = getExtension(originalFilename);
-            var filename = generateFilename(extension);
+            var hashCode = FileUtils.md5HashCode(file);
+            var extension = getExtension(file.getOriginalFilename());
+            var filename = hashCode + EXTENSION_SEPARATOR + extension;
             var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
             return upload(fullPath, inputStream);
         }
@@ -96,6 +104,6 @@ public abstract class AbstractStorageService {
      */
     public String currentMonth() {
         var now = LocalDate.now();
-        return now.toString(DateTimeConstant.MONTH_PATTERN);
+        return now.toString(MONTH_DIR_PATTERN);
     }
 }
