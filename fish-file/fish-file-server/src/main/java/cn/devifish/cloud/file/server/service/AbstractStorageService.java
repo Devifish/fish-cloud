@@ -1,6 +1,5 @@
 package cn.devifish.cloud.file.server.service;
 
-import cn.devifish.cloud.common.core.constant.RegexpConstant;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.DigestUtils;
 import cn.devifish.cloud.common.core.util.DigestUtils.DigestAlgorithms;
@@ -29,7 +28,8 @@ import static cn.devifish.cloud.common.core.util.FilePathUtils.*;
 public abstract class AbstractStorageService {
 
     private static final String MONTH_DIR_PATTERN = "yyyy/MM";
-    private static final Pattern BASE64_FILE_PATTERN = Pattern.compile(RegexpConstant.BASE64_FILE);
+    private static final String BASE64_FILE = "^data:(?<type>[\\w/]+);base64,(?<data>[\\w+/=]+)$";
+    private static final Pattern BASE64_FILE_PATTERN = Pattern.compile(BASE64_FILE);
 
     /**
      * 获取路径前缀
@@ -107,14 +107,14 @@ public abstract class AbstractStorageService {
         // 获取文件名
         var filename = data.getFilename();
         if (StringUtils.isEmpty(filename) || StringUtils.isEmpty(getExtension(filename))) {
-            var type = matcher.group(1);
+            var type = matcher.group("type");
             var extension = type.replaceAll(".+/", "");
             filename = generateFilename(extension);
         }
 
         // 获取文件数据
-        var base64 = matcher.group(2);
-        var bytes = Base64.decodeBase64(base64);
+        var base64Data = matcher.group("data");
+        var bytes = Base64.decodeBase64(base64Data);
         return upload(filename, bytes);
     }
 
