@@ -29,6 +29,7 @@ import static cn.devifish.cloud.common.core.util.FilePathUtils.*;
 public abstract class AbstractStorageService {
 
     private static final String MONTH_DIR_PATTERN = "yyyy/MM";
+    private static final Pattern BASE64_FILE_PATTERN = Pattern.compile(RegexpConstant.BASE64_FILE);
 
     /**
      * 获取路径前缀
@@ -100,8 +101,7 @@ public abstract class AbstractStorageService {
      */
     public UploadResult uploadByBase64(Base64FileData data) throws IOException {
         var content = data.getContent();
-        var pattern = Pattern.compile(RegexpConstant.BASE64_FILE);
-        var matcher = pattern.matcher(content);
+        var matcher = BASE64_FILE_PATTERN.matcher(content);
         if (!matcher.find()) throw new BizException("Base64数据格式不匹配");
 
         // 获取文件名
