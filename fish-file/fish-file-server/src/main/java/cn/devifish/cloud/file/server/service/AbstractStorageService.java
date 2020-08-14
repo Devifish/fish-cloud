@@ -1,5 +1,6 @@
 package cn.devifish.cloud.file.server.service;
 
+import cn.devifish.cloud.common.core.constant.RegexpConstant;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.DigestUtils;
 import cn.devifish.cloud.common.core.util.DigestUtils.DigestAlgorithms;
@@ -7,12 +8,14 @@ import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
 import static cn.devifish.cloud.common.core.util.FilePathUtils.*;
 
@@ -47,18 +50,20 @@ public abstract class AbstractStorageService {
     /**
      * 文件上传
      *
-     * @param path 上传路径
+     * @param filename 文件名
      * @param content 文件数据
      * @return 服务端路径
      */
-    public UploadResult upload(String path, byte[] content) throws IOException {
+    public UploadResult upload(String filename, byte[] content) throws IOException {
         if (ArrayUtils.isEmpty(content))
             throw new BizException("内容不能为NULL");
 
         try (InputStream inputStream = new ByteArrayInputStream(content)) {
             var hashCode = DigestUtils.digest(DigestAlgorithms.MD5, inputStream);
-            var extension = getExtension(path);
-            var filename = hashCode + EXTENSION_SEPARATOR + extension;
+            var extension = getExtension(filename);
+
+            // 使用md5校验值代替文件名
+            filename = hashCode + EXTENSION_SEPARATOR + extension;
             var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
 
             // 重置流并上传
@@ -79,6 +84,8 @@ public abstract class AbstractStorageService {
         try (InputStream inputStream = file.getInputStream()) {
             var hashCode = DigestUtils.digest(DigestAlgorithms.MD5, file);
             var extension = getExtension(file.getOriginalFilename());
+
+            // 使用md5校验值代替文件名
             var filename = hashCode + EXTENSION_SEPARATOR + extension;
             var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
             return upload(fullPath, inputStream);
@@ -92,10 +99,22 @@ public abstract class AbstractStorageService {
      * @return 路径
      */
     public UploadResult uploadByBase64(Base64FileData data) throws IOException {
-        var filename = data.getFilename();
         var content = data.getContent();
-        var bytes = Base64.decodeBase64(content);
+        var pattern = Pattern.compile(RegexpConstant.BASE64_FILE);
+        var matcher = pattern.matcher(content);
+        if (!matcher.find()) throw new BizException("Base64数据格式不匹配");
 
+        // 获取文件名
+        var filename = data.getFilename();
+        if (StringUtils.isEmpty(filename) || StringUtils.isEmpty(getExtension(filename))) {
+            var type = matcher.group(1);
+            var extension = type.replaceAll(".+/", "");
+            filename = generateFilename(extension);
+        }
+
+        // 获取文件数据
+        var base64 = matcher.group(2);
+        var bytes = Base64.decodeBase64(base64);
         return upload(filename, bytes);
     }
 

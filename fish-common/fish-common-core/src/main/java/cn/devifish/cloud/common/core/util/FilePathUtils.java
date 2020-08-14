@@ -53,15 +53,15 @@ public class FilePathUtils {
      *
      * @return 文件名
      */
-    public static String generateFilename(String fileExtension) {
-        Assert.notNull(fileExtension, "文件拓展名不能为空");
+    public static String generateFilename(String extension) {
+        Assert.notNull(extension, "文件拓展名不能为空");
         var uuid = UUID.randomUUID();
         var fileNameBuilder = new StringBuilder(uuid.toString());
 
-        if (StringUtils.startsWith(fileExtension, EXTENSION_SEPARATOR)) {
-            fileNameBuilder.append(fileExtension);
+        if (StringUtils.startsWith(extension, EXTENSION_SEPARATOR)) {
+            fileNameBuilder.append(extension);
         }else {
-            fileNameBuilder.append(EXTENSION_SEPARATOR).append(fileExtension);
+            fileNameBuilder.append(EXTENSION_SEPARATOR).append(extension);
         }
         return fileNameBuilder.toString();
     }
