@@ -1,7 +1,6 @@
 package cn.devifish.cloud.common.security.error;
 
 import cn.devifish.cloud.common.security.exception.*;
-import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +72,6 @@ public class OAuth2SecurityExceptionTranslator implements WebResponseExceptionTr
 
         return ResponseEntity.status(status)
                 .headers(headers)
-                .cacheControl(CacheControl.noCache().noTransform())
                 .body(exception);
     }
 

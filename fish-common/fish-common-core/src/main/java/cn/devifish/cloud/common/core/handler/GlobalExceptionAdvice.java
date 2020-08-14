@@ -3,9 +3,9 @@ package cn.devifish.cloud.common.core.handler;
 import cn.devifish.cloud.common.core.MessageCode;
 import cn.devifish.cloud.common.core.RestfulEntity;
 import cn.devifish.cloud.common.core.exception.FishCloudException;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -21,7 +21,6 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.MessageFormat;
 import java.util.Arrays;
 
@@ -34,8 +33,7 @@ import java.util.Arrays;
  */
 @Slf4j
 @RestControllerAdvice
-@RequiredArgsConstructor
-@ConditionalOnClass(HttpServletRequest.class)
+@ConditionalOnWebApplication(type = Type.SERVLET)
 public class GlobalExceptionAdvice {
 
     /**
