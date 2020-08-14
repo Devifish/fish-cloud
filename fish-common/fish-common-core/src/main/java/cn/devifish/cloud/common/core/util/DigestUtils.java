@@ -20,17 +20,17 @@ public class DigestUtils {
     private static final int DEFAULT_BUFFER_SIZE = 4096;
 
     /**
-     * 计算文件的md5值
+     * 计算文件的digest值
      *
      * @param stream 输入流
-     * @return MD5 HashCode
+     * @return digest
      */
     public static String digest(DigestAlgorithms algorithm, InputStream stream) {
         try {
             var digest = MessageDigest.getInstance(algorithm.getValue());
             var buffer = new byte[DEFAULT_BUFFER_SIZE];
 
-            // 计算文件MD5
+            // 计算文件digest
             var length = -1;
             while ((length = stream.read(buffer, 0, DEFAULT_BUFFER_SIZE)) != -1) {
                 digest.update(buffer, 0, length);
@@ -45,10 +45,10 @@ public class DigestUtils {
     }
 
     /**
-     * 计算文件的md5值
+     * 计算文件的 digest 值
      *
      * @param file 上传文件流
-     * @return MD5 HashCode
+     * @return digest
      */
     public static String digest(DigestAlgorithms algorithm, MultipartFile file) throws IOException {
         try (var inputStream = file.getInputStream()) {

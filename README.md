@@ -23,7 +23,7 @@ Mybatis Plus | 3.3.2
   
 ## 模块说明
 ```
-└── fish-common --------------------------------- 公共组件工具包
+└── fish-common
      ├── fish-common-core ----------------------- 公共核心组件
      ├── fish-common-mybatis -------------------- 公共ORM组件(Mybatis)
      ├── fish-common-rabbitmq ------------------- 公共消息队列组件(RabbitMQ)
@@ -31,17 +31,17 @@ Mybatis Plus | 3.3.2
      ├── fish-common-security ------------------- 公共安全组件(Spring OAuth2)
      ├── fish-common-sentinel ------------------- 公共流量控制组件(Sentinel) [TODO]
      └── fish-common-swagger -------------------- 公共接口文档组件(Swagger) [TODO]
-└── fish-file ----------------------------------- 文件服务聚合包
+└── fish-file
      ├── fish-file-common ----------------------- 文件服务公共组件
      └── fish-file-server ----------------------- 文件服务
 ├── fish-gateway -------------------------------- Gateway 路由网关
-└── fish-message -------------------------------- 消息服务聚合包 [TODO]
-     ├── fish-message-common -------------------- 消息服务公共组件 [TODO]
-     └── fish-message-server -------------------- 消息服务 [TODO]
-└── fish-search --------------------------------- 搜索服务聚合包 [TODO]
+└── fish-message
+     ├── fish-message-common -------------------- 消息服务公共组件
+     └── fish-message-server -------------------- 消息服务
+└── fish-search
      ├── fish-search-common --------------------- 搜索服务公共组件 [TODO]
      └── fish-search-server --------------------- 搜索服务 [TODO]
-└── fish-upms ----------------------------------- 用户权限服务聚合包
+└── fish-upms
      ├── fish-upms-common ----------------------- 用户权限服务公共组件
      └── fish-upms-server ----------------------- 用户权限服务
 ```
