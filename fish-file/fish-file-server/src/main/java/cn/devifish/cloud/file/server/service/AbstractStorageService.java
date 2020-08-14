@@ -1,7 +1,8 @@
 package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
-import cn.devifish.cloud.common.core.util.FileUtils;
+import cn.devifish.cloud.common.core.util.DigestUtils;
+import cn.devifish.cloud.common.core.util.DigestUtils.DigestAlgorithms;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import org.apache.commons.codec.binary.Base64;
@@ -55,7 +56,7 @@ public abstract class AbstractStorageService {
             throw new BizException("内容不能为NULL");
 
         try (InputStream inputStream = new ByteArrayInputStream(content)) {
-            var hashCode = FileUtils.md5HashCode(inputStream);
+            var hashCode = DigestUtils.digest(DigestAlgorithms.MD5, inputStream);
             var extension = getExtension(path);
             var filename = hashCode + EXTENSION_SEPARATOR + extension;
             var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
@@ -76,7 +77,7 @@ public abstract class AbstractStorageService {
         if (file.isEmpty()) throw new BizException("上传文件不能为空");
 
         try (InputStream inputStream = file.getInputStream()) {
-            var hashCode = FileUtils.md5HashCode(file);
+            var hashCode = DigestUtils.digest(DigestAlgorithms.MD5, file);
             var extension = getExtension(file.getOriginalFilename());
             var filename = hashCode + EXTENSION_SEPARATOR + extension;
             var fullPath = joinPath(pathPrefix(), currentMonth(), filename);
@@ -91,10 +92,11 @@ public abstract class AbstractStorageService {
      * @return 路径
      */
     public UploadResult uploadByBase64(Base64FileData data) throws IOException {
+        var filename = data.getFilename();
         var content = data.getContent();
         var bytes = Base64.decodeBase64(content);
 
-        return upload(data.getFilename(), bytes);
+        return upload(filename, bytes);
     }
 
     /**
