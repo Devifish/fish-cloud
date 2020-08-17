@@ -27,7 +27,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "storage.qcloud.secret-id")
 public class QCloudCosConfiguration implements InitializingBean, DisposableBean {
 
-    private final CloudStorageProperties cloudStorageProperties;
+    private final StorageProperties storageProperties;
 
     private COSClient client;
 
@@ -37,7 +37,7 @@ public class QCloudCosConfiguration implements InitializingBean, DisposableBean 
      */
     @Override
     public void afterPropertiesSet() {
-        var config = cloudStorageProperties.getQcloud();
+        var config = storageProperties.getQcloud();
         var credentials = new BasicCOSCredentials(config.getSecretId(), config.getSecretKey());
         var clientConfig = new ClientConfig(new Region(config.getRegion()));
 

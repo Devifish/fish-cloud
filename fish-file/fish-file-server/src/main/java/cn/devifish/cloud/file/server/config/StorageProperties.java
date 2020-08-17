@@ -16,11 +16,13 @@ import org.springframework.context.annotation.Configuration;
 @Setter
 @Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "storage")
-public class CloudStorageProperties {
+public class StorageProperties {
 
     private ALiYunOSSConfig aliyun;
 
     private QCloudCOSConfig qcloud;
+
+    private LocalStorageConfig local;
 
     /**
      * 阿里云OSS配置参数
@@ -77,6 +79,23 @@ public class CloudStorageProperties {
 
         /** 腾讯云COS所属地区 **/
         private String region;
+    }
+
+    /**
+     * 本地存储配置参数
+     */
+    @Getter
+    @Setter
+    public static class LocalStorageConfig {
+
+        /** 域名 **/
+        private String domain;
+
+        /** 存储路径前缀 **/
+        private String prefix;
+
+        /** 存储路径 **/
+        private String path;
     }
 
 }

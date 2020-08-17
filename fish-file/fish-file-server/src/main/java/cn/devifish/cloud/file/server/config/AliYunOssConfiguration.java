@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "storage.aliyun.access-key-id")
 public class AliYunOssConfiguration implements InitializingBean, DisposableBean {
 
-    private final CloudStorageProperties cloudStorageProperties;
+    private final StorageProperties storageProperties;
 
     private OSSClient client;
 
@@ -36,7 +36,7 @@ public class AliYunOssConfiguration implements InitializingBean, DisposableBean 
      */
     @Override
     public void afterPropertiesSet() {
-        var config = cloudStorageProperties.getAliyun();
+        var config = storageProperties.getAliyun();
         var credentialProvider = new DefaultCredentialProvider(config.getAccessKeyId(), config.getAccessKeySecret());
         var clientBuilderConfiguration = new ClientBuilderConfiguration();
 

@@ -2,8 +2,8 @@ package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.file.common.entity.UploadResult;
-import cn.devifish.cloud.file.server.config.CloudStorageProperties;
-import cn.devifish.cloud.file.server.config.CloudStorageProperties.QCloudCOSConfig;
+import cn.devifish.cloud.file.server.config.StorageProperties;
+import cn.devifish.cloud.file.server.config.StorageProperties.QCloudCOSConfig;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.exception.CosClientException;
 import com.qcloud.cos.model.PutObjectRequest;
@@ -30,7 +30,7 @@ import java.io.InputStream;
 @ConditionalOnBean(COSClient.class)
 public class QCloudCosStorageService extends AbstractStorageService {
 
-    private final CloudStorageProperties cloudStorageProperties;
+    private final StorageProperties storageProperties;
     private final COSClient client;
 
     private QCloudCOSConfig config;
@@ -38,7 +38,7 @@ public class QCloudCosStorageService extends AbstractStorageService {
 
     @PostMapping
     private void init() {
-        var config = cloudStorageProperties.getQcloud();
+        var config = storageProperties.getQcloud();
 
         this.pathPrefix = config.getPrefix();
         this.config = config;

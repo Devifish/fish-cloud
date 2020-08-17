@@ -2,8 +2,8 @@ package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.file.common.entity.UploadResult;
-import cn.devifish.cloud.file.server.config.CloudStorageProperties;
-import cn.devifish.cloud.file.server.config.CloudStorageProperties.ALiYunOSSConfig;
+import cn.devifish.cloud.file.server.config.StorageProperties;
+import cn.devifish.cloud.file.server.config.StorageProperties.ALiYunOSSConfig;
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSException;
@@ -31,7 +31,7 @@ import java.io.InputStream;
 @ConditionalOnBean(OSSClient.class)
 public class AliYunOssStorageService extends AbstractStorageService {
 
-    private final CloudStorageProperties cloudStorageProperties;
+    private final StorageProperties storageProperties;
     private final OSSClient client;
 
     private ALiYunOSSConfig config;
@@ -39,7 +39,7 @@ public class AliYunOssStorageService extends AbstractStorageService {
 
     @PostConstruct
     private void init() {
-        var config = cloudStorageProperties.getAliyun();
+        var config = storageProperties.getAliyun();
 
         this.pathPrefix = config.getPrefix();
         this.config = config;
