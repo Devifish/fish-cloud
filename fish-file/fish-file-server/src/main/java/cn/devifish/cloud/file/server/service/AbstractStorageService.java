@@ -7,6 +7,7 @@ import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,8 +29,7 @@ import static cn.devifish.cloud.common.core.util.FilePathUtils.*;
 public abstract class AbstractStorageService {
 
     private static final String MONTH_DIR_PATTERN = "yyyy/MM";
-    private static final String BASE64_FILE = "^data:(?<type>[\\w/]+);base64,(?<data>[\\w+/=]+)$";
-    private static final Pattern BASE64_FILE_PATTERN = Pattern.compile(BASE64_FILE);
+    private static final String BASE64_FILE_PATTERN = "^data:(?<type>[\\w/]+);base64,(?<data>[\\w+/=]+)$";
 
     /**
      * 获取路径前缀
@@ -101,14 +101,14 @@ public abstract class AbstractStorageService {
      */
     public UploadResult uploadByBase64(Base64FileData data) throws IOException {
         var content = data.getContent();
-        var matcher = BASE64_FILE_PATTERN.matcher(content);
+        var matcher = Pattern.compile(BASE64_FILE_PATTERN).matcher(content);
         if (!matcher.find()) throw new BizException("Base64数据格式不匹配");
 
         // 获取文件名
         var filename = data.getFilename();
         if (StringUtils.isEmpty(filename) || StringUtils.isEmpty(getExtension(filename))) {
             var type = matcher.group("type");
-            var extension = type.replaceAll(".+/", "");
+            var extension = RegExUtils.removeAll(type, ".+/");
             filename = generateFilename(extension);
         }
 
