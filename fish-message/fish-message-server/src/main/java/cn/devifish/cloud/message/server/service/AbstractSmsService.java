@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractSmsService {
 
     private static final int DEFAULT_MAX_RETRY = 2;
-    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\$\\{([^}]+)}");
+    private static final String PLACEHOLDER_PATTERN = "\\$\\{([^}]+)}";
 
     @Autowired
     private SmsTemplateService smsTemplateService;
@@ -85,13 +85,14 @@ public abstract class AbstractSmsService {
         Assert.notNull(smsTemplate, "模板不存在");
 
         var template = smsTemplate.getContent();
-        var matcher = PLACEHOLDER_PATTERN.matcher(template);
+        var pattern = Pattern.compile(PLACEHOLDER_PATTERN);
+        var matcher = pattern.matcher(template);
         while (matcher.find()) {
             var key = matcher.group(1);
             if (params.containsKey(key)) {
                 var value = params.get(key);
                 template = matcher.replaceFirst(value.toString());
-                matcher = PLACEHOLDER_PATTERN.matcher(template);
+                matcher = pattern.matcher(template);
             }else {
                 throw new UtilException("缺少必要参数：" + key);
             }

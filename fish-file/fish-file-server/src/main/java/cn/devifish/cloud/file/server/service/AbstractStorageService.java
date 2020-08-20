@@ -7,7 +7,6 @@ import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,7 +107,7 @@ public abstract class AbstractStorageService {
         var filename = data.getFilename();
         if (StringUtils.isEmpty(filename) || StringUtils.isEmpty(getExtension(filename))) {
             var type = matcher.group("type");
-            var extension = RegExUtils.removeAll(type, ".+/");
+            var extension = type.replaceAll(".+/", StringUtils.EMPTY);
             filename = generateFilename(extension);
         }
 
