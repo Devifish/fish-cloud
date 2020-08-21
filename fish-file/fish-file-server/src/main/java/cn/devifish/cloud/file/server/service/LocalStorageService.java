@@ -1,6 +1,7 @@
 package cn.devifish.cloud.file.server.service;
 
 import cn.devifish.cloud.file.common.entity.UploadResult;
+import cn.devifish.cloud.file.server.config.LocalStorageConfiguration;
 import cn.devifish.cloud.file.server.config.StorageProperties;
 import cn.devifish.cloud.file.server.config.StorageProperties.LocalStorageConfig;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ import java.nio.file.Paths;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@ConditionalOnBean(StorageProperties.class)
+@ConditionalOnBean(LocalStorageConfiguration.class)
 public class LocalStorageService extends AbstractStorageService {
 
     private final StorageProperties storageProperties;
