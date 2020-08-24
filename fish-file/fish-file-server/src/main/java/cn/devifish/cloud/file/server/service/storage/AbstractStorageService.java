@@ -1,10 +1,11 @@
-package cn.devifish.cloud.file.server.service;
+package cn.devifish.cloud.file.server.service.storage;
 
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.DigestUtils;
 import cn.devifish.cloud.common.core.util.DigestUtils.DigestAlgorithms;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
+import cn.devifish.cloud.file.server.service.StorageService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,12 +21,12 @@ import static cn.devifish.cloud.common.core.util.FilePathUtils.*;
 
 /**
  * StorageService
- * 存储服务
+ * 存储服务抽象类
  *
  * @author Devifish
  * @date 2020/8/3 16:37
  */
-public abstract class AbstractStorageService {
+public abstract class AbstractStorageService implements StorageService {
 
     private static final String MONTH_DIR_PATTERN = "yyyy/MM";
     private static final String BASE64_FILE_PATTERN = "^data:(?<type>[\\w/]+);base64,(?<data>[\\w+/=]+)$";
@@ -54,7 +55,7 @@ public abstract class AbstractStorageService {
      * @param content 文件数据
      * @return 服务端路径
      */
-    public UploadResult upload(String filename, byte[] content) throws IOException {
+    protected UploadResult upload(String filename, byte[] content) throws IOException {
         if (ArrayUtils.isEmpty(content))
             throw new BizException("内容不能为NULL");
 
@@ -78,6 +79,7 @@ public abstract class AbstractStorageService {
      * @param file 文件
      * @return 路径
      */
+    @Override
     public UploadResult uploadByMultipart(MultipartFile file) throws IOException {
         if (file.isEmpty()) throw new BizException("上传文件不能为空");
 
@@ -98,6 +100,7 @@ public abstract class AbstractStorageService {
      * @param data Base64文件数据
      * @return 路径
      */
+    @Override
     public UploadResult uploadByBase64(Base64FileData data) throws IOException {
         var content = data.getContent();
         var matcher = Pattern.compile(BASE64_FILE_PATTERN).matcher(content);

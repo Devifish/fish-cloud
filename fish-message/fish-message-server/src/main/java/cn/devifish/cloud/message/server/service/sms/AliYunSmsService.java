@@ -1,4 +1,4 @@
-package cn.devifish.cloud.message.server.service;
+package cn.devifish.cloud.message.server.service.sms;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.message.server.config.ShortMessageServiceProperties;

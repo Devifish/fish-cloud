@@ -1,4 +1,4 @@
-package cn.devifish.cloud.file.server.service;
+package cn.devifish.cloud.file.server.service.storage;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
 import cn.devifish.cloud.file.common.entity.UploadResult;
@@ -52,7 +52,7 @@ public class AliYunOssStorageService extends AbstractStorageService {
      * @return 路径前缀
      */
     @Override
-    protected String pathPrefix() {
+    public String pathPrefix() {
         return pathPrefix;
     }
 
@@ -64,7 +64,7 @@ public class AliYunOssStorageService extends AbstractStorageService {
      * @return 服务端路径
      */
     @Override
-    protected UploadResult upload(String path, InputStream inputStream) {
+    public UploadResult upload(String path, InputStream inputStream) {
         var request = new PutObjectRequest(
             config.getBucketName(), path, inputStream, null);
 

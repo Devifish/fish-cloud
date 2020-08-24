@@ -4,4 +4,6 @@ description "消息服务公共模块"
 
 dependencies {
     api project(":fish-common:fish-common-core")
+    compileOnly project(":fish-common:fish-common-mybatis")
+    compileOnly project(":fish-common:fish-common-rabbitmq")
 }

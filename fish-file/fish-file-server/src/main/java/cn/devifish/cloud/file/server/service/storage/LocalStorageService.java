@@ -1,4 +1,4 @@
-package cn.devifish.cloud.file.server.service;
+package cn.devifish.cloud.file.server.service.storage;
 
 import cn.devifish.cloud.file.common.entity.UploadResult;
 import cn.devifish.cloud.file.server.config.LocalStorageConfiguration;

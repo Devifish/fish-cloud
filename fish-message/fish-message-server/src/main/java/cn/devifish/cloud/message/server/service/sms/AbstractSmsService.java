@@ -1,6 +1,8 @@
-package cn.devifish.cloud.message.server.service;
+package cn.devifish.cloud.message.server.service.sms;
 
 import cn.devifish.cloud.common.core.exception.UtilException;
+import cn.devifish.cloud.message.server.service.SmsService;
+import cn.devifish.cloud.message.server.service.SmsTemplateService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
  * @author Devifish
  * @date 2020/8/4 17:32
  */
-public abstract class AbstractSmsService {
+public abstract class AbstractSmsService implements SmsService {
 
     private static final int DEFAULT_MAX_RETRY = 2;
     private static final String PLACEHOLDER_PATTERN = "\\$\\{([^}]+)}";
@@ -43,6 +45,7 @@ public abstract class AbstractSmsService {
      * @param telephone 电话号码
      * @param content 短信内容
      */
+    @Override
     public void send(String telephone, String signature, String content) {
         send(telephone, signature, content, DEFAULT_MAX_RETRY);
     }
@@ -56,6 +59,7 @@ public abstract class AbstractSmsService {
      * @param templateCode 模板编号
      * @param params 参数
      */
+    @Override
     public void send(String telephone, String signature, String templateCode, Map<String, Object> params) {
         var content = formatMessage(templateCode, params);
         send(telephone, signature, content);
@@ -69,6 +73,7 @@ public abstract class AbstractSmsService {
      * @param templateCode 模板编号
      * @param params 参数
      */
+    @Override
     public void send(String telephone, String templateCode, Map<String, Object> params) {
         send(telephone, getDefaultSignature(), templateCode, params);
     }

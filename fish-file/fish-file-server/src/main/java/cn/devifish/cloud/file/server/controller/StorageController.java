@@ -3,7 +3,7 @@ package cn.devifish.cloud.file.server.controller;
 import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.file.common.entity.Base64FileData;
 import cn.devifish.cloud.file.common.entity.UploadResult;
-import cn.devifish.cloud.file.server.service.AbstractStorageService;
+import cn.devifish.cloud.file.server.service.StorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +24,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class StorageController {
 
-    private final AbstractStorageService storageService;
+    private final StorageService storageService;
 
     /**
      * 文件上传（表单方式）
