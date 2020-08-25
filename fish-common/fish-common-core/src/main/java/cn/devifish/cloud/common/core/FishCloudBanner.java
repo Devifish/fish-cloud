@@ -8,8 +8,6 @@ import org.springframework.boot.ansi.AnsiStyle;
 import org.springframework.core.env.Environment;
 
 import java.io.PrintStream;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * FishCloudBanner
@@ -28,15 +26,14 @@ public class FishCloudBanner implements Banner {
     };
 
     private static final String SPRING_BOOT = "Power by SpringBoot (v%s)";
+    private static final String SPACE = " ";
 
     @Override
     public void printBanner(Environment environment, Class<?> sourceClass, PrintStream printStream) {
         var strap_line_size = BANNER[BANNER.length - 1].length();
         var banner = String.join("\n", BANNER);
         var version = String.format(SPRING_BOOT, SpringBootVersion.getVersion());
-        var padding = Stream.generate(() -> " ")
-                .limit(strap_line_size - version.length())
-                .collect(Collectors.joining());
+        var padding = SPACE.repeat(strap_line_size - version.length());
 
         // 输出到控制台
         printStream.println();

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.locks.Lock;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,8 +64,8 @@ public class SmsCodeService {
      */
     public String generate(String telephone, SmsCodeType type) {
         var suffix = type.getParam();
-        String key = smsCodeCache.generatorCacheKey(telephone, suffix);
-        Lock lock = redisLockRegistry.obtain(key);
+        var key = smsCodeCache.generatorCacheKey(telephone, suffix);
+        var lock = redisLockRegistry.obtain(key);
 
         if (!lock.tryLock()) {
             log.warn("阻止用户生成验证码, 检测到[telephone：{}]存在并发调用接口行为", telephone);
@@ -79,7 +78,7 @@ public class SmsCodeService {
 
             //当缓存内没有当前号码的验证码 或 达到验证码可重试时间要求 发送验证码给用户
             if (SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_TIMEOUT - SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_RETRY > expire) {
-                String captcha = Stream.generate(Math::random)
+                var captcha = Stream.generate(Math::random)
                     .map(random -> Integer.toString((int) (random * 10)))
                     .limit(SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_LENGTH)
                     .collect(Collectors.joining());
