@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.stream.DoubleStream;
 
 import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
 
@@ -73,14 +73,16 @@ public class SmsCodeService {
         }
 
         try {
-            long expire = Optional.ofNullable(smsCodeCache.getExpire(telephone, suffix))
+            var timeout = SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_TIMEOUT - SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_RETRY;
+            var expire = Optional.ofNullable(smsCodeCache.getExpire(telephone, suffix))
                 .orElse(NumberUtils.LONG_ZERO);
 
             //当缓存内没有当前号码的验证码 或 达到验证码可重试时间要求 发送验证码给用户
-            if (SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_TIMEOUT - SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_RETRY > expire) {
-                var captcha = Stream.generate(Math::random)
-                    .map(random -> Integer.toString((int) (random * 10)))
+            if (timeout > expire) {
+                var captcha = DoubleStream.generate(Math::random)
                     .limit(SmsCodeConstant.SHORT_MESSAGE_CAPTCHA_LENGTH)
+                    .mapToInt(random -> (int) (random * 10))
+                    .mapToObj(Integer::toString)
                     .collect(Collectors.joining());
 
                 //缓存验证码到Redis
