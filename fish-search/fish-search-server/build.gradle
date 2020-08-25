@@ -6,11 +6,9 @@ mainClassName = "cn.devifish.cloud.search.server.SearchApplication"
 
 dependencies {
     implementation project(":fish-search:fish-search-common")
-    implementation project(":fish-common:fish-common-core")
+    implementation project(":fish-common:fish-common-webmvc")
     implementation project(":fish-common:fish-common-sentinel")
 
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-data-elasticsearch"
 
     implementation "com.alibaba.cloud:spring-cloud-starter-alibaba-nacos-discovery"

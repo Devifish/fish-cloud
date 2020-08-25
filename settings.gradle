@@ -16,6 +16,8 @@ include ":fish-common:fish-common-redis"
 include ":fish-common:fish-common-security"
 include ":fish-common:fish-common-sentinel"
 include ":fish-common:fish-common-swagger"
+include ":fish-common:fish-common-webmvc"
+include ":fish-common:fish-common-webflux"
 
 include ":fish-file:fish-file-common"
 include ":fish-file:fish-file-server"

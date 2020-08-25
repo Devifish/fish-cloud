@@ -1,0 +1,10 @@
+apply plugin: 'java-library'
+
+description "公共WebFlux组件"
+
+dependencies {
+    api project(":fish-common:fish-common-core")
+
+    api "org.springframework.boot:spring-boot-starter-webflux"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+}

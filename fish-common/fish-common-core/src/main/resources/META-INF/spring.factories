@@ -1,7 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.devifish.cloud.common.core.config.JacksonConfiguration,\
   cn.devifish.cloud.common.core.config.RestTemplateConfiguration,\
-  cn.devifish.cloud.common.core.config.IdGeneratorConfiguration,\
-  cn.devifish.cloud.common.core.config.WebMvcConfiguration,\
-  cn.devifish.cloud.common.core.config.WebFluxConfiguration,\
-  cn.devifish.cloud.common.core.handler.GlobalExceptionAdvice
+  cn.devifish.cloud.common.core.config.IdGeneratorConfiguration

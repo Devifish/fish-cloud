@@ -1,4 +1,4 @@
-package cn.devifish.cloud.common.core.handler;
+package cn.devifish.cloud.common.webmvc.handler;
 
 import cn.devifish.cloud.common.core.RestfulEntity;
 import org.springframework.core.MethodParameter;
@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author Devifish
  * @date 2020/7/6 18:27
- * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor
+ * @see RequestResponseBodyMethodProcessor
  * @see org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodProcessor
  */
 public class RestfulResponseMethodProcessor extends RequestResponseBodyMethodProcessor {

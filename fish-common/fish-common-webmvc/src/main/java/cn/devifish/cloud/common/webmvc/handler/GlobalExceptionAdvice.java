@@ -1,11 +1,9 @@
-package cn.devifish.cloud.common.core.handler;
+package cn.devifish.cloud.common.webmvc.handler;
 
 import cn.devifish.cloud.common.core.MessageCode;
 import cn.devifish.cloud.common.core.RestfulEntity;
 import cn.devifish.cloud.common.core.exception.FishCloudException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication.Type;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -33,7 +31,6 @@ import java.util.Arrays;
  */
 @Slf4j
 @RestControllerAdvice
-@ConditionalOnWebApplication(type = Type.SERVLET)
 public class GlobalExceptionAdvice {
 
     /**

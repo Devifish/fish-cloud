@@ -30,7 +30,9 @@ Mybatis Plus | 3.3.2
      ├── fish-common-redis ---------------------- 公共缓存组件(Redis)
      ├── fish-common-security ------------------- 公共安全组件(Spring OAuth2)
      ├── fish-common-sentinel ------------------- 公共流量控制组件(Sentinel) [TODO]
-     └── fish-common-swagger -------------------- 公共接口文档组件(Swagger) [TODO]
+     ├── fish-common-swagger -------------------- 公共接口文档组件(Swagger) [TODO]
+     ├── fish-common-webflux -------------------- 公共WebFlux组件
+     └── fish-common-webmvc --------------------- 公共WebMvc组件
 └── fish-file
      ├── fish-file-common ----------------------- 文件服务公共组件
      └── fish-file-server ----------------------- 文件服务
