@@ -6,5 +6,5 @@ dependencies {
     api project(":fish-common:fish-common-core")
 
     api "org.springframework.boot:spring-boot-starter-webflux"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    api "org.springframework.boot:spring-boot-starter-actuator"
 }

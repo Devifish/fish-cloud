@@ -1,8 +1,8 @@
 package cn.devifish.cloud.common.webmvc;
 
 import cn.devifish.cloud.common.webmvc.config.WebMvcConfiguration;
-import cn.devifish.cloud.common.webmvc.handler.GlobalExceptionAdvice;
 import cn.devifish.cloud.common.webmvc.handler.RestfulResponseMethodProcessor;
+import cn.devifish.cloud.common.webmvc.handler.WebMvcExceptionAdvice;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -22,7 +22,7 @@ import java.util.Objects;
  * @author Devifish
  * @date 2020/8/25 17:16
  */
-@Import({GlobalExceptionAdvice.class, WebMvcConfiguration.class})
+@Import({WebMvcConfiguration.class, WebMvcExceptionAdvice.class})
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnWebApplication(type = Type.SERVLET)
 public class WebMvcAutoConfiguration {
