@@ -78,6 +78,7 @@ services:
       - nacos-server
       - mariadb
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   fish-message-server:
@@ -88,7 +89,9 @@ services:
       - 10200:10200
     depends_on:
       - nacos-server
+      - mariadb
       - redis
+      - rabbitmq
     restart: unless-stopped
 
   fish-search-server:
