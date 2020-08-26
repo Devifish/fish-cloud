@@ -4,14 +4,14 @@
 [![license](https://img.shields.io/github/license/Devifish/fish-cloud)](https://github.com/Devifish/fish-cloud)
 
 > 基于 Spring Cloud Hoxton & Alibaba 微服务框架开发<br/>
-> 紧跟 Java 长期支持版 代码库使用 Java 11 源码级别<br/>
-> 使用 Lambda、Java Stream Api 现代化的函数式编码<br/>
+> 使用现代化的函数式编码 如 Lambda、Java Stream Api、 Spring Reactive<br/>
 > 提供对 Docker 容器环境运行的支持,可使用 Docker Compose、Kubernetes 编排
 
 ## 依赖环境
 依赖 | 版本
 ---|---
 Java Language | 11
+Gradle | 6.4.1
 Spring Boot | 2.3.2.RELEASE
 Spring Cloud | Hoxton.SR6
 Spring Cloud Alibaba | 2.2.1.RELEASE
@@ -31,8 +31,8 @@ Mybatis Plus | 3.3.2
      ├── fish-common-security ------------------- 公共安全组件(Spring OAuth2)
      ├── fish-common-sentinel ------------------- 公共流量控制组件(Sentinel) [TODO]
      ├── fish-common-swagger -------------------- 公共接口文档组件(Swagger) [TODO]
-     ├── fish-common-webflux -------------------- 公共WebFlux组件
-     └── fish-common-webmvc --------------------- 公共WebMvc组件
+     ├── fish-common-webflux -------------------- 公共WebFlux组件(Reactive)
+     └── fish-common-webmvc --------------------- 公共WebMvc组件(Servlet)
 └── fish-file
      ├── fish-file-common ----------------------- 文件服务公共组件
      └── fish-file-server ----------------------- 文件服务
