@@ -1,24 +1,9 @@
 plugins {
-    id 'org.springframework.boot' version '2.3.2.RELEASE' apply false
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE' apply false
+    id 'org.springframework.boot' version "${springBootVersion}" apply false
+    id 'io.spring.dependency-management' version "1.0.10.RELEASE" apply false
 }
 
 description = 'Spring Cloud 微服务开发框架'
-
-ext {
-    javaVersion = JavaVersion.VERSION_11
-    library = [
-        springBootVersion = "2.3.2.RELEASE",
-        springCloudVersion = "Hoxton.SR7",
-        springCloudAlibabaVersion = "2.2.1.RELEASE",
-
-        fastjsonVersion = "1.2.72",
-        mybatisPlusVersion = "3.3.1",
-        aliyunSdkCoreVersion = "4.5.6",
-        aliyunOssVersion = "3.10.2",
-        qcloudCosVersion = "5.6.28"
-    ]
-}
 
 allprojects {
     apply plugin: 'io.spring.dependency-management'
@@ -57,8 +42,8 @@ allprojects {
 subprojects {
     apply plugin: 'java'
 
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     dependencies {
         compileOnly "org.projectlombok:lombok"
