@@ -2,9 +2,10 @@ package cn.devifish.cloud.common.mybatis.config;
 
 import cn.devifish.cloud.common.core.generator.IdGenerator;
 import cn.devifish.cloud.common.mybatis.handler.MybatisMetaObjectHandler;
+import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,13 +38,18 @@ public class MybatisConfiguration {
      * @return PaginationInterceptor
      */
     @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        log.info("Initializing Mybatis Pagination");
-        PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
+    public MybatisPlusInterceptor mybatisPlusInterceptor() {
+        log.info("Initializing Mybatis Plus Interceptor");
+        var interceptor = new MybatisPlusInterceptor();
 
-        // 开启 count 的 join 优化,只针对部分 left join
-        paginationInterceptor.setCountSqlParser(new JsqlParserCountOptimize(true));
-        return paginationInterceptor;
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        return interceptor;
+    }
+
+    @Bean
+    @SuppressWarnings("deprecation")
+    public ConfigurationCustomizer configurationCustomizer() {
+        return configuration -> configuration.setUseDeprecatedExecutor(false);
     }
 
     /**
