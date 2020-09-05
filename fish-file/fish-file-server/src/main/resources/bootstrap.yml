@@ -11,10 +11,10 @@ spring:
     nacos:
       discovery:
         server-addr: nacos-server:8848
-        group: ${spring.profiles.active}-group
+        namespace: ${spring.profiles.active}
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
-        group: ${spring.cloud.nacos.discovery.group}
+        namespace: ${spring.cloud.nacos.discovery.namespace}
         file-extension: yml
         shared-configs:
           - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
