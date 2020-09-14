@@ -1,4 +1,5 @@
 # Fish Cloud
+
 [![Build status](https://ci.appveyor.com/api/projects/status/apa6tcw8v7dxc1l2?svg=true)](https://ci.appveyor.com/project/Devifish/fish-cloud)
 [![star](https://img.shields.io/github/stars/Devifish/fish-cloud.svg?logo=github)](https://github.com/Devifish/fish-cloud)
 [![license](https://img.shields.io/github/license/Devifish/fish-cloud)](https://github.com/Devifish/fish-cloud)
@@ -7,21 +8,26 @@
 > 使用现代化的函数式编码 如 Lambda、Java Stream Api、 Spring Reactive<br/>
 > 提供对 Docker 容器环境运行的支持,可使用 Docker Compose、Kubernetes 编排
 
-## 依赖环境
-依赖 | 版本
----|---
-Java Language | 11
-Gradle | 6.4.1
-Spring Boot | 2.3.2.RELEASE
-Spring Cloud | Hoxton.SR6
-Spring Cloud Alibaba | 2.2.1.RELEASE
-Mybatis Plus | 3.3.2
+- 前端实现：https://github.com/Devifish/fish-cloud-ui
+- 在线体验：https://cloud.devifish.cn (admin/123456)
 
-- 要求 JDK 11+, 代码库基于 Java 11开发无法使用其以下版本运行
-- 其余依赖包版本基本源自 ```Spring Boot``` ```Spring Cloud``` ```Spring Cloud Alibaba``` 提供的DependencyManagement
-- 中间件依赖环境建议使用提供的 ```docker-compose``` 构建
-  
+## 依赖环境
+
+| 依赖                 | 版本          |
+| -------------------- | ------------- |
+| Java Language        | 11            |
+| Gradle               | 6.4.1         |
+| Spring Boot          | 2.3.2.RELEASE |
+| Spring Cloud         | Hoxton.SR6    |
+| Spring Cloud Alibaba | 2.2.1.RELEASE |
+| Mybatis Plus         | 3.3.2         |
+
+- 要求 JDK 11+, 代码库基于 Java 11 开发无法使用其以下版本运行
+- 其余依赖包版本基本源自 `Spring Boot` `Spring Cloud` `Spring Cloud Alibaba` 提供的 DependencyManagement
+- 中间件依赖环境建议使用提供的 `docker-compose` 构建
+
 ## 模块说明
+
 ```
 └── fish-common
      ├── fish-common-core ----------------------- 公共核心组件
