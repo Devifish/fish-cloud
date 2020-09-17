@@ -35,10 +35,9 @@ public class OAuth2SecurityExceptionRenderer implements OAuth2ExceptionRenderer 
 
         var inputMessage = createHttpInputMessage(webRequest);
         var outputMessage = createHttpOutputMessage(webRequest);
-        if (httpEntity instanceof ResponseEntity && webRequest instanceof ServerHttpResponse) {
-            var serverHttpResponse = ((ServerHttpResponse) outputMessage);
+        if (httpEntity instanceof ResponseEntity && outputMessage instanceof ServerHttpResponse) {
             var responseEntity = (ResponseEntity<?>) httpEntity;
-            serverHttpResponse.setStatusCode(responseEntity.getStatusCode());
+            ((ServerHttpResponse) outputMessage).setStatusCode(responseEntity.getStatusCode());
         }
 
         var entityHeaders = httpEntity.getHeaders();
