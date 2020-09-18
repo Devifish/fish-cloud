@@ -3,13 +3,16 @@ package cn.devifish.cloud.upms.server.service;
 import cn.devifish.cloud.common.core.constant.RegexpConstant;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.BeanUtils;
+import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.BasicUser;
 import cn.devifish.cloud.common.security.util.AuthorityUtils;
 import cn.devifish.cloud.common.security.util.SecurityUtils;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
+import cn.devifish.cloud.upms.common.dto.UserPageDTO;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.enums.SexEnum;
 import cn.devifish.cloud.upms.common.enums.SmsCodeType;
+import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.cache.UserCache;
 import cn.devifish.cloud.upms.server.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
@@ -72,6 +75,17 @@ public class UserService implements UserDetailsService {
         if (principal == null) throw new BizException("获取当前用户失败");
 
         return selectById(principal.getUserId());
+    }
+
+    /**
+     * 分页查询用户数据
+     *
+     * @param param 查询参数
+     * @return Page<UserVO>
+     */
+    public Page<UserVO> selectPage(UserPageDTO param) {
+        return userMapper.selectPage(Page.of(param), param)
+            .map(item -> BeanUtils.copyProperties(item, UserVO::new));
     }
 
     /**

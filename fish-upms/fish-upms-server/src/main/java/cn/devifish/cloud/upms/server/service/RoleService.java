@@ -1,7 +1,9 @@
 package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
+import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
+import cn.devifish.cloud.upms.common.dto.RolePageDTO;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.server.cache.RoleCache;
 import cn.devifish.cloud.upms.server.mapper.RoleMapper;
@@ -51,6 +53,16 @@ public class RoleService {
             throw new BizException(PreconditionFailed, "角色ID不能为空");
 
         return roleCache.getIfAbsent(roleId, roleMapper::selectById);
+    }
+
+    /**
+     * 分页查询角色数据
+     *
+     * @param param 参数
+     * @return Page<Role>
+     */
+    public Page<Role> selectPage(RolePageDTO param) {
+        return roleMapper.selectPage(Page.of(param), param);
     }
 
     /**

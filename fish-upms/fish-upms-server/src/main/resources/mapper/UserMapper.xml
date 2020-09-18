@@ -76,4 +76,19 @@
         </where>
     </select>
 
+    <select id="selectPage" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM upms_user AS u
+        <where>
+            u.delete_flag = 0
+            <if test="param.username != null and param.username != ''">
+                and u.username LIKE CONCAT('%', #{param.username}, '%')
+            </if>
+            <if test="param.telephone != null and param.telephone != ''">
+                and u.telephone LIKE CONCAT('%', #{param.telephone}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

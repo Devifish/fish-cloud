@@ -1,8 +1,11 @@
 package cn.devifish.cloud.upms.server.mapper;
 
+import cn.devifish.cloud.common.mybatis.Page;
+import cn.devifish.cloud.upms.common.dto.UserPageDTO;
 import cn.devifish.cloud.upms.common.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * UserMapper
@@ -47,5 +50,14 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 统计
      */
     Integer countByTelephone(String telephone);
+
+    /**
+     * 分页查询用户数据
+     * 不包含已逻辑删除数据
+     *
+     * @param page Page
+     * @return Page<User>
+     */
+    Page<User> selectPage(Page<?> page, @Param("param") UserPageDTO param);
 
 }

@@ -45,4 +45,16 @@
         </where>
     </select>
 
+    <select id="selectPage" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM upms_role AS r
+        <where>
+            r.delete_flag = 0
+            <if test="param.name != null and param.name != ''">
+                and r.name LIKE CONCAT('%', #{param.name}, '%')
+            </if>
+        </where>
+    </select>
+
 </mapper>

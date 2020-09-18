@@ -1,5 +1,7 @@
 package cn.devifish.cloud.upms.server.mapper;
 
+import cn.devifish.cloud.common.mybatis.Page;
+import cn.devifish.cloud.upms.common.dto.RolePageDTO;
 import cn.devifish.cloud.upms.common.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,5 +32,13 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return Integer
      */
     Integer countByCode(String code);
+
+    /**
+     * 分页查询角色数据
+     *
+     * @param param 参数
+     * @return Page<Role>
+     */
+    Page<Role> selectPage(Page<?> page, RolePageDTO param);
 
 }

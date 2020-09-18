@@ -1,6 +1,8 @@
 package cn.devifish.cloud.upms.server.controller;
 
+import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.annotation.OpenApi;
+import cn.devifish.cloud.upms.common.dto.RolePageDTO;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.server.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +13,6 @@ import java.util.Set;
 
 /**
  * RoleController
- *
  *
  * @author Devifish
  * @date 2020/7/13 10:45
@@ -32,6 +33,17 @@ public class RoleController {
     @GetMapping("/select/id/{roleId}")
     public Role selectById(@PathVariable Long roleId) {
         return roleService.selectById(roleId);
+    }
+
+    /**
+     * 分页查询角色数据
+     *
+     * @param param 参数
+     * @return Page<Role>
+     */
+    @GetMapping("/select/page")
+    public Page<Role> selectPage(RolePageDTO param) {
+        return roleService.selectPage(param);
     }
 
     /**
@@ -60,7 +72,7 @@ public class RoleController {
     /**
      * 根据角色ID更新角色权限
      *
-     * @param roleId 角色ID
+     * @param roleId      角色ID
      * @param authorities 权限集合
      * @return 是否成功
      */

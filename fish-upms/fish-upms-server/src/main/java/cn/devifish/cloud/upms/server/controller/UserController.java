@@ -1,8 +1,10 @@
 package cn.devifish.cloud.upms.server.controller;
 
 import cn.devifish.cloud.common.core.util.BeanUtils;
+import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
+import cn.devifish.cloud.upms.common.dto.UserPageDTO;
 import cn.devifish.cloud.upms.common.enums.SmsCodeType;
 import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.service.UserService;
@@ -47,6 +49,17 @@ public class UserController {
     public UserVO selectById(@PathVariable Long userId) {
         var user = userService.selectById(userId);
         return BeanUtils.copyProperties(user, UserVO::new);
+    }
+
+    /**
+     * 分页查询用户数据
+     *
+     * @param param 查询参数
+     * @return Page<UserVO>
+     */
+    @GetMapping("/select/page")
+    public Page<UserVO> selectPage(UserPageDTO param) {
+        return userService.selectPage(param);
     }
 
     /**
