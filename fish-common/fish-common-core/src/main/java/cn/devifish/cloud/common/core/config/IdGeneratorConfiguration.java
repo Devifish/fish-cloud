@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 /**
  * SnowflakeIdConfiguration
@@ -36,7 +37,7 @@ public class IdGeneratorConfiguration {
      */
     @PostConstruct
     private void init() {
-        var localMacAddress = NetworkUtils.getLocalMacAddress();
+        var localMacAddress = Optional.ofNullable(NetworkUtils.getLocalMacAddress());
 
         this.dataCenterId = Math.abs(applicationName.hashCode() % SnowflakeIdGenerator.MAX_DATA_CENTER_ID);
         this.machineId = Math.abs(localMacAddress.hashCode() % SnowflakeIdGenerator.MAX_MACHINE_ID);

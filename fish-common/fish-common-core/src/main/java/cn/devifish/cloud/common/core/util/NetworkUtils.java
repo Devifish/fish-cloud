@@ -36,8 +36,6 @@ public class NetworkUtils {
         final LinkedHashSet<InetAddress> localAddressList = getLocalAddressList(address -> {
             // 非loopback地址，指127.*.*.*的地址
             return !address.isLoopbackAddress()
-                    // 非地区本地地址，指10.0.0.0 ~ 10.255.255.255、172.16.0.0 ~ 172.31.255.255、192.168.0.0 ~ 192.168.255.255
-                    && !address.isSiteLocalAddress()
                     // 需为IPV4地址
                     && address instanceof Inet4Address;
         });
@@ -70,10 +68,6 @@ public class NetworkUtils {
             networkInterfaces = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException e) {
             throw new UtilException(e);
-        }
-
-        if (networkInterfaces == null) {
-            throw new UtilException("Get network interface error!");
         }
 
         final LinkedHashSet<InetAddress> ipSet = new LinkedHashSet<>();
