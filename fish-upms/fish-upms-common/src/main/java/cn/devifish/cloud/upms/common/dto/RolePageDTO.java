@@ -18,4 +18,6 @@ public class RolePageDTO extends PageParam {
     /** 名称 **/
     private String name;
 
+    /** 角色编码 **/
+    private String code;
 }

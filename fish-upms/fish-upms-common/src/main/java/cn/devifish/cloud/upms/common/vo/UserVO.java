@@ -34,7 +34,7 @@ public class UserVO {
     private String email;
 
     /** 手机号 **/
-    private String mobile;
+    private String telephone;
 
     /** 性别 **/
     private SexEnum sex;
