@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
  * SecurityUtils
@@ -36,24 +36,24 @@ public class SecurityUtils {
      *
      * @return Principal
      */
-    public static BasicUser getPrincipal() {
+    public static Optional<BasicUser> getPrincipalOpt() {
         var authentication = getAuthentication();
         if (authentication != null) {
             var principal = authentication.getPrincipal();
             if (principal instanceof BasicUser) {
-                return (BasicUser) principal;
+                return Optional.of((BasicUser) principal);
             }
         }
-        return EMPTY;
+        return Optional.empty();
     }
 
     /**
-     * 当前用户信息是否为空
+     * 获取当前用户的身份信息
      *
-     * @return Boolean
+     * @return Principal
      */
-    public static Boolean isEmpty() {
-        return Objects.equals(EMPTY, getPrincipal());
+    public static BasicUser getPrincipal() {
+        return getPrincipalOpt().orElse(EMPTY);
     }
 
     /**

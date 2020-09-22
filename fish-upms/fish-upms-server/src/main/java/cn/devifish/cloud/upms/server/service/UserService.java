@@ -72,10 +72,11 @@ public class UserService implements UserDetailsService {
      * @return User
      */
     public User currentUser() {
-        var principal = SecurityUtils.getPrincipal();
-        if (principal == null) throw new BizException("获取当前用户失败");
+        var principalOpt = SecurityUtils.getPrincipalOpt();
+        if (principalOpt.isEmpty()) throw new BizException("获取当前用户失败");
 
-        return selectById(principal.getUserId());
+        var basicUser = principalOpt.get();
+        return selectById(basicUser.getUserId());
     }
 
     /**
