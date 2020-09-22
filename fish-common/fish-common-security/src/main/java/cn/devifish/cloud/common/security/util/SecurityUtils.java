@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 
 /**
  * SecurityUtils
@@ -18,7 +19,7 @@ import java.util.Collections;
 public class SecurityUtils {
 
     private static final BasicUser EMPTY = new BasicUser(
-        -1L, "", "", Collections.emptyList());
+        -1L, "EMPTY", "EMPTY", Collections.emptyList());
 
     /**
      * 获取当前用户鉴权信息
@@ -52,7 +53,7 @@ public class SecurityUtils {
      * @return Boolean
      */
     public static Boolean isEmpty() {
-        return EMPTY == getPrincipal();
+        return Objects.equals(EMPTY, getPrincipal());
     }
 
     /**
