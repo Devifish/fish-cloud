@@ -5,6 +5,7 @@ import cn.devifish.cloud.common.core.RestfulEntity;
 import cn.devifish.cloud.common.core.exception.BaseExceptionAdvice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,6 +25,17 @@ import java.util.Arrays;
 @Slf4j
 @RestControllerAdvice
 public class WebMvcExceptionAdvice extends BaseExceptionAdvice {
+
+    /**
+     * 请求未授权访问异常
+     *
+     * @return error
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public RestfulEntity<?> accessDeniedException() {
+        return RestfulEntity.error(MessageCode.Forbidden);
+    }
 
     /**
      * 请求类型不支持异常

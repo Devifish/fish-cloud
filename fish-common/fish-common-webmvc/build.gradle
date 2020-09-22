@@ -4,7 +4,9 @@ description "公共WebMVC组件"
 
 dependencies {
     api project(":fish-common:fish-common-core")
+    compileOnly project(":fish-common:fish-common-security")
 
     api "org.springframework.boot:spring-boot-starter-web"
     api "org.springframework.boot:spring-boot-starter-actuator"
+
 }

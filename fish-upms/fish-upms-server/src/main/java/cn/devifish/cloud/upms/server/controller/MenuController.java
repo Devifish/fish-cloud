@@ -106,7 +106,7 @@ public class MenuController {
      * @param menuId 菜单ID
      * @return 是否成功
      */
-    @DeleteMapping("/delete/{menuId}")
+    @DeleteMapping("/delete/id/{menuId}")
     @PreAuthorize("hasAuthority('menu:delete')")
     public Boolean delete(@PathVariable Long menuId) {
         return menuService.delete(menuId);
