@@ -5,6 +5,7 @@ import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.common.vo.MenuTree;
 import cn.devifish.cloud.upms.server.service.MenuService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -79,6 +80,7 @@ public class MenuController {
      * @return 是否成功
      */
     @PostMapping("/insert")
+    @PreAuthorize("hasAuthority('menu:insert')")
     public Boolean insert(@Valid @RequestBody MenuDTO menuDTO) {
         return menuService.insert(menuDTO);
     }
@@ -92,6 +94,7 @@ public class MenuController {
      * @return 是否成功
      */
     @PutMapping("/update/{menuId}")
+    @PreAuthorize("hasAuthority('menu:update')")
     public Boolean update(@PathVariable Long menuId, @Valid @RequestBody MenuDTO menuDTO) {
         return menuService.update(menuId, menuDTO);
     }
@@ -104,6 +107,7 @@ public class MenuController {
      * @return 是否成功
      */
     @DeleteMapping("/delete/{menuId}")
+    @PreAuthorize("hasAuthority('menu:delete')")
     public Boolean delete(@PathVariable Long menuId) {
         return menuService.delete(menuId);
     }

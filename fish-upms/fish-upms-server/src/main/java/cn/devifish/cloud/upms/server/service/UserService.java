@@ -138,7 +138,7 @@ public class UserService implements UserDetailsService {
 
         return new BasicUser(user.getId(), user.getUsername(), user.getPassword(),
             user.getEnabled(), true, true,
-            !user.getLocked(), authorityList);
+            true, authorityList);
     }
 
     /**
