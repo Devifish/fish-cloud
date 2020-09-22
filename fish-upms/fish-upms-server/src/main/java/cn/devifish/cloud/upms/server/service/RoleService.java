@@ -220,6 +220,7 @@ public class RoleService {
     public Boolean delete(Long roleId) {
         var role = selectById(roleId);
         if (role == null) throw new BizException("该角色不存在");
+        if (role.getSystemFlag()) throw new BizException("无法删除系统角色");
 
         // 校验角色是否存在绑定
         var userIds = userRoleRelationMapper.selectUserIdByRoleId(roleId);

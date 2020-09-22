@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Collections;
+import java.util.Objects;
 
 import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
 
@@ -271,6 +272,7 @@ public class UserService implements UserDetailsService {
     public Boolean update(String username, UserDTO userDTO) {
         var user = selectByUsername(username);
         if (user == null) throw new BizException("该用户不存在");
+        if (user.getLocked()) throw new BizException("无法修改已锁定用户");
 
         BeanUtils.copyProperties(userDTO, user);
         return update(user);
@@ -286,6 +288,12 @@ public class UserService implements UserDetailsService {
     public Boolean delete(Long userId) {
         var user = selectById(userId);
         if (user == null) throw new BizException("该用户不存在");
+
+        // 校验参数
+        var principal = SecurityUtils.getPrincipal();
+        if (user.getLocked()) throw new BizException("无法删除已锁定用户");
+        if (Objects.equals(user.getId(), principal.getUserId()))
+            throw new BizException("无法删除本用户");
 
         // 更新并移除缓存
         if (SqlHelper.retBool(userMapper.deleteById(userId))) {

@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * SecurityUtils
@@ -15,6 +16,9 @@ import java.util.Collection;
  * @date 2020/7/11 17:15
  */
 public class SecurityUtils {
+
+    private static final BasicUser EMPTY = new BasicUser(
+        -1L, "", "", Collections.emptyList());
 
     /**
      * 获取当前用户鉴权信息
@@ -39,7 +43,16 @@ public class SecurityUtils {
                 return (BasicUser) principal;
             }
         }
-        return null;
+        return EMPTY;
+    }
+
+    /**
+     * 当前用户信息是否为空
+     *
+     * @return Boolean
+     */
+    public static Boolean isEmpty() {
+        return EMPTY == getPrincipal();
     }
 
     /**
