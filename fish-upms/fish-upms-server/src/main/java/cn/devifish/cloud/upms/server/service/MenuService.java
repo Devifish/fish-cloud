@@ -2,6 +2,7 @@ package cn.devifish.cloud.upms.server.service;
 
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.core.util.BeanUtils;
+import cn.devifish.cloud.common.core.util.TreeUtils;
 import cn.devifish.cloud.common.security.util.AuthorityUtils;
 import cn.devifish.cloud.common.security.util.SecurityUtils;
 import cn.devifish.cloud.upms.common.dto.MenuDTO;
@@ -18,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
@@ -81,7 +85,7 @@ public class MenuService {
      * @return TreeSet<Menu>
      */
     public Set<MenuTree> selectMenuTree() {
-        return buildMenuVoTree(selectAllVo(), null, null, false);
+        return TreeUtils.toTree(selectAllVo(), null);
     }
 
     /**
@@ -93,7 +97,7 @@ public class MenuService {
      */
     public Set<MenuTree> selectMenuTreeByUserId(Long userId) {
         var authorities = Set.of(roleService.selectAuthoritiesByUserId(userId));
-        return buildMenuVoTree(selectAllVo(), null, authorities, true);
+        return selectMenuTreeByAuthorities(authorities);
     }
 
     /**
@@ -106,44 +110,25 @@ public class MenuService {
     public Set<MenuTree> currentMenuTree() {
         var authorities = SecurityUtils.getAuthorities();
         var authoritiesSet = AuthorityUtils.authorityListToSet(authorities);
-        return buildMenuVoTree(selectAllVo(), null, authoritiesSet, true);
+        return selectMenuTreeByAuthorities(authoritiesSet);
     }
 
     /**
-     * 构建菜单树
+     * 根据权限构建菜单树
      * 利用TreeSet原生的有序性存储数据
      * 对Menu.getSort进行排序
      *
-     * @param collection 所有菜单
-     * @param parentId 父级ID
      * @param authorities 权限
-     * @param valid 是否校验权限
      * @return 菜单树
      */
-    private Set<MenuTree> buildMenuVoTree(Collection<MenuTree> collection, Long parentId, Set<String> authorities, boolean valid) {
-        var iterator = collection.iterator();
-
-        Set<MenuTree> temp = null;
-        while (iterator.hasNext()) {
-            var menuVo = iterator.next();
-            if (!Objects.equals(menuVo.getParentId(), parentId)) continue;
-            if (valid && StringUtils.isNotEmpty(menuVo.getPermission()) && !authorities.contains(menuVo.getPermission())) continue;
-            if (temp == null) temp = new TreeSet<>();
-
-            // 搜索是否存在子节点
-            iterator.remove();
-            var childrenMenu = buildMenuVoTree(collection, menuVo.getId(), authorities, valid);
-            if (CollectionUtils.isEmpty(childrenMenu)) {
-                menuVo.setChildren(Collections.emptySet());
-            }else {
-                menuVo.setChildren(childrenMenu);
-
-                //当存在子节点时则表明集合发生变化，需重置迭代器
-                iterator = collection.iterator();
+    private Set<MenuTree> selectMenuTreeByAuthorities(Set<String> authorities) {
+        return TreeUtils.toTree(selectAllVo(), null, TreeSet::new, menuTree -> {
+            var permission = menuTree.getPermission();
+            if (StringUtils.isNotEmpty(permission)) {
+                return authorities.contains(permission);
             }
-            temp.add(menuVo);
-        }
-        return temp;
+            return true;
+        });
     }
 
     /**
