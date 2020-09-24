@@ -5,8 +5,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -19,18 +17,6 @@ import java.util.function.Supplier;
  * @date 2020/9/23 17:17
  */
 public class TreeUtils {
-
-    /**
-     * 列表数据转换树形数据
-     * 实体数据需要继承TreeNode
-     *
-     * @param list 列表数据
-     * @param rootId 根节点ID
-     * @return 树形数据集合
-     */
-    public static <T extends TreeNode<Set<T>>> Set<T> toTree(Collection<T> list, Long rootId) {
-        return toTree(list, rootId, TreeSet::new);
-    }
 
     /**
      * 列表数据转换树形数据
@@ -71,7 +57,7 @@ public class TreeUtils {
             if (!CollectionUtils.isEmpty(childrenMenu)) {
                 item.setChildren(childrenMenu);
 
-                //当存在子节点时则表明集合发生变化，需重置迭代器
+                // 当存在子节点时则发生变化，需重置迭代器
                 iterator = list.iterator();
             }
             tree.add(item);

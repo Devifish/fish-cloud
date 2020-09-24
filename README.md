@@ -17,10 +17,10 @@
 | -------------------- | ------------- |
 | Java Language        | 11            |
 | Gradle               | 6.4.1         |
-| Spring Boot          | 2.3.2.RELEASE |
-| Spring Cloud         | Hoxton.SR6    |
-| Spring Cloud Alibaba | 2.2.1.RELEASE |
-| Mybatis Plus         | 3.3.2         |
+| Spring Boot          | 2.3.3.RELEASE |
+| Spring Cloud         | Hoxton.SR8    |
+| Spring Cloud Alibaba | 2.2.3.RELEASE |
+| Mybatis Plus         | 3.4.0         |
 
 - 要求 JDK 11+, 代码库基于 Java 11 开发无法使用其以下版本运行
 - 其余依赖包版本基本源自 `Spring Boot` `Spring Cloud` `Spring Cloud Alibaba` 提供的 DependencyManagement

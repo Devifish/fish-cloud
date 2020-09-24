@@ -85,7 +85,7 @@ public class MenuService {
      * @return TreeSet<Menu>
      */
     public Set<MenuTree> selectMenuTree() {
-        return TreeUtils.toTree(selectAllVo(), null);
+        return TreeUtils.toTree(selectAllVo(), null, TreeSet::new);
     }
 
     /**
