@@ -9,7 +9,7 @@
 > 提供对 Docker 容器环境运行的支持,可使用 Docker Compose、Kubernetes 编排
 
 - 前端实现：https://github.com/Devifish/fish-cloud-ui
-- 在线体验：https://cloud.devifish.cn (admin/123456)
+- 在线体验：https://cloud.devifish.cn (guest/guest)
 
 ## 依赖环境
 
