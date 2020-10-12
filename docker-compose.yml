@@ -10,15 +10,15 @@ services:
       - JVM_XMX=512m
       - JVM_XMN=256m
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=mariadb
+      - MYSQL_SERVICE_HOST=mysql
       - MYSQL_SERVICE_PORT=3306
       - MYSQL_SERVICE_DB_NAME=nacos
       - MYSQL_SERVICE_USER=root
-      - MYSQL_SERVICE_PASSWORD=${MARIADB_PASSWORD}
+      - MYSQL_SERVICE_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - 8848:8848
     depends_on:
-      - mariadb
+      - mysql
     restart: unless-stopped
 
   redis:
@@ -31,18 +31,17 @@ services:
       - ${REDIS_DATA_DIR}:/data
     restart: unless-stopped
 
-  mariadb:
-    image: linuxserver/mariadb
-    container_name: mariadb
+  mysql:
+    image: mysql
+    container_name: mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
-      - PUID=65534
-      - PGID=100
       - TZ=Asia/Shanghai
-      - MYSQL_ROOT_PASSWORD=${MARIADB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
     ports:
       - 3306:3306
     volumes:
-      - ${MARIADB_DATA_DIR}:/config
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql
     restart: unless-stopped
 
   rabbitmq:
@@ -76,7 +75,7 @@ services:
       - 10100:10100
     depends_on:
       - nacos-server
-      - mariadb
+      - mysql
       - redis
       - rabbitmq
     restart: unless-stopped
@@ -89,7 +88,7 @@ services:
       - 10200:10200
     depends_on:
       - nacos-server
-      - mariadb
+      - mysql
       - redis
       - rabbitmq
     restart: unless-stopped
