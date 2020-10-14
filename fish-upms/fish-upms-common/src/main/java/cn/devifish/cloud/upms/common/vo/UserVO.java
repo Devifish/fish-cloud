@@ -42,4 +42,10 @@ public class UserVO {
     /** 生日 **/
     private LocalDate birthday;
 
+    /** 是否启用 **/
+    private Boolean enabled;
+
+    /** 是否锁定 **/
+    private Boolean locked;
+
 }

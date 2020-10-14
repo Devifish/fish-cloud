@@ -6,6 +6,7 @@ import cn.devifish.cloud.common.security.annotation.OpenApi;
 import cn.devifish.cloud.upms.common.dto.UserDTO;
 import cn.devifish.cloud.upms.common.dto.UserPageDTO;
 import cn.devifish.cloud.upms.common.enums.SmsCodeType;
+import cn.devifish.cloud.upms.common.vo.UserDetailVO;
 import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +50,17 @@ public class UserController {
     public UserVO selectById(@PathVariable Long userId) {
         var user = userService.selectById(userId);
         return BeanUtils.copyProperties(user, UserVO::new);
+    }
+
+    /**
+     * 根据用户ID查询用户详情
+     *
+     * @param userId 用户ID
+     * @return UserDetailVO
+     */
+    @GetMapping("/select/detail/id/{userId}")
+    public UserDetailVO selectDetailById(@PathVariable Long userId) {
+        return userService.selectDetailById(userId);
     }
 
     /**

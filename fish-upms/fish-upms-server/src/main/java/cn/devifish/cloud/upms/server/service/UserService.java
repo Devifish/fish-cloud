@@ -12,6 +12,7 @@ import cn.devifish.cloud.upms.common.dto.UserPageDTO;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.common.enums.SexEnum;
 import cn.devifish.cloud.upms.common.enums.SmsCodeType;
+import cn.devifish.cloud.upms.common.vo.UserDetailVO;
 import cn.devifish.cloud.upms.common.vo.UserVO;
 import cn.devifish.cloud.upms.server.cache.UserCache;
 import cn.devifish.cloud.upms.server.mapper.UserMapper;
@@ -129,7 +130,7 @@ public class UserService implements UserDetailsService {
         if (user == null)
             throw new UsernameNotFoundException("Not found Username: " + username);
 
-        //获取用户权限
+        // 获取用户权限
         var userId = user.getId();
         var authorities = roleService.selectAuthoritiesByUserId(userId);
         var authorityList = ArrayUtils.isEmpty(authorities)
@@ -139,6 +140,22 @@ public class UserService implements UserDetailsService {
         return new BasicUser(user.getId(), user.getUsername(), user.getPassword(),
             user.getEnabled(), true, true,
             true, authorityList);
+    }
+
+    /**
+     * 根据用户ID查询用户详情
+     *
+     * @param userId 用户ID
+     * @return UserDetailVO
+     */
+    public UserDetailVO selectDetailById(Long userId) {
+        var user = selectById(userId);
+        var userDetailVO = BeanUtils.copyProperties(user, UserDetailVO::new);
+
+        // 获取用户角色
+        var roles = roleService.selectByUserId(userId);
+        userDetailVO.setRoles(roles);
+        return userDetailVO;
     }
 
     /**

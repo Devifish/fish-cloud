@@ -47,7 +47,7 @@ public class OAuth2WebSecurityConfiguration extends WebSecurityConfiguration {
      */
     @Bean
     @Override
-    protected AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }
