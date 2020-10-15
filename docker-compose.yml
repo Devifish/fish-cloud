@@ -15,6 +15,7 @@ services:
       - MYSQL_SERVICE_DB_NAME=nacos
       - MYSQL_SERVICE_USER=root
       - MYSQL_SERVICE_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_SSL_ENABLE=false&allowPublicKeyRetrieval=true
     ports:
       - 8848:8848
     depends_on:
