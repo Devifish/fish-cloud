@@ -52,6 +52,7 @@ public class MenuTree extends TreeNode<Set<MenuTree>> implements Comparable<Menu
         this.url = menu.getUrl();
         this.type = menu.getType();
         this.permission = menu.getPermission();
+        this.icon = menu.getIcon();
         this.enable = menu.getEnable();
         this.sort = menu.getSort();
     }
