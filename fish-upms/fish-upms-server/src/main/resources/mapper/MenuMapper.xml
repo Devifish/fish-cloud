@@ -10,6 +10,7 @@
         <result column="url" property="url"/>
         <result column="type" property="type"/>
         <result column="permission" property="permission"/>
+        <result column="icon" property="icon"/>
         <result column="parent_id" property="parentId"/>
         <result column="enable" property="enable"/>
         <result column="sort" property="sort"/>
@@ -23,6 +24,7 @@
         `m`.url,
         `m`.type,
         `m`.permission,
+        `m`.icon,
         `m`.parent_id,
         `m`.enable,
         `m`.sort,
