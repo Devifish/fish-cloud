@@ -28,6 +28,9 @@ public class Menu extends BaseEntity {
     /** 授权码 **/
     private String permission;
 
+    /** 图标 **/
+    private String icon;
+
     /** 父级ID **/
     private Long parentId;
 

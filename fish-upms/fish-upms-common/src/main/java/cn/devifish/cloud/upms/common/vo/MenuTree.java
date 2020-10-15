@@ -32,6 +32,9 @@ public class MenuTree extends TreeNode<Set<MenuTree>> implements Comparable<Menu
     /** 授权码 **/
     private String permission;
 
+    /** 图标 **/
+    private String icon;
+
     /** 是否启用 **/
     private Boolean enable;
 
