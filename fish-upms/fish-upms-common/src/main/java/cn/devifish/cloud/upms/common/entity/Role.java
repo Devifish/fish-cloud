@@ -3,6 +3,7 @@ package cn.devifish.cloud.upms.common.entity;
 import cn.devifish.cloud.common.core.BaseEntity;
 import cn.devifish.cloud.common.mybatis.handler.MybatisJsonTypeHandler;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,6 +18,7 @@ import java.util.Set;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TableName(autoResultMap = true)
 public class Role extends BaseEntity {
 
     /** 角色名称 **/
