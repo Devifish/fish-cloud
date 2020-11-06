@@ -17,7 +17,7 @@
 | -------------------- | ------------- |
 | Java Language        | 11            |
 | Gradle               | 6.4.1         |
-| Spring Boot          | 2.3.3.RELEASE |
+| Spring Boot          | 2.3.5.RELEASE |
 | Spring Cloud         | Hoxton.SR8    |
 | Spring Cloud Alibaba | 2.2.3.RELEASE |
 | Mybatis Plus         | 3.4.0         |
