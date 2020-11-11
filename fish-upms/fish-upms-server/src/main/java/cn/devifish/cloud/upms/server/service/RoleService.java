@@ -168,18 +168,17 @@ public class RoleService {
         if (StringUtils.isEmpty(name)) throw new BizException(PreconditionFailed, "角色名不能为空");
         if (existByCode(code)) throw new BizException("角色编码已存在");
 
-        // 过滤多余的角色权限
+        // 过滤冗余的角色权限
         var authorities = role.getAuthorities();
         if (!CollectionUtils.isEmpty(authorities)) {
             var menuService = menuServiceFactory.getObject();
             var menuList = menuService.selectAll();
-            var menuAuthorities = menuList.stream()
-                .map(Menu::getPermission)
-                .collect(Collectors.toSet());
 
             // 与所有菜单的权限做交集处理
-            menuAuthorities.retainAll(authorities);
-            role.setAuthorities(menuAuthorities);
+            role.setAuthorities(menuList.stream()
+                .map(Menu::getPermission)
+                .filter(authorities::contains)
+                .collect(Collectors.toSet()));
         }
 
         // 设置默认值
