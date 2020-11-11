@@ -7,6 +7,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * UserMapper
  * 用户 Mapper
@@ -50,6 +53,14 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 统计
      */
     Integer countByTelephone(String telephone);
+
+    /**
+     * 根据相关参数查询用户列表
+     *
+     * @param param 参数
+     * @return List<User>
+     */
+    List<User> selectList(@Param("param") Map<String, Object> param);
 
     /**
      * 分页查询用户数据

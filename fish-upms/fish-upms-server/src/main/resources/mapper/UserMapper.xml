@@ -91,4 +91,25 @@
         </where>
     </select>
 
+    <select id="selectList" resultMap="baseResultMap">
+        SELECT
+        <include refid="baseSql"/>
+        FROM upms_user AS u
+        <if test="param.roleId != null">
+            LEFT JOIN upms_user_role_relation AS urr ON u.id = urr.user_id
+        </if>
+        <where>
+            u.delete_flag = 0
+            <if test="param.username != null and param.username != ''">
+                and u.username LIKE CONCAT('%', #{param.username}, '%')
+            </if>
+            <if test="param.telephone != null and param.telephone != ''">
+                and u.telephone LIKE CONCAT('%', #{param.telephone}, '%')
+            </if>
+            <if test="param.roleId != null">
+                and urr.role_id = #{param.roleId}
+            </if>
+        </where>
+    </select>
+
 </mapper>

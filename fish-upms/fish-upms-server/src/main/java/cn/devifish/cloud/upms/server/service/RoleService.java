@@ -4,9 +4,12 @@ import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import cn.devifish.cloud.upms.common.dto.RolePageDTO;
+import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.common.entity.Role;
+import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.server.cache.RoleCache;
 import cn.devifish.cloud.upms.server.mapper.RoleMapper;
+import cn.devifish.cloud.upms.server.mapper.UserMapper;
 import cn.devifish.cloud.upms.server.mapper.UserRoleRelationMapper;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
 
@@ -36,7 +40,9 @@ public class RoleService {
 
     private final RoleMapper roleMapper;
     private final RoleCache roleCache;
+    private final UserMapper userMapper;
     private final UserRoleRelationMapper userRoleRelationMapper;
+    private final OAuthService oAuthService;
 
     // 防止IOC循环依赖
     private final ObjectFactory<MenuService> menuServiceFactory;
@@ -162,6 +168,20 @@ public class RoleService {
         if (StringUtils.isEmpty(name)) throw new BizException(PreconditionFailed, "角色名不能为空");
         if (existByCode(code)) throw new BizException("角色编码已存在");
 
+        // 过滤多余的角色权限
+        var authorities = role.getAuthorities();
+        if (!CollectionUtils.isEmpty(authorities)) {
+            var menuService = menuServiceFactory.getObject();
+            var menuList = menuService.selectAll();
+            var menuAuthorities = menuList.stream()
+                .map(Menu::getPermission)
+                .collect(Collectors.toSet());
+
+            // 与所有菜单的权限做交集处理
+            menuAuthorities.retainAll(authorities);
+            role.setAuthorities(menuAuthorities);
+        }
+
         // 设置默认值
         role.setId(null);
         if (role.getSystemFlag() == null) role.setSystemFlag(Boolean.FALSE);
@@ -197,6 +217,21 @@ public class RoleService {
         if (code != null && !code.equals(old_code)) {
             if (existByCode(code))
                 throw new BizException("角色Code已存在");
+        }
+
+        // 校验用户是否修改角色权限
+        var authorities = role.getAuthorities();
+        var old_authorities = old_role.getAuthorities();
+        if (!CollectionUtils.isEmpty(authorities) && authorities.equals(old_authorities)) {
+            var param = new TreeMap<String, Object>();
+            param.put("roleId", roleId);
+
+            // 修改角色权限则注销相关用户登录状态
+            var userList = userMapper.selectList(param);
+            for (User user : userList) {
+                var username = user.getUsername();
+                oAuthService.logoutAllByUsername(username);
+            }
         }
 
         // 更新并移除缓存
