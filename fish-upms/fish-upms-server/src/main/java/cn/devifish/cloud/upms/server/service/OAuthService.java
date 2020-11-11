@@ -6,6 +6,7 @@ import cn.devifish.cloud.upms.common.entity.OAuthClient;
 import cn.devifish.cloud.upms.server.cache.OAuthClientCache;
 import cn.devifish.cloud.upms.server.mapper.OAuthClientMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -32,6 +33,7 @@ import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
  * @author Devifish
  * @date 2020/7/3 17:36
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuthService implements ClientDetailsService {
@@ -102,6 +104,7 @@ public class OAuthService implements ClientDetailsService {
         //注销Token
         tokenStore.removeAccessToken(accessToken);
         tokenStore.removeRefreshToken(refreshToken);
+        log.info("成功注销 Token：{}", token);
         return Boolean.TRUE;
     }
 

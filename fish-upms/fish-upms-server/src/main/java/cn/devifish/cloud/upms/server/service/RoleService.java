@@ -3,6 +3,7 @@ package cn.devifish.cloud.upms.server.service;
 import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
+import cn.devifish.cloud.common.security.util.SecurityUtils;
 import cn.devifish.cloud.upms.common.dto.RolePageDTO;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.common.entity.User;
@@ -218,10 +219,13 @@ public class RoleService {
         var authorities = role.getAuthorities();
         var old_authorities = old_role.getAuthorities();
         if (!CollectionUtils.isEmpty(authorities) && authorities.equals(old_authorities)) {
-            var param = new TreeMap<String, Object>();
-            param.put("roleId", roleId);
+            var principal = SecurityUtils.getPrincipal();
+            log.info("用户ID：{} 修改角色ID：{} 的权限数据, 开始注销该角色相关用户Token",
+                principal.getUserId(), roleId);
 
             // 修改角色权限则注销相关用户登录状态
+            var param = new TreeMap<String, Object>();
+            param.put("roleId", roleId);
             var userList = userMapper.selectList(param);
             for (User user : userList) {
                 var username = user.getUsername();
