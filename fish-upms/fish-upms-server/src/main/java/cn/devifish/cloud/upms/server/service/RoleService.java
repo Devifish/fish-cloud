@@ -4,7 +4,6 @@ import cn.devifish.cloud.common.core.exception.BizException;
 import cn.devifish.cloud.common.mybatis.Page;
 import cn.devifish.cloud.common.security.constant.SecurityConstant;
 import cn.devifish.cloud.upms.common.dto.RolePageDTO;
-import cn.devifish.cloud.upms.common.entity.Menu;
 import cn.devifish.cloud.upms.common.entity.Role;
 import cn.devifish.cloud.upms.common.entity.User;
 import cn.devifish.cloud.upms.server.cache.RoleCache;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
 
@@ -172,13 +170,11 @@ public class RoleService {
         var authorities = role.getAuthorities();
         if (!CollectionUtils.isEmpty(authorities)) {
             var menuService = menuServiceFactory.getObject();
-            var menuList = menuService.selectAll();
+            var allPermission = menuService.selectAllPermission();
 
             // 与所有菜单的权限做交集处理
-            role.setAuthorities(menuList.stream()
-                .map(Menu::getPermission)
-                .filter(authorities::contains)
-                .collect(Collectors.toSet()));
+            allPermission.retainAll(authorities);
+            role.setAuthorities(allPermission);
         }
 
         // 设置默认值
