@@ -218,7 +218,7 @@ public class RoleService {
         // 校验用户是否修改角色权限
         var authorities = role.getAuthorities();
         var old_authorities = old_role.getAuthorities();
-        if (!CollectionUtils.isEmpty(authorities) && authorities.equals(old_authorities)) {
+        if (!CollectionUtils.isEmpty(authorities) && !authorities.equals(old_authorities)) {
             var principal = SecurityUtils.getPrincipal();
             log.info("用户ID：{} 修改角色ID：{} 的权限数据, 开始注销该角色相关用户Token",
                 principal.getUserId(), roleId);

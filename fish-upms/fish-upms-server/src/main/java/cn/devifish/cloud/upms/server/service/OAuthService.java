@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import static cn.devifish.cloud.common.core.MessageCode.PreconditionFailed;
 
 /**
- * OAuthClientService
+ * OAuthService
  * OAuth2 客户端服务
  *
  * @author Devifish
