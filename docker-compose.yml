@@ -66,7 +66,6 @@ services:
       - 10000:10000
     depends_on:
       - nacos-server
-    restart: unless-stopped
 
   fish-upms-server:
     image: fish-upms-server
@@ -79,7 +78,6 @@ services:
       - mysql
       - redis
       - rabbitmq
-    restart: unless-stopped
 
   fish-message-server:
     image: fish-message-server
@@ -92,7 +90,6 @@ services:
       - mysql
       - redis
       - rabbitmq
-    restart: unless-stopped
 
   fish-search-server:
     image: fish-search-server
@@ -102,7 +99,6 @@ services:
       - 10300:10300
     depends_on:
       - nacos-server
-    restart: unless-stopped
 
   fish-file-server:
     image: fish-file-server
@@ -113,4 +109,3 @@ services:
     depends_on:
       - nacos-server
       - redis
-    restart: unless-stopped
